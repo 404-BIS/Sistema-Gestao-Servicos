@@ -1,31 +1,13 @@
 
 const template = document.createElement('template');
 template.innerHTML = `  
-    <style>
+    <style type="text/css">
     * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
         font-family: Poppins, sans-serif;
     }
-
-    :root {
-
-        /*CORES*/
-        --principal-background: #FCFCFC;
-        --navbar-color:#B8D7D9;
-    
-        --card-color:#A8A7A7;
-    
-        --text-principal-color: #000000;
-        --text-navbar-color:#6D6D6D;
-        
-         /*FONTES*/
-        --font-semibold: 600;
-        --font-medium: 500;
-        --font-regular: 400 ;
-    }
-    
     
     form {
         border:solid  3px #A8A7A7; 
