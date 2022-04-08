@@ -1,0 +1,249 @@
+/* Navbar User*/
+
+header {
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    background-color:#B8D7D9;
+    padding: 5px 168px;
+    height: 48px;
+}
+
+header img {
+    height: 40px;
+    width: 40px;
+}
+nav {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+a{
+    text-decoration: none;
+}
+
+.minha-req {
+    font-size: 16px; 
+    color:#6D6D6D;  
+    border:none;
+    margin-right:60px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 40px;
+}
+
+.nova-req{
+    font-size: 16px; 
+    color:#6D6D6D; 
+    font-weight: 600;
+    background-color:#FCFCFC; 
+    border:none;
+    border-radius: 8px;
+    width:230px;
+    Height:32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none
+}
+            
+.minha-chamada{
+    font-size: 16px; 
+    color:#6D6D6D;  
+    border:none;
+    margin-right:60px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 40px;
+}
+
+.minha-req:hover{
+    font-size: 17px;
+}
+.nova-req:hover{
+    font-size: 17px;
+}
+
+.minha-chamada:hover{
+    font-size: 17px;
+}
+
+.icon-req{
+    margin-right: 8px;
+    height: 20px;
+    width: 20px;
+}
+
+.icon-mais{
+    margin-right: 8px;
+    height: 15px;
+    width: 15px;
+}
+
+.icon-chamada{
+    margin-right: 8px;
+    height: 18px;
+    width: 18px;
+}
+
+/* Legendas*/
+
+.legenda {
+    display: flex;
+    align-items: center;
+    justify-content:space-evenly;
+    flex-wrap: wrap;
+    margin: -24px 0px 40px 0px;
+}
+
+.hardware, .software, .info{
+    border: solid 2px #A8A7A7;
+    border-radius: 10px;
+    height: 70px;
+    width: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    margin-top: 24px;
+}
+
+.categoria{
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.quant{
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.icon{
+    width: 50px;
+    height: 50px;
+}
+
+/* Formulario */
+.title-nova-req{
+    font-weight: 500;
+    font-size: 24px;
+    margin: 40px 168px 32px 168px;    
+}
+
+form {
+    border:solid  3px #A8A7A7; 
+    border-radius: 15px;
+    padding: 48px 36px;
+    margin: 0px 168px 40px 168px ;
+    background-color: #FCFCFC;   
+}
+
+label{
+    margin-bottom: 8px; 
+    font-weight: 500;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.title input {
+    width: 100%;
+}
+
+
+.title input, .title select{
+    display: block;
+    border:solid  2px #A8A7A7;
+    border-radius: 10px;
+    height: 35px;
+    padding: 0px 10px;
+}
+
+select {
+    border:solid  2px #A8A7A7;
+    border-radius: 10px;
+    height: 35px;
+    width: 100%;
+}
+
+.description textarea{
+    border:solid  2px #A8A7A7;
+    border-radius: 10px;
+    padding: 5px 10px;
+    height: 140px;
+    width: 100%;
+    margin-bottom: 24px;
+    resize:vertical;   
+}
+
+.archive input{
+    border:solid  2px #A8A7A7;
+    border-radius: 10px;
+    height: 35px;
+    width: 260px;
+}
+
+.buttons{
+    display: flex;
+    justify-content: center;
+    margin: 40px 0px 0px 0px;
+}
+
+.enviar{
+    background-color: rgba(87, 218, 116, 70%);
+    border-radius: 15px;
+    font-weight: 500;
+    height: 50px;
+    width: 200px;
+    border:none;
+}
+
+.limpar{
+    background-color: rgba(255, 224, 66, 90%);
+    border-radius: 15px;
+    font-weight: 500;
+    height: 50px;
+    width: 200px;
+    border:none;
+    margin-right: 56px;
+}
+
+/* Box das requisições vazias */
+
+main {
+    margin: 0px 168px 0px 168px ;
+}
+
+.req-aberta,.req-fechada, .tipo-legenda{
+    font-weight: 500;
+    font-size: 24px;
+    margin: 40px 0px 32px 0px;
+}
+
+.box-req{
+    border: solid 2px #A8A7A7;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    width: 100%;
+    font-size: 24;
+    font-weight: 500;
+}
+
+/* Titulo chamados do executor */
+
+.chamado-analise,.chamado-andamento,.chamado-fechada, .tipo-legenda{
+    font-weight: 500;
+    font-size: 24px;
+    margin: 40px 0px 32px 0px;
+}
