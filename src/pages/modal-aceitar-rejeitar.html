@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style type="text/css">
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+                font-family: 'Poppins', sans-serif;
+            }
+    
+            .card{
+                border:solid 2px #A8A7A7;
+                border-radius: 10px;
+                width:100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px 16px 16px 16px;
+                position: relative;
+            }
+
+            .info{
+                list-style: none;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    
+            .titulo{
+                font-weight: 600;  
+                font-size: 18px;
+            }
+    
+            .tipo{
+                font-weight: 500; 
+                margin-bottom: 16px;
+                font-size: 14px;
+            }
+
+            .descricao{
+                font-weight: 500; 
+                font-size: 14px;
+            }
+    
+            .icon {
+                height: 50px;
+                width: 50px;  
+            }
+
+            .botao-padrao:hover{
+                font-size: 14px;
+            }
+            .conteudo{
+                overflow-wrap: break-word;
+                width: 80%;
+            }
+
+            .conteudo span{
+                color:#6c6868;
+            }
+
+            .rejeitar-aceitar{
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .rejeitar{
+                height: 35px;
+                width: 90px;
+                background-color: rgba(255, 79, 100, 0.9);
+                color:#FCFCFC;
+                border-radius: 10px;
+                border: none;
+                bottom: 16px;
+                margin-right:24px ;
+            }
+
+            .aceitar{
+                height: 35px;
+                width: 90px;
+                background-color: rgba(0, 155, 34, 1);
+                color:#FCFCFC;
+                border-radius: 10px;
+                border: none;
+                bottom: 16px;
+            }
+
+
+            /* Style Modal Aceitar Chamado*/
+
+            .box-aceitar{
+                border:solid 5px #A8A7A7;
+                border-radius: 20px;
+                background-color: #fcfcfc;
+                width: 600px;
+                height: 200px;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                margin: auto;
+            }
+
+            .titulo-modal{
+                padding: 30px 0px 20px 0px; 
+                font-size: 26px;
+            }
+
+
+            .button-aceitar{
+                border:none;
+                font-size:24px;
+                color:#FCFCFC;
+                background-color: rgba(0, 155, 34, 1);
+                border-radius:10px;
+                height: 60px;
+                width: 200px;
+            }
+
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                padding-top: 100px;
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+            }
+
+            /* Style Modal Rejeitar Chamado*/
+
+            .box-rejeitar{
+                border:solid 5px #A8A7A7;
+                border-radius: 20px;
+                background-color: #fcfcfc;
+                width: 1010px;
+                height: 419px;
+                display:flex;
+                align-items:center;
+                flex-direction: column;
+                margin: auto;
+            }
+
+            .texto-rejeitar{
+                font-size: 18px;
+                font-weight:600;
+                border: solid 2px #A8A7A7;
+                border-radius: 10px;
+                padding: 10px;
+                height: 164px;
+                width: 790px;
+                resize: vertical;
+            }
+
+            .button-rejeitar{
+                border:none;
+                font-size:24px;
+                color:#FCFCFC;
+                background-color: rgba(255, 79, 100, 0.9);
+                border-radius:10px;
+                height: 60px;
+                width: 300px;
+                margin:40px 0px 56px 0px;
+            }
+
+            </style>
+    </head>
+    <body>  
+        <!-- Card de chamada em analise do exec -->
+        <details class="card">
+            <summary class="info">
+                <p class="titulo">Titulo do Chamado</p><!--variavel titulo-->
+                <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
+                </summary>
+            <div class="conteudo">
+                <p class="tipo">Tipo: <span><!--variavel tipo--></span></p>
+                <p class="descricao">Descrição: <span><!--variavel descricao--></span></p>
+            </div>
+            <div class="rejeitar-aceitar"> 
+                <button class="rejeitar" type="button" id="btnrejeitar">Rejeitar</button>
+                <button class="aceitar" type="button" id="btnaceitar">Aceitar</button>
+            </div>
+        </details>
+
+        <div id="aceitar" class="modal">
+            <div class="box-aceitar">
+                <div class="icon-fechar"></div>
+                <p class="titulo-modal">Chamada Aceita</p>  
+                <button class="button-aceitar">Concluído</button>
+            </div>
+        </div>
+
+        <div id="rejeitar" class="modal">
+            <div class="box-rejeitar">
+                <div class="icon-fechar"></div>
+                <p class="titulo-modal">Critério de Rejeição</p>  
+                <textarea class="texto-rejeitar" name="txtdesc" id="txtdesc" placeholder="Descreva o motivo da rejeição"></textarea>
+                <button class="button-rejeitar">Rejeitar</button>
+            </div>
+        </div>
+        <script>
+            var modalaceitar = document.getElementById("aceitar");
+
+            var modalrejeitar = document.getElementById("rejeitar");
+            
+            var btnaceitar = document.getElementById("btnaceitar");
+
+            var btnrejeitar = document.getElementById("btnrejeitar");
+            
+            var span = document.getElementsByClassName("icon-fechar")[0];
+            
+            btnaceitar.onclick = function() {
+                modalaceitar.style.display = "block";
+            }
+
+            btnrejeitar.onclick = function() {
+                modalrejeitar.style.display = "block";
+            }
+            
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modalaceitar.style.display = "none";
+            }
+
+            span.onclick = function() {
+                modalrejeitar.style.display = "none";
+            }
+            
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+              if (event.target == modalaceitar) {
+                modalaceitar.style.display = "none";
+              }
+
+              if (event.target == modalrejeitar) {
+                modalrejeitar.style.display = "none";
+              }
+            }
+
+            </script>
+    </body>
+</html>

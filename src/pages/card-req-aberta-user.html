@@ -44,7 +44,6 @@
                 font-size: 14px;
             }
     
-    
             .icon {
                 height: 50px;
                 width: 50px;  
@@ -55,6 +54,7 @@
                 width: 130px;
                 background-color: rgba(255, 79, 100, 0.9);
                 color:#FCFCFC;
+                font-size: 13px;
                 border-radius: 10px;
                 border: none;
                 position: absolute;
@@ -62,6 +62,10 @@
                 bottom: 16px;
             }
 
+            .botao-padrao:hover{
+                font-size: 14px;
+            }
+            
             .conteudo{
                 overflow-wrap: break-word;
                 width: 80%;
@@ -71,30 +75,6 @@
                 color:#6c6868;
             }
 
-            .rejeitar-aceitar{
-                display: flex;
-                justify-content: space-between;
-            }
-
-            .rejeitar{
-                height: 35px;
-                width: 90px;
-                background-color: rgba(255, 79, 100, 0.9);
-                color:#FCFCFC;
-                border-radius: 10px;
-                border: none;
-                bottom: 16px;
-            }
-
-            .aceitar{
-                height: 35px;
-                width: 90px;
-                background-color: rgba(0, 155, 34, 1);
-                color:#FCFCFC;
-                border-radius: 10px;
-                border: none;
-                bottom: 16px;
-            }
             </style>
     </head>
     <body>  
@@ -112,34 +92,7 @@
             </details>
 
             <br>
-        <!-- Card de chamada em andamento do exec -->
-            <details class="card">
-                <summary class="info">
-                    <p class="titulo">Titulo do Chamado</p><!--variavel titulo-->
-                    <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                    </summary>
-                <div class="conteudo">
-                    <p class="tipo">Tipo: <span><!--variavel tipo--></span></p>
-                    <p class="descricao">Descrição: <span><!--variavel descricao--></span></p>
-                </div>
-                <button  class="botao-padrao" type="button">Fechar Chamado</button>
-            </details>
-
-            <br>
         <!-- Card de chamada em analise do exec -->
-            <details class="card">
-                <summary class="info">
-                    <p class="titulo">Titulo do Chamado</p><!--variavel titulo-->
-                    <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                    </summary>
-                <div class="conteudo">
-                    <p class="tipo">Tipo: <span><!--variavel tipo--></span></p>
-                    <p class="descricao">Descrição: <span><!--variavel descricao--></span></p>
-                </div>
-                <div class="rejeitar-aceitar"> 
-                    <button class="rejeitar" type="button">Rejeitar</button>
-                    <button class="aceitar" type="button">Aceitar</button>
-                </div>
-            </details>
+
     </body>
 </html>
