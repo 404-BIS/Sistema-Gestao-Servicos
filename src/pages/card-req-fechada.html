@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style type="text/css">
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+                font-family: 'Poppins', sans-serif;
+            }
+    
+            details{
+                border:solid 2px #A8A7A7;
+                border-radius: 10px;
+                width:100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px 16px 16px 16px;
+                position: relative;
+            }
+
+            details summary{
+                list-style: none;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    
+            summary p{
+                font-weight: 600;  
+                font-size: 18px;
+            }
+
+            summary img {
+                height: 50px;
+                width: 50px;  
+            }
+    
+            .conteudo{
+                overflow-wrap: break-word;
+                width: 80%;
+            }
+
+            .conteudo p{
+                font-weight: 600; 
+                margin-bottom: 16px;
+                font-size: 15px;
+            }
+
+            span{
+                color:#6c6868;
+                font-weight: 500;
+                font-size: 14px; 
+            }
+
+            .texto-fechamento{
+                border: solid 1px #A8A7A7;
+                border-radius: 10px;
+                min-height: 100px;
+                max-height: 300px;
+                width: 100%;
+                padding: 10px 20px;
+            }
+
+            .detalhes-fechamento{
+                font-weight: 600; 
+                margin-bottom: 4px;
+                font-size: 14px;    
+            }
+            
+            </style>
+    </head>
+    <body>  
+        <!-- Card de req fechada do user/executor -->
+        <details>
+            <summary>
+                <p>Titulo do Chamado</p><!--variavel titulo-->
+                <img src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
+            </summary>
+            <div class="conteudo">
+                <p>Tipo: <span>Lorem ipsum dolor sit amet,<!--variavel tipo--></span></p>
+                <p>Descrição: <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam placerat placerat elit in eleifend. Aenean hendrerit, est non ornare rutrum, mi tellus posuere nisi, eget tempor nisl massa at eros. Cras eu molestie erat. Morbi ac commodo diam, ac hendrerit tellus. Vestibulum rutrum purus nec augue convallis vehicula. Nulla eget nulla iaculis, commodo neque lobortis, vulputate dolor. Curabitur eget dui fringilla, tincidunt est vel, ornare massa. In scelerisque ornare tristique.<!--variavel descricao--></span></p>
+            </div>
+            <p class="detalhes-fechamento"> Requisição Fechada por: <span> Lorem ipsum dolor<!--variavel de usuario que fechou o chamado--></span></p> 
+            <div class="texto-fechamento">
+                <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam placerat placerat elit in eleifend. Aenean hendrerit, est non ornare rutrum, mi tellus posuere nisi, eget tempor nisl massa at eros. Cras eu molestie erat. Morbi ac commodo diam, ac hendrerit tellus. Vestibulum rutrum purus nec augue convallis vehicula. Nulla eget nulla iaculis, commodo neque lobortis, vulputate dolor. Curabitur eget dui fringilla, tincidunt est vel, ornare massa. In scelerisque ornare tristique.
+
+                    Sed varius congue nisi, in volutpat ex sollicitudin ut. Sed ultricies, erat in tempor finibus, mi erat iaculis ipsum, in luctus massa odio eu neque. Nullam sagittis dignissim commodo. In tristique, urna eget tempus dictum, purus velit congue ligula, nec dignissim odio erat tincidunt sapien. Proin euismod sed leo id blandit. Nam quis scelerisque enim. Maecenas vestibulum mollis iaculis. Nullam ultricies tincidunt gravida. Fusce quis nisi bibendum, porta leo a, congue nisl. <!--variavel descricao de fechamento--></span>    
+            </div>
+        </details>
+    </body>
+</html>
