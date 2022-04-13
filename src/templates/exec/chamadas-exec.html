@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+        <style type="text/css"> 
+            details{
+                border:solid 2px #A8A7A7;
+                border-radius: 10px;
+                width:100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px 16px 16px 16px;
+                margin-bottom: 16px;
+                position: relative;
+            }
+
+            summary{
+                list-style: none;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    
+            summary p{
+                font-weight: 600;  
+                font-size: 18px;
+            }
+    
+            .conteudo{
+                overflow-wrap: break-word;
+                width: 80%;
+            }
+
+            .conteudo p{
+                font-weight: 600; 
+                font-size: 15px;
+                margin-bottom: 16px;
+            }
+
+            .icon {
+                height: 50px;
+                width: 50px;  
+            }
+
+            .botao-padrao:hover{
+                font-size: 14px;
+            }
+
+             .conteudo span{
+                color:#6c6868;
+            }
+
+            .rejeitar-aceitar{
+                display: flex;
+                justify-content: flex-end;
+                margin-top:-16px
+            }
+
+            .rejeitar-aceitar .rejeitar{
+                height: 35px;
+                width: 90px;
+                background-color: rgba(255, 79, 100, 0.9);
+                color:#FCFCFC;
+                border-radius: 10px;
+                border: none;
+                bottom: 16px;
+                margin-right:24px ;
+            }
+
+            .rejeitar-aceitar .aceitar{
+                height: 35px;
+                width: 90px;
+                background-color: rgba(0, 155, 34, 1);
+                color:#FCFCFC;
+                border-radius: 10px;
+                border: none;
+                bottom: 16px;
+            }
+
+            /* Style Modal Aceitar Chamado*/
+
+            .modal {
+                display: none; 
+                position: fixed; 
+                z-index: 1; 
+                padding-top: 100px;
+                left: 0;
+                top: 0;
+                width: 100%; 
+                height: 100%; 
+                overflow: auto;
+                background-color: rgb(0,0,0); 
+                background-color: rgba(0,0,0,0.6); 
+            }
+
+            .box-aceitar{
+                border:solid 5px #A8A7A7;
+                border-radius: 20px;
+                background-color: #fcfcfc;
+                width: 600px;
+                height: 200px;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                margin: auto;
+            }
+
+            .box-aceitar p{
+                padding: 30px 0px 20px 0px; 
+                font-size: 26px;
+            }
+
+            .box-aceitar button{
+                border:none;
+                font-size:24px;
+                color:#FCFCFC;
+                background-color: rgba(0, 155, 34, 1);
+                border-radius:10px;
+                height: 60px;
+                width: 200px;
+            }
+
+            /* Style Modal Rejeitar Chamado*/
+
+            .box-rejeitar{
+                border:solid 5px #A8A7A7;
+                border-radius: 20px;
+                background-color: #fcfcfc;
+                width: 1010px;
+                height: 419px;
+                display:flex;
+                align-items:center;
+                flex-direction: column;
+                margin: auto;
+            }
+
+            .box-rejeitar textarea{
+                font-size: 18px;
+                font-weight:600;
+                border: solid 2px #A8A7A7;
+                border-radius: 10px;
+                padding: 10px;
+                height: 164px;
+                width: 790px;
+                resize: vertical;
+            }
+
+            .box-rejeitar button{
+                border:none;
+                font-size:24px;
+                color:#FCFCFC;
+                background-color: rgba(255, 79, 100, 0.9);
+                border-radius:10px;
+                height: 60px;
+                width: 300px;
+                margin:40px 0px 56px 0px;
+            }
+
+            /* Style chamado em andamento*/
+
+            .botao-padrao {
+                height: 35px;
+                width: 130px;
+                background-color: rgba(255, 79, 100, 0.9);
+                color:#FCFCFC;
+                font-size: 13px;
+                border-radius: 10px;
+                border: none;
+                position: absolute;
+                right: 16px;
+                bottom: 16px;
+            }
+
+            .botao-padrao:hover{
+                font-size: 14px;
+            }
+
+            /* Style Modal fechar chamado em analise*/
+
+            /* .card-fechar main{
+                margin:0px 110px 0px 110px;
+            }
+            
+            .modal {
+                display: none; 
+                position: fixed;
+                z-index: 1; 
+                padding-top: 100px;
+                left: 0;
+                top: 0;
+                width: 100%; 
+                height: 100%; 
+                overflow: auto; 
+                background-color: rgb(0,0,0); 
+                background-color: rgba(0,0,0,0.6); 
+            }
+
+            .card-fechar p{
+                border:solid 5px #A8A7A7;
+                border-radius: 20px;
+                background-color: #fcfcfc;
+                width: 1010px;
+                height: 600px;
+                margin: auto;
+            }
+
+            .conclusao-chamado{
+                font-weight: 500;
+                font-size: 26px;
+                display: flex;
+                justify-content: center;
+            }
+
+            .card-2{
+                border:solid 2px #A8A7A7;
+                border-radius: 10px;
+                width:100%;
+                align-items: center;
+                padding: 20px;
+                margin: 20px 0px 24px 0px;
+            }
+
+            .info-conclu{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 16px;    
+            }
+
+            .titulo-conclu{
+                font-weight: 600;  
+                font-size: 18px;
+            }
+   
+            .tipo-conclu{
+                font-weight: 600; 
+                margin-bottom: 16px;
+                font-size: 14px;
+            }
+
+            .descricao-conclu{
+                font-weight: 600; 
+                font-size: 14px;
+            }
+            
+            textarea{
+                font-size: 18px;
+                font-weight:600;
+                border: solid 2px #A8A7A7;
+                border-radius: 10px;
+                height: 164px;
+                width: 100%;
+                resize: vertical;
+                padding: 10px;
+            }
+    
+            .button{
+                border:none;
+                font-size:24px;
+                color:#FCFCFC;
+                background-color: #57DA74;
+                border-radius:10px;
+                height: 60px;
+                width: 300px;
+                margin-top:40px;
+            }
+
+            .botao-concluir{
+                display: flex;
+                justify-content: center;
+                align-items: center;    
+            }
+           
+            .superior{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-right:10px;
+            }
+
+            .icon-fechar{
+                height: 40px;
+                width: 40px;
+            }    */
+
+
+            /* aaaa */
+            .texto-fechamento{
+                border: solid 1px #A8A7A7;
+                border-radius: 10px;
+                min-height: 100px;
+                max-height: 300px;
+                width: 100%;
+                padding: 10px 20px;
+            }
+
+            .detalhes-fechamento{
+                font-weight: 600; 
+                margin-bottom: 4px;
+                font-size: 14px;    
+            }
+            </style>
+    </head>
+    <body>
+        
+        <header>
+            <img src="../../static/images/Usuario.svg"> 
+            <nav>
+                <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg"> Minhas Chamadas</a>
+                <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas requisições</a>
+                <a href="/executor/solicitacao">
+                <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
+                </a>
+            </nav>
+        </header>
+        <main>
+            <!--chamados em análise-->
+            <p class="chamado-analise">Chamados em Análise</p>
+            {%  if Values == 0 or leitoraberto == 0%}
+                <div class="box-req">
+                    <p>Sem requisições para análise no momento</p>
+                </div>
+            {% else %}
+                {% for user in Details %}
+                    {%if user[4] == 'Aberta'%}   
+                        <details>
+                            <summary>
+                                <p>{{user[1]}}</p><!--variavel titulo-->
+                                
+                                {% if user[3] == 'Problemas de Hardware'%}
+                                    <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
+                                {% elif user[3] == 'Problemas de Software'%}
+                                    <img class="icon" src="../static/images/Software.png" alt="icon">
+                                {%else%}
+                                    <img class="icon" src="../static/images/Info.png" alt="icon">
+                                {%endif%}
+                            </summary>
+                            <div class="conteudo">
+                                <p>Tipo: <span>{{user[3]}}</span></p>
+                                <p>Descrição: <span>{{user[2]}}</span></p>
+                            </div>
+                            <!-- <form action="/executor/chamadas-exec"> -->
+                            <div class="rejeitar-aceitar"> 
+                                <form action="/recusando/{{user.0}}" method="POST">
+                                    <button class="rejeitar" type="submit" id="btnrejeitar" value="">Rejeitar</button>
+                                </form> 
+                                <form action="/aceitando/{{user.0}}" method="POST">
+                                    <button class="aceitar" type="submit" id="btnaceitar" value="0">Aceitar</button>
+                                </form>
+                            </div>
+                        </details>
+                    {%endif%}   
+                {% endfor %}
+            {% endif %}
+
+            
+            <!--chamados andamento-->
+            <p class="chamado-andamento">Chamados em Andamento</p>
+            {%  if Values == 0 or leitorandamento == 0%}
+                <div class="box-req">
+                    <p>Sem chamados em andamento no momento</p>
+                </div>
+            {%else%}
+                {% for user in Details %}
+                    {%if user[4] == 'Andamento'%} 
+                        <details>
+                            <summary>
+                                <p>{{user[1]}}</p><!--variavel titulo-->
+                                {% if user[3] == 'Problemas de Hardware'%}
+                                    <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
+                                {% elif user[3] == 'Problemas de Software'%}
+                                    <img class="icon" src="../static/images/Software.png" alt="icon">
+                                {%else%}
+                                    <img class="icon" src="../static/images/Info.png" alt="icon">
+                                {%endif%}
+
+                            </summary>
+                            <div class="conteudo">
+                                <p>Tipo: <span>{{user[3]}}<!--variavel tipo--></span></p>
+                                <p>Descrição: <span>{{user[2]}}<!--variavel descricao--></span></p>
+                            </div>
+                            <form action="/recusando/{{user.0}}" method="POST">
+                                <button class="botao-padrao" id="myBtn" type="submit">Fechar Chamado</button>
+                            </form>
+                        </details>
+                    {%endif%}
+                {%endfor%}
+            {%endif%}
+            <!--Modal fechar chamado-->
+            <!-- <div id="myModal" class="modal">
+                <div class="card-fechar">   
+                    <main>
+                        <div class="icon-fechar"></div>
+                        <p> Conclusão de Chamada </p> 
+                        <div class="card-2">
+                            <div class="info-conclu">
+                                <p class="titulo-conclu"></p>variavel titulo-->
+                                <!-- <p>11/11/1111</p>
+                            </div>
+                            <div class="conteudo-conclu">
+                                <p class="tipo-conclu">Tipo: <span></span></p>
+                                <p class="descricao-conclu">Descrição: <span></span></p>
+                            </div>
+                        </div>
+                        <textarea name="txtdesc" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
+                        <div class="botao-concluir">
+                            <button>Concluir chamada</button>
+                        </div>
+                    </main>
+                </div>
+            </div> -->
+
+            <!--chamados fechado-->
+            <p class="chamado-fechada">Chamados Fechados</p>
+            {%  if leitorfechado == 0 or Values==0 %}
+                <div class="box-req">
+                    <p>Sem chamados fechadas no momento</p>
+                </div>
+            {%else%}
+                {% for user in Details %}
+                    {%if user[4] == 'Fechada'%} 
+                        <details>
+                            <summary>
+                                <p>{{user[1]}}</p><!--variavel titulo-->
+                                {% if user[3] == 'Problemas de Hardware'%}
+                                    <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
+                                {% elif user[3] == 'Problemas de Software'%}
+                                    <img class="icon" src="../static/images/Software.png" alt="icon">
+                                {%else%}
+                                    <img class="icon" src="../static/images/Info.png" alt="icon">
+                                {%endif%}
+                            </summary>
+                            <div class="conteudo">
+                                <p>Tipo: <span>{{user[3]}}<!--variavel tipo--></span></p>
+                                <p>Descrição: <span>{{user[2]}}<!--variavel descricao--></span></p>
+                            </div>
+                            <p class="detalhes-fechamento"> Requisição Fechada por: <span> <!--variavel de usuario que fechou o chamado--></span></p> 
+                            <div class="texto-fechamento"> <span> </span> </div>
+                        </details>
+                   {%endif%}
+                {%endfor%} 
+            {%endif%}
+
+
+            <!--Legendas-->
+            <p class="tipo-legenda">Tipos de problemas</p>
+            <div class="legenda">
+                <div class="hardware">            
+                    <div>
+                        <p class="categoria">Problemas de Hardware</p>
+                        <p class="quant">Quantidade:{{prob}}</p> <!--variavel de quantidade-->
+                    </div>    
+                <img class="icon" src="../../static/images/Hardware.png" alt="hardware">
+            </div>   
+    
+                <div class="software">
+                    <div>
+                        <p class="categoria">Problemas de Software</p>
+                        <p class="quant">Quantidade:{{prob1}}</p> <!--variavel de quantidade-->
+                    </div>    
+                    <img class="icon" src="../../static/images/Software.png" alt="hardware">
+                </div>  
+    
+                <div class="info">
+                    <div>
+                        <p class="categoria">Esclarecimento/informação</p>
+                        <p class="quant">Quantidade:{{prob2}}</p> <!--variavel de quantidade-->
+                    </div>    
+                    <img class="icon" src="../../static/images/Info.png" alt="hardware">
+                </div>  
+            </div>
+        </main>
+
+<!--script-->
+        
+        <script>
+            var modalaceitar = document.getElementById("aceitar");
+            var modalrejeitar = document.getElementById("rejeitar");
+            var btnaceitar = document.getElementById("btnaceitar");
+            var btnrejeitar = document.getElementById("btnrejeitar");
+            var fechar = document.getElementsByClassName("icon-fechar")[0];
+            
+            btnaceitar.onclick = function() {
+                modalaceitar.style.display = "block";
+            }
+
+            btnrejeitar.onclick = function() {
+                modalrejeitar.style.display = "block";
+            }
+            
+            fechar.onclick = function() {
+                modalaceitar.style.display = "none";
+            }
+
+            fechar.onclick = function() {
+                modalrejeitar.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+              if (event.target == modalaceitar) {
+                modalaceitar.style.display = "none";
+              }
+
+              if (event.target == modalrejeitar) {
+                modalrejeitar.style.display = "none";
+              }
+            }
+            
+            </script>
+    </body>
+</html>
+<!--Modal aceitar/rejeitar-->
+
+                <!-- <div id="aceitar" class="modal">
+                    <div class="box-aceitar">
+                        <div class="icon-fechar"></div>
+                        <p>Chamada Aceita</p>
+                         <form action="/aceitando/" method="POST"> 
+                            <button class="aceitar" type="submit" id="btnaceitar">Aceitar</button>
+                         </form> -->
+                    <!-- </div> -->
+                <!-- </div> -->
+                <!-- <div id="rejeitar" class="modal">
+                    <div class="box-rejeitar">
+                        <div class="icon-fechar"></div>
+                        <p>Critério de Rejeição</p>
+                        <P> </P>
+                        <textarea name="txtdesc" id="txtdesc" placeholder="Descreva o motivo da rejeição"></textarea>
+                        <form action="/recusando/" method="POST">
+                            <button class="rejeitar" type="submit" id="btnrejeitar">Rejeitar</button>
+                        </form> 
+                    </div>
+                </div> -->

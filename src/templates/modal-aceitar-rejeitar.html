@@ -119,17 +119,17 @@
             }
 
             .modal {
-                display: none;
-                position: fixed;
-                z-index: 1;
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
                 padding-top: 100px;
                 left: 0;
                 top: 0;
-                width: 100%;
-                height: 100%;
-                overflow: auto;
-                background-color: rgb(0,0,0); 
-                background-color: rgba(0,0,0,0.6);
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
             }
 
             /* Style Modal Rejeitar Chamado*/
@@ -176,7 +176,7 @@
             <summary class="info">
                 <p class="titulo">Titulo do Chamado</p><!--variavel titulo-->
                 <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-            </summary>
+                </summary>
             <div class="conteudo">
                 <p class="tipo">Tipo: <span><!--variavel tipo--></span></p>
                 <p class="descricao">Descrição: <span><!--variavel descricao--></span></p>
@@ -205,9 +205,13 @@
         </div>
         <script>
             var modalaceitar = document.getElementById("aceitar");
+
             var modalrejeitar = document.getElementById("rejeitar");
+            
             var btnaceitar = document.getElementById("btnaceitar");
+
             var btnrejeitar = document.getElementById("btnrejeitar");
+            
             var span = document.getElementsByClassName("icon-fechar")[0];
             
             btnaceitar.onclick = function() {
@@ -218,6 +222,7 @@
                 modalrejeitar.style.display = "block";
             }
             
+            // When the user clicks on <span> (x), close the modal
             span.onclick = function() {
                 modalaceitar.style.display = "none";
             }
@@ -226,6 +231,7 @@
                 modalrejeitar.style.display = "none";
             }
             
+            // When the user clicks anywhere outside of the modal, close it
             window.onclick = function(event) {
               if (event.target == modalaceitar) {
                 modalaceitar.style.display = "none";

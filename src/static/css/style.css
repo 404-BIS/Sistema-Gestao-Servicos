@@ -135,7 +135,7 @@ a{
     margin: 40px 168px 32px 168px;    
 }
 
-form {
+.formulario {
     border:solid  3px #A8A7A7; 
     border-radius: 15px;
     padding: 48px 36px;
