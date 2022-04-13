@@ -73,11 +73,11 @@ RNF 09 | Utilizar JavaScript no front end (obs: pode fazer uso de frameworks). |
   
 COD | DESCRIÇÃO | AREA | STATUS |
 :--:|:---------:|:------:|:-----|
-SP01 01 | Prototipação do sistema de solicitações. | ✔️ |
-SP01 02 | Criação do Front para o sistema de solicitações em webcomponents. | ✔ |
-SP01 03 | Criação do Banco de dados para o sistema de solicitações | ✔ |
-SP01 04 | CRUD para sistema de solicitações | ✔ |
-SP01 05 | Implementação da Parte de solicitações | ✔ |
+SP01 01 | Prototipação do sistema de solicitações. | Front-end e Back-end | ✔ |
+SP01 02 | Criação do Front para o sistema de solicitações. | Front-end | ✔ |
+SP01 03 | Criação do Banco de dados para o sistema de solicitações. | Back-end | ✔ |
+SP01 04 | CRUD para sistema de solicitações. | Back-end | ✔ |
+SP01 05 | Implementação da Parte de solicitações. | Front-end e Back-end | ✔ |
 
 
 </div>
@@ -85,7 +85,24 @@ SP01 05 | Implementação da Parte de solicitações | ✔ |
 <div align="center">
   
   ### Protótipo do Projeto
-  ### JOGAR IMAGENS AQUI
+  #### Tela Login e de Cadastro
+![Login](https://user-images.githubusercontent.com/79495727/163172972-9e18f440-1dc3-4a7c-adbc-cba09ff76c5e.png)
+![Cadastrar](https://user-images.githubusercontent.com/79495727/163173006-b046683a-5503-417a-b1e0-cfc6e06d7147.png)
+  #### Tela de Nova Requisção
+![User](https://user-images.githubusercontent.com/79495727/163174079-a4cb83e1-6499-40ea-b649-496966689473.png)
+  #### Tela de Requisições sem requisições
+![User](https://user-images.githubusercontent.com/79495727/163173165-c038cc75-b515-4b3b-8f8d-3853caa7a5d0.png)
+  #### Tela de Requisições com requisições
+![User](https://user-images.githubusercontent.com/79495727/163173812-297c409a-0e76-4edf-9e8e-43fca5a1c72a.png)
+  #### Tela de Requisições com requisições abertas detalhadas
+![User](https://user-images.githubusercontent.com/79495727/163173591-27f47370-4970-4783-9e33-cd33ed57fe77.png)
+ #### Tela de Requisições com requisições fechadas detalhadas
+![User](https://user-images.githubusercontent.com/79495727/163173708-c82c6e82-ccc2-4071-9f1d-b939d74783c6.png)
+ #### Modal de Avaliação  
+![User](https://user-images.githubusercontent.com/79495727/163173976-f21eac2a-2a7b-46af-a264-67dad63b1a59.png)
+ #### Modal Perfil
+![User](https://user-images.githubusercontent.com/79495727/163174170-00d1ddc4-afbc-4e6a-a885-fef374136bd1.png)
+
 
 </div>
 
@@ -109,11 +126,13 @@ set FLASK_ENV=development
 set FLASK_APP=src/app.py
 ~~~
 ### Abra o Workbench e crie o banco de dados de forma local
+
 <div align="center">
   
   ### Jogar imagens aqui
 
 </div>
+
 ### Rode o servidor local
 ~~~
 flask run
@@ -132,3 +151,4 @@ Set-ExecutionPolicy Unrestricted
    ![image](https://user-images.githubusercontent.com/79495727/160821599-f4b87a00-5f66-408b-a201-de8bdea3c394.png)
 
  </div>
+
