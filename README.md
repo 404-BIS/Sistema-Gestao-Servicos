@@ -73,15 +73,11 @@ RNF 09 | Utilizar JavaScript no front end (obs: pode fazer uso de frameworks). |
   
 COD | DESCRIÇÃO | AREA | STATUS |
 :--:|:---------:|:------:|:-----|
-SP01 01 | AQUI | ✔️ |
-SP01 02 | AQUI | ✔ |
-SP01 03 | AQUI | ✔ |
-SP01 04 | AQUI | ✔ |
-SP01 05 | AQUI | ✔ |
-SP01 06 | AQUI | ✔ |
-SP01 07 | AQUI | ✔ |
-SP01 08 | AQUI | ✔ |
-SP01 09 | AQUI | ✔ |
+SP01 01 | Prototipação do sistema de solicitações. | ✔️ |
+SP01 02 | Criação do Front para o sistema de solicitações em webcomponents. | ✔ |
+SP01 03 | Criação do Banco de dados para o sistema de solicitações | ✔ |
+SP01 04 | CRUD para sistema de solicitações | ✔ |
+SP01 05 | Implementação da Parte de solicitações | ✔ |
 
 
 </div>
