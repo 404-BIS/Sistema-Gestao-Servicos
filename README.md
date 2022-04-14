@@ -18,7 +18,8 @@
     
   
 > :gear: **Tecnologias Utilizadas:** [Figma](http://www.figma.com), [HTML](https://developer.mozilla.org/pt-BR/docs/Web/HTML), [CSS](https://developer.mozilla.org/pt-BR/docs/Web/CSS), [JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript), [Python](https://www.python.org/), [Flask](https://flask.palletsprojects.com/en/2.0.x/), [Visual Studio Code](https://code.visualstudio.com/), [Discord](https://discord.com/), [GitHub](https://github.com/)
-    
+   
+ <div align="center">   
  <span id="backlog">
   
  ## :dart: Backlogs
@@ -45,7 +46,7 @@
 | RNF 05 | Interface simples e intuitiva |  
 | RNF 06 | Sistema deve ser responsivo |
 | RNF 07 | Backend em Python 3+ e microframework Flask |
-
+     
 ### Backlog das sprints 
 #### Sprint 1
 | CÓDIGO | DESCRIÇÃO |
@@ -56,8 +57,13 @@
 | RF 03 | Aceite ou rejeite de chamados |
 | --    | Criação e integração do banco de dados |  
      
-#### Metricas      
-     
+#### Metricas Sprint 1      
+ Utilizamos os gráficos de burndown como forma de medir o desempenho e o progeresso durante a sprint:
+  
+ ![Burndown Chart](https://user-images.githubusercontent.com/92696799/163481889-2437818c-bdb1-4c7a-b16f-e78ee6afe424.png)
+ 
+ ![Tarefas da sprint](https://user-images.githubusercontent.com/92696799/163482254-30419030-b6b7-4856-add2-3c80a5d87edc.jpg)
+  
      
 #### Sprint 2
 | CÓDIGO | DESCRIÇÃO |
@@ -72,7 +78,8 @@
 |:------:|:---------:|
 | RF 07 | Geração de estatíticas | SPRINT 3 |
 
- <span id="pastas">
+</div>     
+<span id="pastas">
    
 ## :file_folder: Configuração das pastas
 * 📂 `src`: Pasta com os códigos
