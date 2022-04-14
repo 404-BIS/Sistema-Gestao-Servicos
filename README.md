@@ -62,7 +62,8 @@
   
  ![Burndown Chart](https://user-images.githubusercontent.com/92696799/163481889-2437818c-bdb1-4c7a-b16f-e78ee6afe424.png)
  
- ![Tarefas da sprint](https://user-images.githubusercontent.com/92696799/163482254-30419030-b6b7-4856-add2-3c80a5d87edc.jpg)
+ ![Tarefas da sprint](https://user-images.githubusercontent.com/92696799/163482971-bf152d18-be96-4270-8b33-98c68c556097.jpg)
+
   
      
 #### Sprint 2
