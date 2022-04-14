@@ -85,14 +85,11 @@
   
 ## :desktop_computer: Prótotipo
   
-<div align="center">
-  
-### Protótipo do Projeto
 #### Prótotipo da tela do usuário
     
 ![API](https://user-images.githubusercontent.com/92696799/163493216-654e13f5-c4b9-43df-a295-8dd7b179e3dc.gif)
-
-</div>
+    
+![API-Exec](https://user-images.githubusercontent.com/92696799/163494007-21cde00e-1f0f-4c82-a52f-51ee6eef6012.gif)
 
 <span id="rodar"> 
     
