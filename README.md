@@ -80,12 +80,7 @@
 | RF 07 | Geração de estatíticas | SPRINT 3 |
 
 </div>     
-<span id="pastas">
-   
-## :file_folder: Configuração das pastas
-* 📂 `src`: Pasta com os códigos
-* 📂 `doc`: Pasta com Documentação relacionada ao Projeto
- 
+
 <span id="prototipo"> 
   
 ## :desktop_computer: Prótotipo
@@ -142,6 +137,12 @@ Digite 'A'
 
  </div>
     
+<span id="pastas">
+   
+## :file_folder: Configuração das pastas
+* 📂 `src`: Pasta com os códigos
+* 📂 `doc`: Pasta com Documentação relacionada ao Projeto
+     
 <span id="equipe"> 
     
 ## :busts_in_silhouette: Equipe
