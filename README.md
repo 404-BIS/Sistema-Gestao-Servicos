@@ -88,9 +88,9 @@
 <div align="center">
   
 ### Protótipo do Projeto
-#### Tela Login e de Cadastro
-![Login](https://user-images.githubusercontent.com/79495727/163172972-9e18f440-1dc3-4a7c-adbc-cba09ff76c5e.png)
-![Cadastrar](https://user-images.githubusercontent.com/79495727/163173006-b046683a-5503-417a-b1e0-cfc6e06d7147.png)
+#### Prótotipo da tela do usuário
+    
+![API](https://user-images.githubusercontent.com/92696799/163493216-654e13f5-c4b9-43df-a295-8dd7b179e3dc.gif)
 
 </div>
 
