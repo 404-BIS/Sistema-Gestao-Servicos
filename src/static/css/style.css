@@ -198,18 +198,20 @@ select {
 }
 
 .enviar{
-    background-color: rgba(87, 218, 116, 70%);
+    background-color: rgba(0, 155, 34, 1);
+    color:#fff;
+    font-size: 24px;
     border-radius: 15px;
-    font-weight: 500;
     height: 50px;
     width: 200px;
     border:none;
 }
 
 .limpar{
-    background-color: rgba(255, 224, 66, 90%);
+    background-color:rgba(255, 224, 66, 0.9);
     border-radius: 15px;
-    font-weight: 500;
+    color:#000;
+    font-size: 24px;
     height: 50px;
     width: 200px;
     border:none;
@@ -247,3 +249,117 @@ main {
     font-size: 24px;
     margin: 40px 0px 32px 0px;
 }
+
+/* Cards */
+
+details{
+    border:solid 2px #A8A7A7;
+    border-radius: 10px;
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 16px 16px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+details summary{
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+summary p{
+    font-weight: 600;  
+    font-size: 18px;
+}
+
+summary img {
+    height: 50px;
+    width: 50px;  
+}
+
+.conteudo{
+    overflow-wrap: break-word;
+    width: 80%;
+}
+
+.conteudo p{
+    font-weight: 600; 
+    margin-bottom: 16px;
+    font-size: 15px;
+}
+
+span{
+    color:#6c6868;
+    font-weight: 500;
+    font-size: 14px; 
+}
+
+.texto-fechamento{
+    border: solid 1px #A8A7A7;
+    border-radius: 10px;
+    min-height: 100px;
+    max-height: 300px;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.detalhes-fechamento{
+    font-weight: 600; 
+    margin-bottom: 4px;
+    font-size: 14px;    
+}
+
+.icon {
+    height: 50px;
+    width: 50px;  
+}
+
+.botao-padrao {
+    height: 35px;
+    width: 130px;
+    background-color: rgba(255, 79, 100, 0.9);
+    color:#FCFCFC;
+    border-radius: 10px;
+    border: none;
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+}
+
+.botao-padrao:hover{
+    font-size: 14px;
+}
+
+/* Componente Aceitar/rejeitar*/
+
+.rejeitar-aceitar{
+    display: flex;
+    justify-content: flex-end;
+    margin-top:-16px
+}
+
+.rejeitar-aceitar .rejeitar{
+    height: 35px;
+    width: 90px;
+    background-color: rgba(255, 79, 100, 0.9);
+    color:#FCFCFC;
+    border-radius: 10px;
+    border: none;
+    bottom: 16px;
+    margin-right:24px ;
+}
+
+.rejeitar-aceitar .aceitar{
+    height: 35px;
+    width: 90px;
+    background-color: rgba(0, 155, 34, 1);
+    color:#FCFCFC;
+    border-radius: 10px;
+    border: none;
+    bottom: 16px;
+}
+

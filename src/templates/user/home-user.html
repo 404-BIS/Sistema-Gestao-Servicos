@@ -4,86 +4,6 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
-        <style type="text/css"> 
-            details{
-                border:solid 2px #A8A7A7;
-                border-radius: 10px;
-                width:100%;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 16px 16px 16px 16px;
-                margin-bottom: 16px;
-                position: relative;
-            }
-
-            details summary{
-                list-style: none;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-    
-            summary p{
-                font-weight: 600;  
-                font-size: 18px;
-            }
-
-            summary img {
-                height: 50px;
-                width: 50px;  
-            }
-    
-            .conteudo{
-                overflow-wrap: break-word;
-                width: 80%;
-            }
-
-            .conteudo p{
-                font-weight: 600; 
-                margin-bottom: 16px;
-                font-size: 15px;
-            }
-
-            span{
-                color:#6c6868;
-                font-weight: 500;
-                font-size: 14px; 
-            }
-
-            .texto-fechamento{
-                border: solid 1px #A8A7A7;
-                border-radius: 10px;
-                min-height: 100px;
-                max-height: 300px;
-                width: 100%;
-                padding: 10px 20px;
-            }
-
-            .detalhes-fechamento{
-                font-weight: 600; 
-                margin-bottom: 4px;
-                font-size: 14px;    
-            }
-
-            .icon {
-                height: 50px;
-                width: 50px;  
-            }
-
-            .botao-padrao {
-                height: 35px;
-                width: 130px;
-                background-color: rgba(255, 79, 100, 0.9);
-                color:#FCFCFC;
-                border-radius: 10px;
-                border: none;
-                position: absolute;
-                right: 16px;
-                bottom: 16px;
-            }
-
-            </style>
     </head>
     <body>
         <header>
@@ -125,9 +45,6 @@
                     </details>
                 {% endif %}
             {% endfor %}
-            
-            
-
             <p class="req-fechada">Requisições Fechadas</p>
             {%  if leitorfechado == 0 or Values==0 %}
                 <div class="box-req">

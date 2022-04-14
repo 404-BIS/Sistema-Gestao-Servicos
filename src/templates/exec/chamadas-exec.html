@@ -5,83 +5,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
         <style type="text/css"> 
-            details{
-                border:solid 2px #A8A7A7;
-                border-radius: 10px;
-                width:100%;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 16px 16px 16px 16px;
-                margin-bottom: 16px;
-                position: relative;
-            }
-
-            summary{
-                list-style: none;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-    
-            summary p{
-                font-weight: 600;  
-                font-size: 18px;
-            }
-    
-            .conteudo{
-                overflow-wrap: break-word;
-                width: 80%;
-            }
-
-            .conteudo p{
-                font-weight: 600; 
-                font-size: 15px;
-                margin-bottom: 16px;
-            }
-
-            .icon {
-                height: 50px;
-                width: 50px;  
-            }
-
-            .botao-padrao:hover{
-                font-size: 14px;
-            }
-
-             .conteudo span{
-                color:#6c6868;
-            }
-
-            .rejeitar-aceitar{
-                display: flex;
-                justify-content: flex-end;
-                margin-top:-16px
-            }
-
-            .rejeitar-aceitar .rejeitar{
-                height: 35px;
-                width: 90px;
-                background-color: rgba(255, 79, 100, 0.9);
-                color:#FCFCFC;
-                border-radius: 10px;
-                border: none;
-                bottom: 16px;
-                margin-right:24px ;
-            }
-
-            .rejeitar-aceitar .aceitar{
-                height: 35px;
-                width: 90px;
-                background-color: rgba(0, 155, 34, 1);
-                color:#FCFCFC;
-                border-radius: 10px;
-                border: none;
-                bottom: 16px;
-            }
-
-            /* Style Modal Aceitar Chamado*/
-
+            
+            /*Modal Padrão*/
             .modal {
                 display: none; 
                 position: fixed; 
@@ -96,6 +21,7 @@
                 background-color: rgba(0,0,0,0.6); 
             }
 
+            /* Style Modal Aceitar Chamado*/
             .box-aceitar{
                 border:solid 5px #A8A7A7;
                 border-radius: 20px;
@@ -109,7 +35,7 @@
             }
 
             .box-aceitar p{
-                padding: 30px 0px 20px 0px; 
+                padding: 0px 0px 20px 0px; 
                 font-size: 26px;
             }
 
@@ -123,82 +49,13 @@
                 width: 200px;
             }
 
-            /* Style Modal Rejeitar Chamado*/
-
-            .box-rejeitar{
-                border:solid 5px #A8A7A7;
-                border-radius: 20px;
-                background-color: #fcfcfc;
-                width: 1010px;
-                height: 419px;
-                display:flex;
-                align-items:center;
-                flex-direction: column;
-                margin: auto;
-            }
-
-            .box-rejeitar textarea{
-                font-size: 18px;
-                font-weight:600;
-                border: solid 2px #A8A7A7;
-                border-radius: 10px;
-                padding: 10px;
-                height: 164px;
-                width: 790px;
-                resize: vertical;
-            }
-
-            .box-rejeitar button{
-                border:none;
-                font-size:24px;
-                color:#FCFCFC;
-                background-color: rgba(255, 79, 100, 0.9);
-                border-radius:10px;
-                height: 60px;
-                width: 300px;
-                margin:40px 0px 56px 0px;
-            }
-
-            /* Style chamado em andamento*/
-
-            .botao-padrao {
-                height: 35px;
-                width: 130px;
-                background-color: rgba(255, 79, 100, 0.9);
-                color:#FCFCFC;
-                font-size: 13px;
-                border-radius: 10px;
-                border: none;
-                position: absolute;
-                right: 16px;
-                bottom: 16px;
-            }
-
-            .botao-padrao:hover{
-                font-size: 14px;
-            }
-
             /* Style Modal fechar chamado em analise*/
 
-            /* .card-fechar main{
+            .card-conclu main{
                 margin:0px 110px 0px 110px;
             }
-            
-            .modal {
-                display: none; 
-                position: fixed;
-                z-index: 1; 
-                padding-top: 100px;
-                left: 0;
-                top: 0;
-                width: 100%; 
-                height: 100%; 
-                overflow: auto; 
-                background-color: rgb(0,0,0); 
-                background-color: rgba(0,0,0,0.6); 
-            }
 
-            .card-fechar p{
+            .card-conclu{
                 border:solid 5px #A8A7A7;
                 border-radius: 20px;
                 background-color: #fcfcfc;
@@ -257,15 +114,19 @@
                 padding: 10px;
             }
     
-            .button{
+            .bot-conclu{
                 border:none;
                 font-size:24px;
                 color:#FCFCFC;
-                background-color: #57DA74;
+                background-color: rgba(0, 155, 34, 1);
                 border-radius:10px;
                 height: 60px;
                 width: 300px;
                 margin-top:40px;
+            }
+
+            .bot-conclu:hover{
+                font-size: 27px;
             }
 
             .botao-concluir{
@@ -284,24 +145,8 @@
             .icon-fechar{
                 height: 40px;
                 width: 40px;
-            }    */
-
-
-            /* aaaa */
-            .texto-fechamento{
-                border: solid 1px #A8A7A7;
-                border-radius: 10px;
-                min-height: 100px;
-                max-height: 300px;
-                width: 100%;
-                padding: 10px 20px;
             }
 
-            .detalhes-fechamento{
-                font-weight: 600; 
-                margin-bottom: 4px;
-                font-size: 14px;    
-            }
             </style>
     </head>
     <body>
@@ -309,7 +154,7 @@
         <header>
             <img src="../../static/images/Usuario.svg"> 
             <nav>
-                <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg"> Minhas Chamadas</a>
+                <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg"> Meus Chamados</a>
                 <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas requisições</a>
                 <a href="/executor/solicitacao">
                 <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
@@ -319,17 +164,20 @@
         <main>
             <!--chamados em análise-->
             <p class="chamado-analise">Chamados em Análise</p>
+            {% set variable = namespace() %}
+            {% set variable.useropen = 1 %}
             {%  if Values == 0 or leitoraberto == 0%}
                 <div class="box-req">
                     <p>Sem requisições para análise no momento</p>
                 </div>
             {% else %}
                 {% for user in Details %}
-                    {%if user[4] == 'Aberta'%}   
+                    {% set variable.useropen = user %}
+                    {%if user[4] == 'Aberta'%}  
+                        
                         <details>
                             <summary>
                                 <p>{{user[1]}}</p><!--variavel titulo-->
-                                
                                 {% if user[3] == 'Problemas de Hardware'%}
                                     <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
                                 {% elif user[3] == 'Problemas de Software'%}
@@ -344,27 +192,60 @@
                             </div>
                             <!-- <form action="/executor/chamadas-exec"> -->
                             <div class="rejeitar-aceitar"> 
-                                <form action="/recusando/{{user.0}}" method="POST">
-                                    <button class="rejeitar" type="submit" id="btnrejeitar" value="">Rejeitar</button>
-                                </form> 
-                                <form action="/aceitando/{{user.0}}" method="POST">
-                                    <button class="aceitar" type="submit" id="btnaceitar" value="0">Aceitar</button>
-                                </form>
+                                <button class="rejeitar btnrejeitar" type="submit">Rejeitar</button>
+                                <button class="aceitar" type="submit" id="btnaceitar">Aceitar</button>
                             </div>
                         </details>
+                       
                     {%endif%}   
                 {% endfor %}
             {% endif %}
-
             
+            <div id="rejeitar" class="modal">
+                <div class="card-conclu">   
+                    <main>
+                        <div class="icon-fechar"></div>
+                        <p class="conclusao-chamado"> Conclusão de Chamada </p> 
+                        <div class="card-2">
+                            <div class="info-conclu">
+                                <p class="titulo-conclu">{{variable.useropen[1]}}</p><!--variavel titulo-->
+                                <p>11/11/1111</p>
+                            </div>
+                            <div class="conteudo-conclu">
+                                <p class="tipo-conclu">Tipo: <span>{{variable.useropen[3]}}</span></p>
+                                <p class="descricao-conclu">Descrição: <span>{{variable.useropen[2]}}</span></p>
+                            </div>
+                        </div>
+                        <textarea name="txtdesc" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
+                        <div class="botao-concluir">
+                            <form action="/recusando/{{variable.useropen.0}}" method="POST">
+                                <button class="bot-conclu" type="submit">Concluir Chamado</button>
+                            </form>
+                        </div>
+                    </main>
+                </div> 
+            </div>
+            <div id="aceitar" class="modal">
+                <div class="box-aceitar">
+                    <div class="icon-fechar"></div>
+                    <p>Chamada Aceita</p>
+                    <form action="/aceitando/{{variable.useropen.0}}" method="POST"> 
+                        <button class="aceitar" type="submit">Aceitar</button>
+                    </form> 
+                </div> 
+            </div>
             <!--chamados andamento-->
             <p class="chamado-andamento">Chamados em Andamento</p>
+            {% set ns = namespace() %}
+            {% set ns.user = 1 %}
+
             {%  if Values == 0 or leitorandamento == 0%}
                 <div class="box-req">
                     <p>Sem chamados em andamento no momento</p>
                 </div>
             {%else%}
                 {% for user in Details %}
+                    {% set ns.user = user %}
                     {%if user[4] == 'Andamento'%} 
                         <details>
                             <summary>
@@ -382,36 +263,39 @@
                                 <p>Tipo: <span>{{user[3]}}<!--variavel tipo--></span></p>
                                 <p>Descrição: <span>{{user[2]}}<!--variavel descricao--></span></p>
                             </div>
-                            <form action="/recusando/{{user.0}}" method="POST">
-                                <button class="botao-padrao" id="myBtn" type="submit">Fechar Chamado</button>
-                            </form>
+                            <div class="rejeitar-aceitar"> 
+                                <button class="rejeitar btnrejeitar" type="submit">Rejeitar</button>
+                            </div>
                         </details>
+                        
                     {%endif%}
                 {%endfor%}
             {%endif%}
-            <!--Modal fechar chamado-->
-            <!-- <div id="myModal" class="modal">
-                <div class="card-fechar">   
+            <div id="rejeitar" class="modal">
+                <div class="card-conclu">   
                     <main>
                         <div class="icon-fechar"></div>
-                        <p> Conclusão de Chamada </p> 
+                        <p class="conclusao-chamado"> Conclusão de Chamada </p> 
                         <div class="card-2">
                             <div class="info-conclu">
-                                <p class="titulo-conclu"></p>variavel titulo-->
-                                <!-- <p>11/11/1111</p>
+                                <p class="titulo-conclu">{{ns.user[1]}}</p><!--variavel titulo-->
+                                <p>11/11/1111</p>
                             </div>
                             <div class="conteudo-conclu">
-                                <p class="tipo-conclu">Tipo: <span></span></p>
-                                <p class="descricao-conclu">Descrição: <span></span></p>
+                                <p class="tipo-conclu">Tipo: <span>{{ns.user[3]}}</span></p>
+                                <p class="descricao-conclu">Descrição: <span>{{ns.user[2]}}</span></p>
                             </div>
                         </div>
                         <textarea name="txtdesc" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
                         <div class="botao-concluir">
-                            <button>Concluir chamada</button>
+                            <form action="/recusando/{{ns.user.0}}" method="POST">
+                                <button class="bot-conclu" type="submit">Concluir Chamado</button>
+                            </form>
                         </div>
                     </main>
-                </div>
-            </div> -->
+                </div> 
+            </div>
+            
 
             <!--chamados fechado-->
             <p class="chamado-fechada">Chamados Fechados</p>
@@ -443,7 +327,6 @@
                    {%endif%}
                 {%endfor%} 
             {%endif%}
-
 
             <!--Legendas-->
             <p class="tipo-legenda">Tipos de problemas</p>
@@ -480,25 +363,25 @@
             var modalaceitar = document.getElementById("aceitar");
             var modalrejeitar = document.getElementById("rejeitar");
             var btnaceitar = document.getElementById("btnaceitar");
-            var btnrejeitar = document.getElementById("btnrejeitar");
+            var btnsrejeitar = document.getElementsByClassName("btnrejeitar");
             var fechar = document.getElementsByClassName("icon-fechar")[0];
-            
+            for (let x=0;btnsrejeitar.length >x ; x++){
+                console.log('cheguei')
+                btnsrejeitar[x].onclick = function() {
+                modalrejeitar.style.display = "block";
+                
+                }
+            }
             btnaceitar.onclick = function() {
                 modalaceitar.style.display = "block";
             }
-
-            btnrejeitar.onclick = function() {
-                modalrejeitar.style.display = "block";
-            }
-            
+           
             fechar.onclick = function() {
                 modalaceitar.style.display = "none";
             }
-
             fechar.onclick = function() {
                 modalrejeitar.style.display = "none";
             }
-
             window.onclick = function(event) {
               if (event.target == modalaceitar) {
                 modalaceitar.style.display = "none";
@@ -508,29 +391,6 @@
                 modalrejeitar.style.display = "none";
               }
             }
-            
             </script>
     </body>
 </html>
-<!--Modal aceitar/rejeitar-->
-
-                <!-- <div id="aceitar" class="modal">
-                    <div class="box-aceitar">
-                        <div class="icon-fechar"></div>
-                        <p>Chamada Aceita</p>
-                         <form action="/aceitando/" method="POST"> 
-                            <button class="aceitar" type="submit" id="btnaceitar">Aceitar</button>
-                         </form> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-                <!-- <div id="rejeitar" class="modal">
-                    <div class="box-rejeitar">
-                        <div class="icon-fechar"></div>
-                        <p>Critério de Rejeição</p>
-                        <P> </P>
-                        <textarea name="txtdesc" id="txtdesc" placeholder="Descreva o motivo da rejeição"></textarea>
-                        <form action="/recusando/" method="POST">
-                            <button class="rejeitar" type="submit" id="btnrejeitar">Rejeitar</button>
-                        </form> 
-                    </div>
-                </div> -->

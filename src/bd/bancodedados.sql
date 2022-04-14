@@ -7,12 +7,14 @@ create table requisicao_exec (
     titulo varchar (40) not null,
 	descricao varchar (150) not null,
     tipo varchar (40) not null,
-    condicao varchar (15)
+    condicao varchar (15),
+    comentario varchar(200)
 );
 create table requisicao (
 	id_requisicao int primary key auto_increment,
     titulo varchar (40) not null,
 	descricao varchar (150) not null,
     tipo varchar (40) not null,
-    condicao varchar (15)
+    condicao varchar (15),
+    comentario varchar(200)
 );

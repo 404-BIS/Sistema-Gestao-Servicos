@@ -1,15 +1,13 @@
-from colorama import Cursor
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
 from flask.views import MethodView
-from sqlalchemy import null
 
 
 app = Flask(__name__)
  
 app.config['MYSQL_HOST'] = 'localhost'  
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'lukinhas123'
+app.config['MYSQL_PASSWORD'] = 'admim'
 app.config['MYSQL_DB'] = 'sistema_solicitacao'
  
 mysql = MySQL(app)
@@ -97,8 +95,8 @@ def ExecChamada():
     Values=Cursor.execute("SELECT * FROM requisicao")
     if Values > 0:
         Details = Cursor.fetchall()
-        return render_template('exec/chamadas-exec.html', Details=Details,Values=Values,prob=prob,prob1=prob1,prob2=prob2,leitoraberto = leitoraberto ,leitorfechado = leitorfechado ,leitorandamento =leitorandamento )
-    return render_template('exec/chamadas-exec.html', Details=Details,Values=Values)
+        return render_template('exec/chamadas-exec.html', Details=Details,Values=Values,prob=prob,prob1=prob1,prob2=prob2,leitoraberto = leitoraberto ,leitorfechado = leitorfechado ,leitorandamento =leitorandamento)
+    return render_template('exec/chamadas-exec.html',Values=Values)
 # ---------------------------------------------update------------------------------------------------------------------------------
 
 @app.route('/aceitando/<id>', methods=['POST'])
