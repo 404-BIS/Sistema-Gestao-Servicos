@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
-from flask.views import MethodView
+
 
 
 app = Flask(__name__)
@@ -14,7 +14,7 @@ mysql = MySQL(app)
 
 @app.route('/')
 def MainHome():
-    return render_template('user/home-user.html')
+    return redirect('/usuario/menu')
 #---------------------------------------------------------------------------------------USUARIO----------------------------
 @app.route('/usuario/solicitacao', methods=['GET','POST'])
 def index():
@@ -24,8 +24,9 @@ def index():
         descricao = Details['descricao']
         tipo = Details['tipo']
         condicao = 'Aberta'
+        comentari= ''
         Cursor = mysql.connection.cursor()
-        Cursor.execute("INSERT INTO requisicao(titulo, descricao,tipo,condicao) VALUES(%s,%s,%s,%s)",(titulo,descricao,tipo,condicao))
+        Cursor.execute("INSERT INTO requisicao(titulo, descricao,tipo,condicao,comentario) VALUES(%s,%s,%s,%s,%s)",(titulo,descricao,tipo,condicao,comentari))
         mysql.connection.commit()
         Cursor.close()
         return redirect("/usuario/menu")
@@ -59,6 +60,7 @@ def novaExecutor():
         tipoE = Details['tipo']
         descricao = Details['descricao']
         condicao = 'Aberta'
+
         Cursor = mysql.connection.cursor()
         Cursor.execute("INSERT INTO requisicao_exec(titulo, descricao,tipo,condicao) VALUES(%s,%s,%s,%s)",(titulo,descricao,tipoE,condicao))
         mysql.connection.commit()
@@ -109,6 +111,28 @@ def aceitar(id):
 
 @app.route('/recusando/<id>', methods=['POST'])
 def fechada(id):
+    formulario= request.form
+    comentario= formulario['codigo']
+    if comentario != None:
+        Cursor= mysql.connection.cursor()
+        Cursor.execute("UPDATE requisicao SET comentario=%s  WHERE id_requisicao = %s",(comentario,id,))
+        Cursor.connection.commit()
+        Cursor.close
+    Cursor= mysql.connection.cursor()
+    Cursor.execute("UPDATE requisicao SET condicao ='Fechada'  WHERE id_requisicao = %s",(id,))
+    Cursor.connection.commit()
+    Cursor.close
+    return redirect ('/executor/chamadas-exec')
+
+@app.route('/andamento/<id>', methods=['POST'])
+def fechada1(id):
+    inform= request.form
+    comentario = inform['comentario']
+    if comentario != None:
+        Cursor= mysql.connection.cursor()
+        Cursor.execute("UPDATE requisicao SET comentario=%s  WHERE id_requisicao = %s",(comentario,id,))
+        Cursor.connection.commit()
+        Cursor.close
     Cursor= mysql.connection.cursor()
     Cursor.execute("UPDATE requisicao SET condicao ='Fechada'  WHERE id_requisicao = %s",(id,))
     Cursor.connection.commit()
@@ -134,6 +158,7 @@ def delete2(id):
     Cursor.connection.commit()
     Cursor.close
     return redirect('/executor/menu')
+
 
 
 if __name__ == "__main__":

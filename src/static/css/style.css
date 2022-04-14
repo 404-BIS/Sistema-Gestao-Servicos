@@ -363,3 +363,12 @@ span{
     bottom: 16px;
 }
 
+.rejeitar-aceitar .concluir{
+    height: 35px;
+    width: 90px;
+    background-color: rgba(0, 155, 34, 1);
+    color:#FCFCFC;
+    border-radius: 10px;
+    border: none;
+    bottom: 16px;
+}

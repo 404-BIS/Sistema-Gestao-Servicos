@@ -9,7 +9,7 @@
         <header>
             <img src="../../static/images/Usuario.svg"> 
             <nav>
-                <a class="minha-req" href="/usuario/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas requisições</a>
+                <a class="minha-req" href="/usuario/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas Requisições</a>
                 <a href="/usuario/solicitacao">
                 <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
                 </a>
@@ -70,14 +70,14 @@
                     </div>
                     <p class="detalhes-fechamento"> Requisição Fechada por: <span> <!--variavel de usuario que fechou o chamado--></span></p> 
                     <div class="texto-fechamento">
-                        <span> <!--variavel descricao de fechamento--></span>    
+                        <span> {{user[5]}}</span>    
                     </div>
                 </details>
                 {% endif %}
             {% endfor %}
             
 
-            <p class="tipo-legenda">Tipos de problemas</p>
+            <p class="tipo-legenda">Tipos de Problemas</p>
             <div class="legenda">
                 <div class="hardware">
                     <div>
