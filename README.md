@@ -20,9 +20,11 @@
 > :gear: **Tecnologias Utilizadas:** [Figma](http://www.figma.com), [HTML](https://developer.mozilla.org/pt-BR/docs/Web/HTML), [CSS](https://developer.mozilla.org/pt-BR/docs/Web/CSS), [JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript), [Python](https://www.python.org/), [Flask](https://flask.palletsprojects.com/en/2.0.x/), [Visual Studio Code](https://code.visualstudio.com/), [Discord](https://discord.com/), [GitHub](https://github.com/)
    
  <span id="backlog">  
+   
+ ## :dart: Backlogs  
+     
  <div align="center">   
   
- ## :dart: Backlogs
    
  ### Backlog do produto
  #### Requisitos Funcionais  
