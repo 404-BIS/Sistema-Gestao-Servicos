@@ -188,4 +188,4 @@ http://127.0.0.1:5000/executor/menu
     
 ## :movie_camera: Vídeo Técnico 
      
-     link:[link do vídeo](https://drive.google.com/drive/folders/1dYaIAg5sDPl6jNXHNghidlp36edTh-SW?usp=sharing)
+link:[link do vídeo](https://drive.google.com/drive/folders/1dYaIAg5sDPl6jNXHNghidlp36edTh-SW?usp=sharing)   
