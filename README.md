@@ -98,10 +98,7 @@
 
 Antes de rodar o proejeto, faça o download do MySQL Workbench, que será utilizado para a criação do Banco de Dados, siga este vídeo para poder baixar e configurar: [link do vídeo]()   
     
-- Abra o prompt de comando para instalar o Python  
-~~~ 
-pip install python3.10
-~~~
+Tecnologias necessárias: Python 3.10 e Workbench
     
 - crie uma pasta para clonar o repositório 
 ~~~
