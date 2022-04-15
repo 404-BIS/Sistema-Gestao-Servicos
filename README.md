@@ -95,44 +95,74 @@
     
 ## :mag_right: Como rodar
 
-- Crie um ambiente virtual para rodar o aplicativo
+Antes de rodar o proejeto, faça o download do MySQL Workbench, que será utilizado para a criação do Banco de Dados, siga este vídeo para poder baixar e configurar: [link do vídeo]()   
+    
+- Abra o prompt de comando para instalar o Python  
 ~~~ 
-py -3 -m venv venv
+pip install python3.10
 ~~~
-- Instale as dependencias usando o arquivo Requirements.txt
+    
+- crie uma pasta para clonar o repositório 
 ~~~
+mkdir cloneprojeto  
+~~~
+    
+- entre na pasta criada  
+~~~
+cd cloneprojeto
+~~~
+ 
+- clone o reposiório dentro da pasta 
+~~~   
+git clone https://github.com/404-BIS/Sistema-Gestao-Servicos.git
+~~~
+    
+- entre na pasta do projeto 
+~~~   
+cd Sistema-Gestao-Servicos\src
+~~~
+    
+- instale o ambiente que ele será processado 
+~~~   
+py -m venv venv
+~~~
+    
+- ative o ambiente 
+~~~   
+venv\Scripts\activate
+~~~
+    
+- baixe as bibliotecas nescessarias 
+~~~   
 pip install -r requirements.txt
 ~~~
-- Set o FLASK_ENV e o FLASK_APP
-~~~
-set FLASK_ENV=development
-set FLASK_APP=src/app.py
-~~~
-- Abra o Workbench e crie o banco de dados de forma local
-
-<div align="center">
-  
-  ### Jogar imagens aqui
-</div>
-
--  Rode o servidor local
-~~~
+    
+- inicie o site 
+~~~   
 flask run
 ~~~
 
-- Caso a execução de Scripts esteja desativada... Passo a Passo para ativar:
-
-Abra o PowerShell no modo Administrador e digite o seguinte código
+- caso nao aceite, utilize 
+~~~   
+python3 app.py
 ~~~
-Set-ExecutionPolicy Unrestricted
+    
+- acesse o site utilizando 
+~~~   
+http://127.0.0.1:5000
 ~~~
-Digite 'A'
 
-<div align="center">
-
-   ![image](https://user-images.githubusercontent.com/79495727/160821599-f4b87a00-5f66-408b-a201-de8bdea3c394.png)
-
- </div>
+- para entrar na inteface de usuário, utilize o link    
+~~~   
+http://127.0.0.1:5000/usuario/menu
+~~~
+    
+- para entrar na inteface de executor, utilize o link    
+~~~   
+http://127.0.0.1:5000/executor/menu
+~~~
+    
+    
     
 <span id="pastas">
    
