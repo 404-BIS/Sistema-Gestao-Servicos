@@ -6,8 +6,9 @@
     <a href="#backlog">Backlogs</a> | 
     <a href="#prototipo">Protótipo</a> | 
     <a href="#rodar">Como Rodar</a> |
-     <a href="#pastas">Configuração das pastas</a> | 
+    <a href="#pastas">Configuração das pastas</a> | 
     <a href="#equipe">Equipe</a>
+    <a href="#video">Vídeo Técnico</a>
 </p>
 
 <span id="sobre">
@@ -181,3 +182,10 @@ http://127.0.0.1:5000/executor/menu
 |   Dev Team    | Amanda Vieira de Oliveira             |  [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/amanda-vo/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/amandavo)                           |
 |   Dev Team    | Lucas Vinicius da Silva Soares        |  [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/lucasviniciussoares/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/LucasVinicius32)          |
 |   Dev Team    | Valderi Douglas Camargo Queiros Ferreira |  [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/valderidouglas/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/ValderiDouglas)             |
+ 
+    
+ <span id="video"> 
+    
+## :movie_camera: Vídeo Técnico 
+     
+     link:
