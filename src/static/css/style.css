@@ -128,6 +128,13 @@ a{
     height: 50px;
 }
 
+/* Legendas*/
+.filtro p, .filtro select{
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    border-color: white;
+}
+
 /* Formulario */
 .title-nova-req{
     font-weight: 500;

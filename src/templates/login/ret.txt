@@ -1,0 +1,53 @@
+.ret1{
+    position: fixed;
+    width: 2.8vw;
+    height: 138vh;
+    left: 1680px;
+    top: -135px;
+
+    background: rgba(184, 215, 217, 0.6);
+    transform: matrix(-0.71, 0.71, -0.7, -0.71, 0, 0);
+}
+
+.ret2{
+    position: fixed;
+    width: 2.8vw;
+    height: 91.7vh;
+    left: 1760px;
+    top: -95px;
+
+    background: rgba(184, 215, 217, 0.4);
+    transform: matrix(-0.71, 0.71, -0.7, -0.71, 0, 0);
+}
+
+.ret3{
+    position: fixed;
+    width: 2.8vw;
+    height: 130.8vh;
+    left: 160px;
+    top: 460px;
+
+    background: rgba(184, 215, 217, 0.8);
+    transform: rotate(-45deg);
+}
+
+.ret4{
+    position: fixed;
+    width: 2.8vw;
+    height: 95vh;
+    left: 100px;
+    top: 630px;
+
+    background: #B8D7D9;
+    transform: rotate(-45deg);
+}
+
+@media only screen and (max-width: 1670px){
+    .ret2{
+        left: 1580px;
+    }
+
+    .ret1{
+        left: 1500px;
+    }
+}

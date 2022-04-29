@@ -17,6 +17,15 @@
         </header>
         <main>
             <p class="req-aberta">Requisições Abertas  </p>
+            <div class="filtro">
+                <p>Filtrar por:
+                <select>
+                    <option value="1">Mais Recente</option>
+                    <option value="2">Mais Antigo</option>
+                    <option value="3">A a Z</option>
+                    <option value="4">Z a A</option>
+                </select></p>
+            </div>
             {%  if leitoraberto == 0 or Values ==0 %}
                 <div class="box-req">
                 <p>Sem requisições abertas no momento</p>
@@ -46,6 +55,15 @@
                 {% endif %}
             {% endfor %}
             <p class="req-fechada">Requisições Fechadas</p>
+            <div class="filtro">
+                <p>Filtrar por:
+                <select>
+                    <option value="1">Mais Recente</option>
+                    <option value="2">Mais Antigo</option>
+                    <option value="3">A a Z</option>
+                    <option value="4">Z a A</option>
+                </select></p>
+            </div>
             {%  if leitorfechado == 0 or Values==0 %}
                 <div class="box-req">
                 <p>Sem requisições abertas no momento</p>
