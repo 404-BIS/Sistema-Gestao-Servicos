@@ -26,39 +26,9 @@
      
  <div align="center">   
   
-   
- ### Backlog do produto
- #### Requisitos Funcionais  
-| CÓDIGO | DESCRIÇÃO | PRVISÃO DE CONCLUSÃO |
-|:------:|:---------:|:--------------------:|
-| RF 01 | Sistema de cadastro e login | SPRINT 2 |
-| RF 02 | Abertura e fechamento de chamados | SPRINT 1 |
-| RF 03 | Aceite ou rejeite de chamados | SPRINT 1 |
-| RF 04 | Sistema de avaliação do chamado | SPRINT 2 |
-| RF 05 | Filtragem de chamados por tipo de problema | SPRINT 2 |
-| RF 06 | Filtragem de chamados por data | SPRINT 2 |
-| RF 07 | Geração de estatíticas | SPRINT 3 |
- 
-#### Requisitos Não Funcionais  
-| CÓDIGO | DESCRIÇÃO | 
-|:------:|:---------:|
-| RNF 01 | Banco de dados em MySQL ou MariaDB |
-| RNF 02 | Frontend em HTML 5, CSS 3 e Javascript |
-| RNF 03 | Utilização de frameworks pelo frontend |
-| RNF 04 | Utilização do GitHub para pra controle de versionamento |
-| RNF 05 | Interface simples e intuitiva |  
-| RNF 06 | Sistema deve ser responsivo |
-| RNF 07 | Backend em Python 3+ e microframework Flask |
-     
-### Backlog das sprints 
-#### Sprint 1
-| CÓDIGO | DESCRIÇÃO |
-|:------:|:---------:|
-| --    | Levantamento de requisitos |
-| --    | Criação do wireframe |
-| RF 02 | Abertura e fechamento de chamados |
-| RF 03 | Aceite ou rejeite de chamados |
-| --    | Criação e integração do banco de dados |  
+
+![backlog 010522](https://user-images.githubusercontent.com/79495727/166178712-5bb215c1-5055-443d-b51f-1c2779a0a496.png)
+
      
 #### Metricas Sprint 1      
  Utilizamos os gráficos de burndown como forma de medir o desempenho e o progeresso durante a sprint:
@@ -68,20 +38,6 @@
  ![Tarefas da sprint](https://user-images.githubusercontent.com/92696799/163482971-bf152d18-be96-4270-8b33-98c68c556097.jpg)
 
   
-     
-#### Sprint 2
-| CÓDIGO | DESCRIÇÃO |
-|:------:|:---------:|
-| RF 01 | Sistema de cadastro e login |
-| RF 04 | Sistema de avaliação do chamado 
-| RF 05 | Filtragem de chamados por tipo de problema |
-| RF 06 | Filtragem de chamados por data |
-
-#### Sprint 3
-| CÓDIGO | DESCRIÇÃO |
-|:------:|:---------:|
-| RF 07 | Geração de estatíticas | SPRINT 3 |
-
 </div>     
 
 <span id="prototipo"> 
