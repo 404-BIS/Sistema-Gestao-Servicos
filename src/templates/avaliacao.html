@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avaliacao</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
-
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/global.css">
 </head>
 
-<body>
+<body class="containerAvaliacao">
     <div class="avaliacao">
         <div class="header">
             <b>Avaliação</b>
-            <button><span class="material-icons close">close</span></button>
+            <!--<button><span class="material-icons close">close</span></button>-->
         </div>
         <div class="caras">
             <button>
@@ -39,9 +37,9 @@
                     <span>Ótimo</span></b>
                 </button>
         </div>
-        <textarea>Descreva sua avaliação</textarea>
+        <textarea placeholder="Descreva sua avaliação"></textarea>
         <div class="submit">
-            <button id="avaliar">Avaliar</button>
+            <button>Avaliar</button>
         </div>
     </div>
 </body>
