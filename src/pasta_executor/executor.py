@@ -1,6 +1,6 @@
-from flask import Blueprint,render_template,request,redirect
-from db import mysql
-
+from flask import Blueprint,render_template,request,redirect,session
+from bd.db import mysql
+import datetime
 
 executor_blueprint= Blueprint('executor',__name__, template_folder='templates')
 
@@ -9,11 +9,14 @@ def novaExecutor():
     if request.method == 'POST':
         Details = request.form
         titulo = Details['titulo']
-        tipo = Details['tipo']
         descricao = Details['descricao']
-        condicao = 'Aberta'
+        type_problem = Details['tipo']   
+        status_sol = 'Aberta'
+        comentario= ''
+        hora= datetime.datetime.now()
         with mysql.cursor()as Cursor:
-            Cursor.execute("INSERT INTO requisicao_exec(titulo, descricao,tipo,condicao) VALUES(%s,%s,%s,%s)",(titulo,descricao,tipo,condicao))
+            id_user = session["id_exec"]
+            Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio) VALUES(%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,id_user,hora))
             mysql.commit()
             Cursor.close()
         return redirect("/executor/menu")
@@ -21,42 +24,50 @@ def novaExecutor():
 
 
 @executor_blueprint.route('/executor/menu' , methods=['GET','POST'])
-def executor():
+def exec():
     with mysql.cursor()as Cursor:
-        aberta= Cursor.execute("SELECT * FROM requisicao_exec")
-        cont_hardware= Cursor.execute("SELECT tipo FROM requisicao_exec WHERE tipo='Problemas de Hardware'")
-        cont_software= Cursor.execute("SELECT tipo FROM requisicao_exec WHERE tipo='Problemas de Software'")
-        cont_duv= Cursor.execute("SELECT tipo FROM requisicao_exec WHERE tipo='Duvidas ou Esclarecimentos'")
-        leitoraberto= Cursor.execute("SELECT * FROM requisicao_exec WHERE condicao='Aberta'")
-        leitorfechado= Cursor.execute("SELECT * FROM requisicao_exec WHERE condicao='Fechada'")
-        Values = Cursor.execute("SELECT * FROM requisicao_exec")
-    if Values > 0:
-        Details = Cursor.fetchall()
-        Cursor.close()
-        return render_template('/home-exec.html', Details=Details,Values=Values,aberta=aberta,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto=leitoraberto,leitorfechado=leitorfechado)
-    return render_template('/home-exec.html',Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv)
-
-
+        pk_user = session["id_exec"]
+        Cursor.execute("SELECT id_user FROM solicitacao WHERE id_user = %s", (pk_user,))
+        conta = Cursor.fetchone()
+    with mysql.cursor()as Cursor:    
+        cont_hardware=Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Hardware' and id_user= %s",(pk_user,))
+        cont_software= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Software' and id_user =%s", (pk_user,))
+        cont_duv= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and id_user =%s", (pk_user,))
+        leitoraberto= Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and id_user =%s",(pk_user,))
+        leitorfechado= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Fechada' and id_user =%s",(pk_user,))
+        Values = Cursor.execute("SELECT * FROM solicitacao WHERE id_user= %s",(pk_user,))
+        if Values > 0:
+            Details = Cursor.fetchall()
+            return render_template('/home-exec.html', Details=Details,Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto=leitoraberto,leitorfechado=leitorfechado,conta=conta)
+        else:
+            return render_template('/home-exec.html', Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,pk_user=pk_user)
+            
 @executor_blueprint.route('/executor/chamadas-exec', methods=['GET','POST'])
 def ExecChamada():
     with mysql.cursor()as Cursor:
-        leitoraberto= Cursor.execute("SELECT * FROM requisicao WHERE condicao='Aberta'")
-        leitorandamento= Cursor.execute("SELECT * FROM requisicao WHERE condicao='Andamento'")
-        leitorfechado= Cursor.execute("SELECT * FROM requisicao WHERE condicao='Fechada'")
-        cont_hardware=Cursor.execute("SELECT tipo FROM requisicao WHERE tipo='Problemas de Hardware'")
-        cont_software= Cursor.execute("SELECT tipo FROM requisicao WHERE tipo='Problemas de Software'")
-        cont_duv= Cursor.execute("SELECT tipo FROM requisicao WHERE tipo='Duvidas ou Esclarecimentos'")
-        Values=Cursor.execute("SELECT * FROM requisicao")
+        pk_user = session["id_exec"]
+        Cursor.execute("SELECT id_user FROM solicitacao WHERE id_user = %s", (pk_user,))
+        conta = Cursor.fetchone()
+        
+        cont_hardware=Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Hardware'")
+        cont_software= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Software'")
+        cont_duv= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos'")
+
+        leitoraberto= Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and not id_user =%s",(pk_user,))
+        leitorfechado= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Fechada' and not id_user =%s",(pk_user,))
+        leitorandamento= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Andamento' and not id_user =%s",(pk_user,))
+
+        Values=Cursor.execute("SELECT * FROM solicitacao")
     if Values > 0:
         Details = Cursor.fetchall()
         Cursor.close()
-        return render_template('/chamadas-exec.html', Details=Details,Values=Values,cont_hardware = cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto = leitoraberto ,leitorfechado = leitorfechado ,leitorandamento =leitorandamento)
-    return render_template('/chamadas-exec.html',Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv)
+        return render_template('/chamadas-exec.html', Details=Details,Values=Values,cont_hardware = cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto = leitoraberto ,leitorfechado = leitorfechado ,leitorandamento=leitorandamento,conta=conta)
+    return render_template('/chamadas-exec.html',Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,conta=conta)
 
 @executor_blueprint.route('/aceitando/<id>', methods=['POST'])
 def aceitar(id):
     with mysql.cursor()as Cursor:
-        Cursor.execute("UPDATE requisicao SET condicao ='Andamento' WHERE id_requisicao = %s",(id,))
+        Cursor.execute("UPDATE solicitacao SET status_sol ='Andamento' WHERE id_sol = %s",(id,))
         mysql.commit()
         Cursor.close()
     return redirect ('/executor/chamadas-exec')
@@ -65,36 +76,32 @@ def aceitar(id):
 def recusando(id):
     formulario= request.form
     comentario= formulario['codigo']
+    hora= datetime.datetime.now()
+    nome= session['nome_exec']
     if comentario != None:
         with mysql.cursor()as Cursor:
-            Cursor.execute("UPDATE requisicao SET comentario=%s  WHERE id_requisicao = %s",(comentario,id,))
+            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,nome_exec=%s,comentario=%s WHERE id_sol = %s",(hora,nome,comentario,id,))
             mysql.commit()
             Cursor.close()
-    with mysql.cursor()as Cursor:
-        Cursor.execute("UPDATE requisicao SET condicao ='Fechada'  WHERE id_requisicao = %s",(id,))
-        mysql.commit()
-        Cursor.close()
     return redirect ('/executor/chamadas-exec')
 
 @executor_blueprint.route('/andamento/<id>', methods=['POST'])
 def fechamento(id):
     formulario= request.form
     comentario = formulario['comentario']
+    hora= datetime.datetime.now()
+    nome= session['nome_exec']
     if comentario != None:
         with mysql.cursor()as Cursor:
-            Cursor.execute("UPDATE requisicao SET comentario=%s  WHERE id_requisicao = %s",(comentario,id,))
+            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,nome_exec=%s,comentario=%s WHERE id_sol = %s",(hora,nome,comentario,id,))
             mysql.commit()
             Cursor.close()
-    with mysql.cursor()as Cursor:
-        Cursor.execute("UPDATE requisicao SET condicao ='Fechada'  WHERE id_requisicao = %s",(id,))
-        mysql.commit()
-        Cursor.close()
     return redirect ('/executor/chamadas-exec')
 
 @executor_blueprint.route('/executor/<id>', methods=['POST'])
 def delete(id):
     with mysql.cursor()as Cursor:
-        Cursor.execute("DELETE FROM requisicao_exec WHERE id_requisicao=%s",(id,))
+        Cursor.execute("DELETE FROM solicitacao WHERE id_sol = %s",(id,))
         mysql.commit()
         Cursor.close()
     return redirect('/executor/menu')

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    </head>
+    <body>
+        <header>
+            <img src="../../static/images/Usuario.svg"> 
+            <nav>
+                <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg"> Meus Chamados</a>
+                <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas Requisições</a>
+                <a href="/executor/solicitacao">
+                <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
+                </a>
+            </nav>
+        </header>
+        <main>
+            <p class="req-aberta">Requisições Abertas</p>
+            
+            {%  if leitoraberto == 0 or Values == 0%}
+                <div class="box-req">
+                <p>Sem requisições abertas no momento</p>
+                </div>
+            {% endif %}
+            {% for solicitacao in Details %}   
+            {% if solicitacao[3] =="Aberta" and solicitacao[6] == conta[0] %}
+                <details>
+                    <summary>
+                        <p>{{solicitacao[1]}}</p><!--variavel titulo-->
+                        {% if solicitacao[4] == 'Problemas de Hardware'%}
+                            <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
+                        {% elif solicitacao[4] == 'Problemas de Software'%}
+                            <img class="icon" src="../static/images/Software.png" alt="icon">
+                        {%else%}
+                            <img class="icon" src="../static/images/Info.png" alt="icon">
+                        {%endif%}
+                    </summary>
+                    <div class="conteudo">
+                        <p>Tipo: <span>{{solicitacao[1]}}</span></p>
+                        <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+                    </div>
+                    <form action="/executor/{{solicitacao.0}}" method='POST'>
+                        <button class="botao-padrao" type="submit">Apagar</button>             
+                    </form>  
+                </details>
+            {% endif %}
+        {% endfor %}
+            
+            
+            <p class="req-fechada">Requisições Fechadas</p>
+            {%  if leitorfechado == 0 or Values==0 %}
+                <div class="box-req">
+                <p>Sem requisições abertas no momento</p>
+                </div>
+            {%endif%}
+            {% for solicitacao in Details %}   
+            {% if solicitacao[3] =="Fechada" and solicitacao[6] == conta[0] %}
+            <details>
+                <summary>
+                    <p>{{solicitacao[1]}}</p><!--variavel titulo-->
+                    {% if solicitacao[4] == 'Problemas de Hardware'%}
+                        <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
+                    {% elif solicitacao[4] == 'Problemas de Software'%}
+                        <img class="icon" src="../static/images/Software.png" alt="icon">
+                    {%else%}
+                        <img class="icon" src="../static/images/Info.png" alt="icon">
+                    {%endif%}
+                </summary>
+                <div class="conteudo">
+                    <p>Tipo: <span>{{solicitacao[4]}}</span></p>
+                    <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+                </div>
+                <form action="/executor/{{solicitacao.0}}" method='POST'>
+                    <button class="botao-padrao" type="submit">Apagar</button>
+                </form>  
+            </details>
+        {% endif %}
+        {% endfor %}
+
+            <p class="tipo-legenda">Tipos de Problemas</p>
+            <div class="legenda">
+                <div class="hardware">
+                    <div>
+                        <p class="categoria">Problemas de Hardware</p>
+                        <p class="quant">Quantidade:{{cont_hardware}}</p> <!--variavel de quantidade-->
+                    </div>    
+                    <img class="icon" src="../../static/images/Hardware.png" alt="hardware">
+                </div>   
+    
+                <div class="software">
+                    <div>
+                        <p class="categoria">Problemas de Software</p>
+                        <p class="quant">Quantidade:{{cont_software}}</p> <!--variavel de quantidade-->
+                    </div>    
+                    <img class="icon" src="../../static/images/Software.png" alt="hardware">
+                </div>  
+    
+                <div class="info">
+                    <div>
+                        <p class="categoria">Esclarecimento/informação</p>
+                        <p class="quant">Quantidade:{{cont_duv}}</p> <!--variavel de quantidade-->
+                    </div>    
+                    <img class="icon" src="../../static/images/Info.png" alt="hardware">
+                </div>  
+            </div>
+        </main>
+    </body>
+</html>

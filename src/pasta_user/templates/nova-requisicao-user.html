@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <header>
+            <img src="../../static/images/Usuario.svg"> 
+            <nav>
+                <a class="minha-req" href="/usuario/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas requisições</a>
+                <a href="/usuario/solicitacao"><button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
+                </a>
+            </nav>
+        </header>
+        <p class="title-nova-req"> Nova Requisição</p>
+        <form class="formulario" action="/usuario/solicitacao" method="POST">
+            <div class="title">
+                <div>
+                    <label>Titulo</label>
+                    <input type="text" id="title" name="titulo">
+                </div>
+                <div>
+                    <label>Tipo</label>
+                    <select name="tipo">
+                        <option value="Problemas de Software">Problemas de Software</option>
+                        <option value="Problemas de Hardware">Problemas de Hardware</option>
+                        <option value="Dúvidas ou Esclarecimentos">Dúvidas ou Esclarecimentos</option>
+                    </select>
+                </div> 
+            </div> 
+            <div class="description">
+                <label>Descrição</label> <br>
+                <textarea id="description" name="descricao"></textarea> 
+            </div>
+            <div class="archive">
+                <label>Anexar arquivo (PNG, JPEG, JPG)</label> <br>
+                <input type="file" id="archive" name="arquivo"> 
+            </div> 
+
+            <div class="buttons">
+                <input class="enviar" type="submit" value="Enviar">                   
+            </div>
+        </form>  
+    </body>
+</html>
