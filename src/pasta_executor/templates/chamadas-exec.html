@@ -152,7 +152,7 @@
     <body>
         
         <header>
-            <img src="../../static/images/Usuario.svg"> 
+            <img type=submit href="" src="../../static/images/Usuario.svg"> 
             <nav>
                 <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg"> Meus Chamados</a>
                 <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas Requisições</a>
@@ -169,23 +169,22 @@
                     <p id="btnaceitar" class="btnrejeitar">Sem requisições para análise no momento</p>
                 </div>
             {% else %}
-                {% for user in Details %}
-                    {%if user[4] == 'Aberta'%}  
-                        
+            {% for solicitacao in Details %}   
+                    {% if solicitacao[3] =="Aberta" and solicitacao[6] != conta[0] %}
                         <details>
                             <summary>
-                                <p>{{user[1]}}</p><!--variavel titulo-->
-                                {% if user[3] == 'Problemas de Hardware'%}
+                                <p>{{solicitacao[1]}}</p><!--variavel titulo-->
+                                {% if solicitacao[4] == 'Problemas de Hardware'%}
                                     <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                                {% elif user[3] == 'Problemas de Software'%}
+                                {% elif solicitacao[4] == 'Problemas de Software'%}
                                     <img class="icon" src="../static/images/Software.png" alt="icon">
                                 {%else%}
                                     <img class="icon" src="../static/images/Info.png" alt="icon">
                                 {%endif%}
                             </summary>
                             <div class="conteudo">
-                                <p>Tipo: <span>{{user[3]}}</span></p>
-                                <p>Descrição: <span>{{user[2]}}</span></p>
+                                <p>Tipo: <span>{{solicitacao[1]}}</span></p>
+                                <p>Descrição: <span>{{solicitacao[2]}}</span></p>
                             </div>
                             <!-- <form action="/executor/chamadas-exec"> -->
                             <div class="rejeitar-aceitar"> 
@@ -200,16 +199,16 @@
                                     <p class="conclusao-chamado"> Rejeição de Chamado </p> 
                                     <div class="card-2">
                                         <div class="info-conclu">
-                                            <p class="titulo-conclu">{{user[1]}}</p><!--variavel titulo-->
+                                            <p class="titulo-conclu">{{solicitacao[1]}}</p><!--variavel titulo-->
                                             <p>11/11/1111</p>
                                         </div>
                                         <div class="conteudo-conclu">
-                                            <p class="tipo-conclu">Tipo: <span>{{user[3]}}</span></p>
-                                            <p class="descricao-conclu">Descrição: <span>{{user[2]}}</span></p>
+                                            <p class="tipo-conclu">Tipo: <span>{{solicitacao[4]}}</span></p>
+                                            <p class="descricao-conclu">Descrição: <span>{{solicitacao[2]}}</span></p>
                                         </div>
                                     </div>
                                     <div class="botao-concluir">
-                                        <form action="/recusando/{{user.0}}" method="POST">
+                                        <form action="/recusando/{{solicitacao.0}}" method="POST">
                                             <textarea name="codigo" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
                                             <button class="bot-conclu" type="submit">Rejeitar Chamado</button>
                                         </form>
@@ -221,7 +220,7 @@
                             <div class="box-aceitar">
                                 <div class="icon-fechar"></div>
                                 <p>Chamada Aceita</p>
-                                <form action="/aceitando/{{user.0}}" method="POST"> 
+                                <form action="/aceitando/{{solicitacao.0}}" method="POST"> 
                                     <button class="aceitar" type="submit">Aceitar</button>
                                 </form> 
                             </div> 
@@ -239,14 +238,14 @@
                     
                 </div>
             {%else%}
-                {% for user in Details %}
-                    {%if user[4] == 'Andamento'%} 
+                {% for solicitacao in Details %}
+                    {%if solicitacao[3] == 'Andamento' and solicitacao[6] !=conta[0] %} 
                         <details>
                             <summary>
-                                <p>{{user[1]}}</p><!--variavel titulo-->
-                                {% if user[3] == 'Problemas de Hardware'%}
+                                <p>{{solicitacao[1]}}</p><!--variavel titulo-->
+                                {% if solicitacao[4] == 'Problemas de Hardware'%}
                                     <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                                {% elif user[3] == 'Problemas de Software'%}
+                                {% elif solicitacao[4] == 'Problemas de Software'%}
                                     <img class="icon" src="../static/images/Software.png" alt="icon">
                                 {%else%}
                                     <img class="icon" src="../static/images/Info.png" alt="icon">
@@ -254,8 +253,8 @@
 
                             </summary>
                             <div class="conteudo">
-                                <p>Tipo: <span>{{user[3]}}<!--variavel tipo--></span></p>
-                                <p>Descrição: <span>{{user[2]}}<!--variavel descricao--></span></p>
+                                <p>Tipo: <span>{{solicitacao[4]}}<!--variavel tipo--></span></p>
+                                <p>Descrição: <span>{{solicitacao[2]}}<!--variavel descricao--></span></p>
                             </div>
                             <div class="rejeitar-aceitar"> 
                                 <button class="concluir btnconcluir" type="submit">Concluir</button>
@@ -268,16 +267,16 @@
                                     <p class="conclusao-chamado"> Conclusão de Chamada </p> 
                                     <div class="card-2">
                                         <div class="info-conclu">
-                                            <p class="titulo-conclu">{{user[1]}}</p><!--variavel titulo-->
-                                            <p>11/11/1111</p>
+                                            <p class="titulo-conclu">{{solicitacao[1]}}</p><!--variavel titulo-->
+                                            <p>{{solicitacao[7]}}</p>
                                         </div>
                                         <div class="conteudo-conclu">
-                                            <p class="tipo-conclu">Tipo: <span>{{user[3]}}</span></p>
-                                            <p class="descricao-conclu">Descrição: <span>{{user[2]}}</span></p>
+                                            <p class="tipo-conclu">Tipo: <span>{{solicitacao[4]}}</span></p>
+                                            <p class="descricao-conclu">Descrição: <span>{{solicitacao[2]}}</span></p>
                                         </div>
                                     </div>
                                     <div class="botao-concluir">
-                                        <form action="/andamento/{{user.0}}" method="POST">
+                                        <form action="/andamento/{{solicitacao.0}}" method="POST">
                                             <textarea name="comentario" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
                                             <button class="bot-conclu" type="submit">Concluir Chamado</button>
                                         </form>
@@ -298,26 +297,39 @@
                     <p>Sem chamados fechadas no momento</p>
                 </div>
             {%else%}
-                {% for user in Details %}
-                    {%if user[4] == 'Fechada'%} 
+                {% for solicitacao in Details %}
+                    {%if solicitacao[3] == 'Fechada' and solicitacao[6] != conta[0]%} 
                         <details>
                             <summary>
-                                <p>{{user[1]}}</p><!--variavel titulo-->
-                                {% if user[3] == 'Problemas de Hardware'%}
+                                <p>{{solicitacao[1]}}</p><!--variavel titulo-->
+                                {% if solicitacao[4] == 'Problemas de Hardware'%}
                                     <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                                {% elif user[3] == 'Problemas de Software'%}
+                                {% elif solicitacao[4] == 'Problemas de Software'%}
                                     <img class="icon" src="../static/images/Software.png" alt="icon">
                                 {%else%}
                                     <img class="icon" src="../static/images/Info.png" alt="icon">
                                 {%endif%}
                             </summary>
                             <div class="conteudo">
-                                <p>Tipo: <span>{{user[3]}}<!--variavel tipo--></span></p>
-                                <p>Descrição: <span>{{user[2]}}<!--variavel descricao--></span></p>
+                                <p>Tipo: <span>{{solicitacao[4]}}<!--variavel tipo--></span></p>
+                                <p>Descrição: <span>{{solicitacao[2]}}<!--variavel descricao--></span></p>
                             </div>
-                            <p class="detalhes-fechamento"> Requisição Fechada por: <span> <!--variavel de usuario que fechou o chamado--></span></p> 
-                            <div class="texto-fechamento"> <span>{{user[5]}} </span> </div>
+                            <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}}</span></p> 
+                            <div class="texto-fechamento"> <span>{{solicitacao[5]}} </span> </div>
                         </details>
+                        <div class="caras">
+                            {% if solicitacao[10]=="1" %}
+                                <img src='../static/images/pessimo.png'>
+                            {% elif solicitacao[10]=="2" %}
+                                <img src='../static/images/ruim.png'>
+                            {% elif solicitacao[10]=="3" %}
+                                <img src='../static/images/mediano.png'>
+                            {% elif solicitacao[10]=="4" %}
+                                <img src='../static/images/bom.png'>
+                            {% elif solicitacao[10]=="5" %}
+                                <img src='../static/images/otimo.png'>
+                            {% endif %}
+                        </div>
                    {%endif%}
                 {%endfor%} 
             {%endif%}
@@ -328,7 +340,7 @@
                 <div class="hardware">            
                     <div>
                         <p class="categoria">Problemas de Hardware</p>
-                        <p class="quant">Quantidade:{{prob}}</p> <!--variavel de quantidade-->
+                        <p class="quant">Quantidade:{{cont_hardware}}</p> <!--variavel de quantidade-->
                     </div>    
                 <img class="icon" src="../../static/images/Hardware.png" alt="icon">
             </div>   
@@ -336,7 +348,7 @@
                 <div class="software">
                     <div>
                         <p class="categoria">Problemas de Software</p>
-                        <p class="quant">Quantidade:{{prob1}}</p> <!--variavel de quantidade-->
+                        <p class="quant">Quantidade:{{cont_software}}</p> <!--variavel de quantidade-->
                     </div>    
                     <img class="icon" src="../../static/images/Software.png" alt="icon">
                 </div>  
@@ -344,7 +356,7 @@
                 <div class="info">
                     <div>
                         <p class="categoria">Esclarecimento/informação</p>
-                        <p class="quant">Quantidade:{{prob2}}</p> <!--variavel de quantidade-->
+                        <p class="quant">Quantidade:{{cont_duv}}</p> <!--variavel de quantidade-->
                     </div>    
                     <img class="icon" src="../../static/images/Info.png" alt="icon">
                 </div>  

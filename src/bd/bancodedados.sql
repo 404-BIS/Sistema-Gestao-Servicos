@@ -15,9 +15,14 @@ Create table solicitacao(
     title_sol varchar(55) not null,
     desc_sol varchar(155) not null,
     status_sol varchar(55) not null,
-    type_problem varchar(20),
+    type_problem varchar(40),
     comentario varchar(155),
+    nome_exec varchar(55),
+    data_inicio datetime,
+    data_final datetime,
     id_user int,
+    avaliacao int,
+    coment_avaliacao varchar(155),
     constraint ck_type_problem Check (type_problem in ('Problemas de Hardware','Problemas de Software','Duvidas ou Esclarecimentos'))
 );
 

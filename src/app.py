@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, url_for,request,session,flash
 from flask_login import LoginManager, logout_user
-from db import mysql
+from bd.db import mysql
 
 
 app = Flask(__name__)
@@ -46,11 +46,18 @@ def login_post():
         if not conta:
             flash('Please check your login details and try again.')
             return redirect (url_for('auth.login'))
-        session['email_user'] = email_user
-        session['loggedin'] = True
-        session['id_user'] = conta[0]
-        session['nome_user'] = conta[1]
-        return redirect(url_for('user.home'))
+        if conta[4] == 'user':
+            session['email_user'] = email_user
+            session['loggedin'] = True
+            session['id_user'] = conta[0]
+            session['nome_user'] = conta[1]
+            return redirect(url_for('user.home'))
+        else:
+            session['email_exec'] = email_user
+            session['loggedin'] = True
+            session['id_exec'] = conta[0]
+            session['nome_exec'] = conta[1]
+            return redirect(url_for('executor.exec'))
 
 @app.route("/logout")
 def logout():

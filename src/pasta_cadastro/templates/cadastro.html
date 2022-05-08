@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Cadastre-se</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    </head>
+    <body>
+        <div class="voltar">
+            <a href="/">
+                <img src="../../static/images/Voltar.svg" alt="Voltar">
+            </a>
+        </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}. Go to <a href="{{ url_for('auth.login') }}">login page</a>.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form action="/signup" method="POST" >
+            <div class="containerCadastro">
+                <div class="cadastro">
+                    <h1>Cadastrar-se</h1>
+                    <div class="dados">
+                        <label>Nome</label>
+                        <input type="name" name="nome_user">
+                        <label>Email</label>
+                        <input type="email" name="email_user">
+                        <label>Senha</label>
+                        <input type="password" name="pass_user">
+                        <label>Confirme sua senha</label>
+                        <input type="password">
+                    </div>
+                    <div class="checks">
+                        <input type="checkbox">Termos de Uso</input>
+                        <br>
+                        <input type="checkbox">Política de Privacidade</input>
+                    </div>
+
+                    <button type="submit">Entrar</button>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

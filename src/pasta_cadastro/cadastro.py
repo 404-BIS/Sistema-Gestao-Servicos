@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request,flash,session
-from db import mysql
+from bd.db import mysql
 from flask_login import login_user
 
 auth= Blueprint('auth',__name__, template_folder='templates')
