@@ -1,7 +1,6 @@
 from asyncio.windows_events import NULL
 from flask import Blueprint,render_template,request,redirect,session
 from flask_login import login_required, current_user
-from sqlalchemy import null
 from bd.db import mysql
 import datetime
 user_blueprint= Blueprint('user', __name__ , template_folder='templates')
