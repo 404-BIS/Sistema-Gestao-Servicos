@@ -604,12 +604,16 @@ span{
     flex-direction: column;
 }
 
+.login-form{
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+    flex-direction: column;  
+}
+
 .login h1{
     font-size: 22px;
     margin: 16px 0px 32px 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .login label{
@@ -628,7 +632,7 @@ span{
 }
 
 .login button{
-    margin: 20px 0px 30px 34px;
+    margin: 20px 0px;
     width: 180px;
     height: 50px;
 

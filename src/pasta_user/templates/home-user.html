@@ -124,8 +124,7 @@
                 {%if solicitacao[10] != '1' and solicitacao[10] != '2' and solicitacao[10] != '3'and solicitacao[10] != '4' and solicitacao[10] != '5'%}
                 <div id="concluir" class="modal">
                     <div class="icon-fechar"></div>
-                    <form action="/avaliar/{{solicitacao.0}}" method="POST"> 
-                        <div class="avaliacao">
+                    <form class="avaliacao" action="/avaliar/{{solicitacao.0}}" method="POST"> 
                             <div class="icon-fechar"></div>
                             <div class="header">
                                 <b>Avaliação</b>
@@ -157,7 +156,6 @@
                             <div class="submit">
                                 <button >Avaliar</button>
                             </div>
-                        </div>
                     </form>
                 </div>
                 {%endif%}
