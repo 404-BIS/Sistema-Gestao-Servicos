@@ -298,7 +298,7 @@
                 </div>
             {%else%}
                 {% for solicitacao in Details %}
-                    {%if solicitacao[3] == 'Fechada' and solicitacao[6] != conta[0]%} 
+                    {%if solicitacao[3] == 'Fechada'%} 
                         <details>
                             <summary>
                                 <p>{{solicitacao[1]}}</p><!--variavel titulo-->
@@ -314,22 +314,24 @@
                                 <p>Tipo: <span>{{solicitacao[4]}}<!--variavel tipo--></span></p>
                                 <p>Descrição: <span>{{solicitacao[2]}}<!--variavel descricao--></span></p>
                             </div>
-                            <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}}</span></p> 
+                            <div class="aaa"> 
+                                <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}}</span></p> 
+                                <div class="caras">
+                                    {% if solicitacao[10]==1 %}
+                                        <img src='../static/images/pessimo.png'>
+                                    {% elif solicitacao[10]==2 %}
+                                        <img src='../static/images/ruim.png'>
+                                    {% elif solicitacao[10]==3 %}
+                                        <img src='../static/images/mediano.png'>
+                                    {% elif solicitacao[10]==4 %}
+                                        <img src='../static/images/bom.png'>
+                                    {% elif solicitacao[10]==5 %}
+                                        <img src='../static/images/otimo.png'>
+                                    {% endif %}
+                                </div>
+                            </div>
                             <div class="texto-fechamento"> <span>{{solicitacao[5]}} </span> </div>
                         </details>
-                        <div class="caras">
-                            {% if solicitacao[10]=="1" %}
-                                <img src='../static/images/pessimo.png'>
-                            {% elif solicitacao[10]=="2" %}
-                                <img src='../static/images/ruim.png'>
-                            {% elif solicitacao[10]=="3" %}
-                                <img src='../static/images/mediano.png'>
-                            {% elif solicitacao[10]=="4" %}
-                                <img src='../static/images/bom.png'>
-                            {% elif solicitacao[10]=="5" %}
-                                <img src='../static/images/otimo.png'>
-                            {% endif %}
-                        </div>
                    {%endif%}
                 {%endfor%} 
             {%endif%}
@@ -375,7 +377,6 @@
             var fechar = document.getElementsByClassName("icon-fechar")[0];
             
             btnsaceitar.onclick = function() {
-                console.log('oi')
                 modalaceitar.style.display = "block";
             }
             btnsrejeitar.onclick = function() {

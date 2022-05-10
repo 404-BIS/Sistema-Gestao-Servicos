@@ -5,6 +5,23 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     </head>
+    <style type="text/css"> 
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto;
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.6); 
+        }
+
+        
+    </style>
     <body>
         <header>
             <img src="../../static/images/Usuario.svg"> 
@@ -19,15 +36,17 @@
             </nav>
         </header>
         <main>
-            <p class="req-aberta">Requisições Abertas  </p>
-            <div class="filtro">
-                <p>Filtrar por:
-                <select>
-                    <option value="1">Mais Recente</option>
-                    <option value="2">Mais Antigo</option>
-                    <option value="3">A a Z</option>
-                    <option value="4">Z a A</option>
-                </select></p>
+            <div class="bbb">
+                <p class="req-aberta">Requisições Abertas  </p>
+                <div class="filtro">
+                    <p>Filtrar por:
+                    <select>
+                        <option value="1">Mais Recente</option>
+                        <option value="2">Mais Antigo</option>
+                        <option value="3">A a Z</option>
+                        <option value="4">Z a A</option>
+                    </select></p>
+                </div>
             </div>
             {%  if leitoraberto == 0 or Values ==0 %}
                 <div class="box-req">
@@ -57,15 +76,17 @@
                     </details>
                 {% endif %}
             {% endfor %}
-            <p class="req-fechada">Requisições Fechadas</p>
-            <div class="filtro">
-                <p>Filtrar por:
-                <select>
-                    <option value="1">Mais Recente</option>
-                    <option value="2">Mais Antigo</option>
-                    <option value="3">A a Z</option>
-                    <option value="4">Z a A</option>
-                </select></p>
+            <div class="bbb">
+                <p class="req-fechada">Requisições Fechadas</p>
+                <div class="filtro">
+                    <p>Filtrar por:
+                    <select>
+                        <option value="1">Mais Recente</option>
+                        <option value="2">Mais Antigo</option>
+                        <option value="3">A a Z</option>
+                        <option value="4">Z a A</option>
+                    </select></p>
+                </div>
             </div>
             {%  if leitorfechado == 0 or Values==0 %}
                 <div class="box-req">
@@ -90,26 +111,31 @@
                         <p>{{solicitacao[8]}}</p>
                         <p>Descrição: <span>{{solicitacao[2]}}</span></p>
                     </div>
-                    <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}} </span></p> 
+                    <div class="avaliar">
+                        <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}} </span></p> 
+                        <button class="concluir btnconcluir" type="submit">Concluir</button>
+                    </div>
                     <div class="texto-fechamento">
                         <span> {{solicitacao[5]}}</span>    
                     </div>
-                    <div>
-                        <button id="aceitar" class="caras" type="submit">Avaliar</button>
-                    </div>
                 </details>
+
+
                 {%if solicitacao[10] != '1' and solicitacao[10] != '2' and solicitacao[10] != '3'and solicitacao[10] != '4' and solicitacao[10] != '5'%}
+                <div id="concluir" class="modal">
+                    <div class="icon-fechar"></div>
                     <form action="/avaliar/{{solicitacao.0}}" method="POST"> 
                         <div class="avaliacao">
+                            <div class="icon-fechar"></div>
                             <div class="header">
                                 <b>Avaliação</b>
                                 <!--<button><span class="material-icons close">close</span></button>-->
                             </div>
-                            <div class="caras">
+                            <div class="caras">           
                                 <input name="pes" value="1" type="checkbox">
                                     <img src="../static/images/pessimo.png">
                                     <span>Péssimo</span>
-                                </input>
+                                 </input>
                                 <input name="ruim" value="2" type="checkbox">
                                     <img src='../static/images/ruim.png'>
                                     <span>Ruim</span>
@@ -132,7 +158,8 @@
                                 <button >Avaliar</button>
                             </div>
                         </div>
-                </form>
+                    </form>
+                </div>
                 {%endif%}
             {% endif %}
             {% endfor %}
@@ -167,20 +194,24 @@
         </main>
         <script>
             // var modalavaliar = document.getElementById("avaliar");
-            var modalaceitar = document.getElementById("aceitar");
+            var modalconcluir = document.getElementById("concluir");
+            var btnsconcluir = document.getElementsByClassName("btnconcluir")[0];
+            var fechar = document.getElementsByClassName("icon-fechar")[0];
 
-            btnsavaliar.onclick = function() {
-                console.log('a')
-                modalaceitar.style.display = "block";
+            btnsconcluir.onclick = function() {
+                console.log('oi')
+                modalconcluir.style.display = "block";
             }
 
-            fechar.onclick = function(){
-                modalaceitar.style.display="none";
+            fechar.onclick = function() {
+                console.log('socorro')
+                modalconcluir.style.display = "none";
             }
-            window.onclick =function(event){
-                if (event.target == modalaceitar){
-                    modalaceitar.style.display= "none";
-                }
+
+            window.onclick = function(event) {
+              if (event.target == modalconcluir) {
+                modalconcluir.style.display = "none";
+              }
             }
         </script>
     </body>
