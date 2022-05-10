@@ -27,7 +27,8 @@
  <div align="center">   
   
 
-![backlog 010522](https://user-images.githubusercontent.com/79495727/166178712-5bb215c1-5055-443d-b51f-1c2779a0a496.png)
+![Untitled-1](https://user-images.githubusercontent.com/79495727/167642397-663773be-c301-4951-939c-c121e51ccab6.jpg)
+
 
      
 #### Metricas Sprint 1      
