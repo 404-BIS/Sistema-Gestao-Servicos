@@ -27,3 +27,4 @@ Create table solicitacao(
 );
 
 ALTER TABLE solicitacao ADD FOREIGN KEY (id_user) REFERENCES user(id_user);
+INSERT INTO user (nome_user,email_user,pass_user,type_user) VALUES ('admin','admin@admin','admin','admin');

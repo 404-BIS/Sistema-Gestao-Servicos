@@ -10,6 +10,7 @@ from pasta_user.user import user_blueprint
 from pasta_executor.executor import executor_blueprint
 from pasta_login.login import main
 from pasta_cadastro.cadastro import auth
+from pasta_adm.adm import admin
 
 import secrets
 
@@ -23,6 +24,7 @@ app.register_blueprint(user_blueprint)
 app.register_blueprint(executor_blueprint)
 app.register_blueprint(main)
 app.register_blueprint(auth)
+app.register_blueprint(admin)
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
@@ -52,16 +54,23 @@ def login_post():
             session['id_user'] = conta[0]
             session['nome_user'] = conta[1]
             return redirect(url_for('user.home'))
-        else:
+        elif conta[4] == 'exec':
             session['email_exec'] = email_user
             session['loggedin'] = True
             session['id_exec'] = conta[0]
             session['nome_exec'] = conta[1]
             return redirect(url_for('executor.exec'))
+        else:
+            session['email_user'] = email_user
+            session['loggedin'] = True
+            session['id_user'] = conta[0]
+            session['nome_user'] = conta[1]
+            return redirect(url_for("admin.adm"))
 
 @app.route("/logout")
 def logout():
     logout_user()
+    session['loggedin'] = False
     return redirect(url_for('auth.login'))
 
 if __name__ == "__main__":
