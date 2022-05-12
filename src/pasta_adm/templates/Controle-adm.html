@@ -78,34 +78,40 @@
                 </ul>
             </nav>
         </header>
-        <p class="title-nova-req"> Nova Requisição</p>
-        <form class="formulario" action="/adm/solicitacao" method="POST">
-            <div class="title">
-                <div>
-                    <label>Titulo</label>
-                    <input type="text" id="title" name="titulo">
-                </div>
-                <div>
-                    <label>Tipo</label>
-                    <select name="tipo">
-                        <option value="Problemas de Software">Problemas de Software</option>
-                        <option value="Problemas de Hardware">Problemas de Hardware</option>
-                        <option value="Dúvidas ou Esclarecimentos">Dúvidas ou Esclarecimentos</option>
-                    </select>
-                </div> 
-            </div> 
-            <div class="description">
-                <label>Descrição</label> <br>
-                <textarea id="description" name="descricao"></textarea> 
-            </div>
-            <div class="archive">
-                <label>Anexar arquivo (PNG, JPEG, JPG)</label> <br>
-                <input type="file" id="archive" name="arquivo"> 
-            </div> 
-
-            <div class="buttons">
-                <input class="enviar" type="submit" value="Enviar">                   
-            </div>
-        </form>  
+        <main>
+            <p class="req-aberta">Lista de usuários</p>   
+        {%for user in Details%}
+            {%if user[4] == 'user'%}
+                <details>
+                    <summary>
+                        <p>Usuario | {{user.1}} </p><!--variavel cargo e nome-->
+                        <p>icone</p>
+                    </summary>
+                    <div class="info-user">
+                        <p> {{user.2}}</p>  
+                        <div class="sequencia-botao">
+                            <a href="/view{{user.0}}"> <button >Visualizar chamados </button> </a>
+                            <a href="/cargo{{user.0}}"><button>Alterar Cargo</button></a>
+                        </div>
+                    </div>            
+                </details>
+            {%elif user[4] == 'exec'%}
+            <details>
+                <summary>
+                    <p>Executor | {{user.1}} </p><!--variavel cargo e nome-->
+                    <p>icone</p>
+                </summary>
+                <div class="info-user">
+                    <p> {{user.2}}</p>
+                    <div class="sequencia-botao">
+                        <button type="submit">Histórico de Avaliação</button> 
+                        <a href="/view{{user.0}}"> <button >Visualizar chamados </button> </a>
+                        <a href="/cargo{{user.0}}"><button>Alterar Cargo</button></a>
+                    </div>
+                </div>            
+            </details>
+            {%endif%}
+            {%endfor%}
+         </main> 
     </body>
 </html>

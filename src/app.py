@@ -63,7 +63,7 @@ def login_post():
         else:
             session['email_user'] = email_user
             session['loggedin'] = True
-            session['id_user'] = conta[0]
+            session['id_admin'] = conta[0]
             session['nome_user'] = conta[1]
             return redirect(url_for("admin.adm"))
 

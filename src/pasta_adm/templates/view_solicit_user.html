@@ -5,7 +5,51 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
         <style type="text/css"> 
-            
+            .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {background-color: #f1f1f1;}
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown{
+            margin: 30px;
+            list-style-type: none
+        }
+
+        .info-user{
+            display: flex;   
+            align-items: center;
+            justify-content: space-between;
+            margin-top:10px
+        }
+
+        .sequencia-botao button{
+            margin-left: 10px;
+            padding: 0 16px;
+            height: 35px;
+            border: none;
+            border-radius: 10px;
+            background-color: #009B22;
+            color: #FCFCFC;
+            font-size: 13px;    
+        }
             /*Modal Padrão*/
             .modal {
                 display: none; 
@@ -146,51 +190,6 @@
                 height: 40px;
                 width: 40px;
             }
-            .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            text-align: left;
-        }
-
-        .dropdown-content a:hover {background-color: #f1f1f1;}
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown{
-            margin: 30px;
-            list-style-type: none
-        }
-
-        .info-user{
-            display: flex;   
-            align-items: center;
-            justify-content: space-between;
-            margin-top:10px
-        }
-
-        .sequencia-botao button{
-            margin-left: 10px;
-            padding: 0 16px;
-            height: 35px;
-            border: none;
-            border-radius: 10px;
-            background-color: #009B22;
-            color: #FCFCFC;
-            font-size: 13px;    
-        }
 
             </style>
     </head>
@@ -219,16 +218,16 @@
                 </ul>
             </nav>
         </header>
+        <p ><center>{{nome[0]}}</center></p>
         <main>
-            <!--chamados em análise-->
-            <p class="chamado-analise">Chamados em Análise</p>
-            {%  if Values == 0 or leitoraberto == 0%}
+            <p class="chamado-analise">Chamados em Análise do {{nome[0]}}</p>
+            {% if leitoraberto == 0 or leitorandamento == 0 %}
                 <div class="box-req">
                     <p id="btnaceitar" class="btnrejeitar">Sem requisições para análise no momento</p>
                 </div>
             {% else %}
             {% for solicitacao in Details %}   
-                    {% if solicitacao[3] =="Aberta" %}
+                    {% if solicitacao[3] =="Aberta" and solicitacao[9] == vai.0 %}
                         <details>
                             <summary>
                                 <p>{{solicitacao[1]}}</p><!--variavel titulo-->
@@ -289,7 +288,7 @@
             
             
             <!--chamados andamento-->
-            <p class="chamado-andamento">Chamados em Andamento</p>
+            <p class="chamado-andamento">Chamados em Andamento do {{nome[0]}}</p>
             {%  if Values == 0 or leitorandamento == 0%}
                 <div class="box-req">
                     <p class="btnconcluir">Sem chamados em andamento no momento</p>
@@ -297,7 +296,7 @@
                 </div>
             {%else%}
                 {% for solicitacao in Details %}
-                    {%if solicitacao[3] == 'Andamento' %} 
+                    {%if solicitacao[3] == 'Andamento' and solicitacao[9] == vai.0 %} 
                         <details>
                             <summary>
                                 <p>{{solicitacao[1]}}</p><!--variavel titulo-->
@@ -349,14 +348,14 @@
             
 
             <!--chamados fechado-->
-            <p class="chamado-fechada">Chamados Fechados</p>
+            <p class="chamado-fechada">Chamados Fechados do {{nome[0]}}</p>
             {%  if leitorfechado == 0 or Values==0 %}
                 <div class="box-req">
                     <p>Sem chamados fechadas no momento</p>
                 </div>
             {%else%}
                 {% for solicitacao in Details %}
-                    {%if solicitacao[3] == 'Fechada'%} 
+                    {%if solicitacao[3] == 'Fechada' and solicitacao[9] == vai.0 %} 
                         <details>
                             <summary>
                                 <p>{{solicitacao[1]}}</p><!--variavel titulo-->
@@ -444,6 +443,8 @@
             btnsconcluir.onclick = function() {
                 modalconcluir.style.display = "block";
             }
+            
+           
             fechar.onclick = function() {
                 modalaceitar.style.display = "none";
             }
