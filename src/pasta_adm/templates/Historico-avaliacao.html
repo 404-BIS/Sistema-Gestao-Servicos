@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+        <style>
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {background-color: #f1f1f1;}
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown{
+            margin: 30px;
+            list-style-type: none
+        }
+
+        .info-user{
+            display: flex;   
+            align-items: center;
+            justify-content: space-between;
+            margin-top:10px
+        }
+
+        .sequencia-botao button{
+            margin-left: 10px;
+            padding: 0 16px;
+            height: 35px;
+            border: none;
+            border-radius: 10px;
+            background-color: #009B22;
+            color: #FCFCFC;
+            font-size: 13px;    
+        }
+        </style>
+        
+    </head>
+    <body>
+        <header>
+            <img src="../../static/images/Usuario.svg"> 
+            <nav>
+                <a class="minha-chamada" href="/adm"><img class="icon-chamada" src="../../static/images/Manutencao.svg"> Controle de usuários </a>
+                <ul>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Requisições do Sistema</a>
+                        <div class="dropdown-content">
+                            <a href="/adm/requisicoes">Todas as Requsições</a>
+                            <a href="/adm/estatisticas">Estatisticas das requisições</a>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Minhas Requisições</a>
+                        <div class="dropdown-content">
+                            <a href="/adm/solicitacao">Criar chamados </a>
+                            <a href="/adm/menu">Minhas requisições</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+        <p class="chamado-fechada">Chamados Avaliados do {{nome[0]}}</p>
+        {%  if  leitorfechado == 0 or Values ==0 %}
+            <div class="box-req">
+                <p>Sem chamados Avaliados no momento </p>
+            </div>  
+        {%else%}
+            {% for solicitacao in Details %}
+                {%if solicitacao[10] == 1 or solicitacao[10] == 2 or solicitacao[10] == 3 or solicitacao[10] == 4 or solicitacao[10] == 5 %} 
+                    <details>
+                        <summary>
+                            <p>{{solicitacao[1]}}</p><!--variavel titulo-->
+                            {% if solicitacao[4] == 'Problemas de Hardware'%}
+                                <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
+                            {% elif solicitacao[4] == 'Problemas de Software'%}
+                                <img class="icon" src="../static/images/Software.png" alt="icon">
+                            {%else%}
+                                <img class="icon" src="../static/images/Info.png" alt="icon">
+                            {%endif%}
+                        </summary>
+                        <div class="conteudo">
+                            <p>Tipo: <span>{{solicitacao[4]}}<!--variavel tipo--></span></p>
+                            <p>Descrição: <span>{{solicitacao[2]}}<!--variavel descricao--></span></p>
+                        </div>
+                        <div class="aaa"> 
+                            <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}}</span></p> 
+                            <div class="caras">
+                                {% if solicitacao[10]==1 %}
+                                    <img src='../static/images/pessimo.png'>
+                                {% elif solicitacao[10]==2 %}
+                                    <img src='../static/images/ruim.png'>
+                                {% elif solicitacao[10]==3 %}
+                                    <img src='../static/images/mediano.png'>
+                                {% elif solicitacao[10]==4 %}
+                                    <img src='../static/images/bom.png'>
+                                {% elif solicitacao[10]==5 %}
+                                    <img src='../static/images/otimo.png'>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="texto-fechamento"> <span>{{solicitacao[5]}} </span> </div>
+                    </details>
+               {%endif%}
+            {%endfor%} 
+        {%endif%}
+
+        <!--Legendas-->
+        <p class="tipo-legenda">Tipos de Problemas</p>
+        <div class="legenda">
+            <div class="hardware">            
+                <div>
+                    <p class="categoria">Problemas de Hardware</p>
+                    <p class="quant">Quantidade:{{cont_hardware_adm}}</p> <!--variavel de quantidade-->
+                </div>    
+            <img class="icon" src="../../static/images/Hardware.png" alt="icon">
+        </div>   
+
+            <div class="software">
+                <div>
+                    <p class="categoria">Problemas de Software</p>
+                    <p class="quant">Quantidade:{{cont_software_adm}}</p> <!--variavel de quantidade-->
+                </div>    
+                <img class="icon" src="../../static/images/Software.png" alt="icon">
+            </div>  
+
+            <div class="info">
+                <div>
+                    <p class="categoria">Esclarecimento/informação</p>
+                    <p class="quant">Quantidade:{{cont_duv_adm}}</p> <!--variavel de quantidade-->
+                </div>    
+                <img class="icon" src="../../static/images/Info.png" alt="icon">
+            </div>  
+        </div>
+    </main>
+</body>
+</html>

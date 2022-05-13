@@ -78,9 +78,10 @@ def recusando(id):
     comentario= formulario['codigo']
     hora= datetime.datetime.now()
     nome= session['nome_exec']
+    id_de_qm_fechou = session['id_exec']
     if comentario != None:
         with mysql.cursor()as Cursor:
-            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,nome_exec=%s,comentario=%s WHERE id_sol = %s",(hora,nome,comentario,id,))
+            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,nome_exec=%s,comentario=%s,id_de_quem_fechou=%s WHERE id_sol = %s",(hora,nome,comentario,id_de_qm_fechou,id,))
             mysql.commit()
             Cursor.close()
     return redirect ('/executor/chamadas-exec')

@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from flask import Blueprint,render_template,request,redirect,session
 from flask_login import login_required, current_user
 from bd.db import mysql
@@ -54,11 +53,13 @@ def avaliacao(id):
     bom = request.form.get('bom')
     
     comentario_avaliacao= request.form['avaliacao']
+    trocar = session["id_user"]
     x = [pessimo,ruim,mediano,bom,otimo]
     for i in x:
         if str(i) in "12345":
+            print(id)
             with mysql.cursor()as Cursor:
-                Cursor.execute("UPDATE solicitacao SET avaliacao =%s WHERE id_sol = %s",(i,id,))
+                Cursor.execute("UPDATE solicitacao SET avaliacao =%s WHERE id_sol = %s ",(i,id,))
                 mysql.commit()
                 Cursor.close()
         

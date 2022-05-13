@@ -112,52 +112,57 @@
                         <p>Descrição: <span>{{solicitacao[2]}}</span></p>
                     </div>
                     {%if solicitacao[10] != 1 and solicitacao[10] != 2 and solicitacao[10] != 3 and solicitacao[10] != 4 and solicitacao[10] != 5%}
-                    <div class="avaliar">
-                        <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}} </span></p> 
-                        
-                        <button class="concluir btnconcluir" type="submit">Concluir</button>
-                    </div>
-                    {%endif%}
-                    <div class="texto-fechamento">
-                        <span> {{solicitacao[5]}}</span>    
-                    </div>
-                </details>
-                <div id="concluir" class="modal">
-                    <div class="icon-fechar"></div>
-                    <form class="avaliacao" action="/avaliar/{{solicitacao.0}}" method="POST"> 
+                        <div class="avaliar">
+                            <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}} </span></p> 
+                            
+                            <button class="concluir btnconcluir" type="submit">Avaliar</button>
+                        </div>
+                        <div id="concluir" class="modal">
                             <div class="icon-fechar"></div>
-                            <div class="header">
-                                <b>Avaliação</b>
-                                <!--<button><span class="material-icons close">close</span></button>-->
-                            </div>
-                            <div class="caras">           
-                                <input name="pes" value="1" type="checkbox">
-                                    <img src="../static/images/pessimo.png">
-                                    <span>Péssimo</span>
-                                 </input>
-                                <input name="ruim" value="2" type="checkbox">
-                                    <img src='../static/images/ruim.png'>
-                                    <span>Ruim</span>
-                                </input>
-                                <input name="med" value="3" type="checkbox">
-                                    <img src="../static/images/mediano.png">
-                                    <span>Mediano</span>
-                                </input>
-                                <input name="bom" value="4" type="checkbox">
-                                    <img src='../static/images/bom.png'>
-                                    <span>Bom</span>
-                                </input>
-                                <input name="otimo" value="5"type="checkbox">
-                                    <img src='../static/images/otimo.png'>
-                                    <span>Ótimo</span>
-                            </input>
-                            </div>
-                            <textarea placeholder="Descreva sua avaliação" name="avaliacao"></textarea>
-                            <div class="submit">
-                                <button >Avaliar</button>
-                            </div>
-                    </form>
-                </div>
+                            <form class="avaliacao" action="/avaliar/{{solicitacao.0}}" method="POST"> 
+                                    <div class="icon-fechar"></div>
+                                    <div class="header">
+                                        <b>Avaliação</b>
+                                        <!--<button><span class="material-icons close">close</span></button>-->
+                                    </div>
+                                    <div class="caras">           
+                                        <input name="pes" value="1" type="checkbox">
+                                            <img src="../static/images/pessimo.png">
+                                            <span>Péssimo</span>
+                                        </input>
+                                        <input name="ruim" value="2" type="checkbox">
+                                            <img src='../static/images/ruim.png'>
+                                            <span>Ruim</span>
+                                        </input>
+                                        <input name="med" value="3" type="checkbox">
+                                            <img src="../static/images/mediano.png">
+                                            <span>Mediano</span>
+                                        </input>
+                                        <input name="bom" value="4" type="checkbox">
+                                            <img src='../static/images/bom.png'>
+                                            <span>Bom</span>
+                                        </input>
+                                        <input name="otimo" value="5"type="checkbox">
+                                            <img src='../static/images/otimo.png'>
+                                            <span>Ótimo</span>
+                                    </input>
+                                    </div>
+                                    <textarea placeholder="Descreva sua avaliação" name="avaliacao"></textarea>
+                                    <div class="submit">
+                                        <button >Avaliar</button>
+                                    </div>
+                            </form>
+                            
+                        </div>
+                        {%endif%}
+                        <div class="texto-fechamento">
+                            <span> {{solicitacao[5]}}</span>    
+                        </div>
+                    
+                    </details>
+                    
+                    
+                    
             {% endif %}
             {% endfor %}
             
