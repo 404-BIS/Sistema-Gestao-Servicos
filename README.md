@@ -66,12 +66,17 @@
 
 
      
-#### Metricas Sprint 1      
+#### Metricas      
  Utilizamos os gráficos de burndown como forma de medir o desempenho e o progeresso durante a sprint:
   
+ #### Sprint 1º
+     
  ![Burndown Chart](https://user-images.githubusercontent.com/92696799/163481889-2437818c-bdb1-4c7a-b16f-e78ee6afe424.png)
  
-  
+ #### Sprint 2º   
+     
+ ![Burndown Chart](https://user-images.githubusercontent.com/92696799/168493819-3b95a8be-ed0c-416a-a95f-b7cdedf222b3.png)
+
 </div>     
 <span id="prototipo"> 
   
