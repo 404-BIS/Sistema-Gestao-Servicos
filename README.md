@@ -29,15 +29,15 @@
    
  ### Backlog do produto
  #### Requisitos Funcionais  
-| CÓDIGO | DESCRIÇÃO | PRVISÃO DE CONCLUSÃO |
-|:------:|:---------:|:--------------------:|
-| RF 01 | Sistema de cadastro e login | SPRINT 2 |
-| RF 02 | Abertura e fechamento de chamados | SPRINT 1 |
-| RF 03 | Aceite ou rejeite de chamados | SPRINT 1 |
-| RF 04 | Sistema de avaliação do chamado | SPRINT 2 |
-| RF 05 | Filtragem de chamados por tipo de problema | SPRINT 2 |
-| RF 06 | Filtragem de chamados por data | SPRINT 2 |
-| RF 07 | Geração de estatíticas | SPRINT 3 |
+| CÓDIGO | DESCRIÇÃO |
+|:------:|:---------:|
+| RF 01 | Sistema de cadastro e login |
+| RF 02 | Abertura e fechamento de chamados |
+| RF 03 | Aceite ou rejeite de chamados |
+| RF 04 | Sistema de avaliação do chamado |
+| RF 05 | Filtragem de chamados por tipo de problema |
+| RF 06 | Filtragem de chamados por data |
+| RF 07 | Geração de estatíticas |
  
 #### Requisitos Não Funcionais  
 | CÓDIGO | DESCRIÇÃO | 
@@ -49,41 +49,29 @@
 | RNF 05 | Interface simples e intuitiva |  
 | RNF 06 | Sistema deve ser responsivo |
 | RNF 07 | Backend em Python 3+ e microframework Flask |
+
+</div>     
+<span id="backlog">  
+   
+ ## :dart: User Storys 
      
-### Backlog das sprints 
-#### Sprint 1
-| CÓDIGO | DESCRIÇÃO |
-|:------:|:---------:|
-| --    | Levantamento de requisitos |
-| --    | Criação do wireframe |
-| RF 02 | Abertura e fechamento de chamados |
-| RF 03 | Aceite ou rejeite de chamados |
-| --    | Criação e integração do banco de dados |  
+ <div align="center">   
+     
+  ![US1](https://user-images.githubusercontent.com/79495727/168456150-58187d3b-67f1-4992-849f-e5f93f2a7f09.png)
+     
+  ![US2](https://user-images.githubusercontent.com/79495727/168456367-a48f3d18-5880-4562-8d45-4faebe71e831.png)
+     
+  ![US3](https://user-images.githubusercontent.com/79495727/168456444-9ca9d303-9c3f-4a78-9da9-f75778f2f96a.png)
+
+
      
 #### Metricas Sprint 1      
  Utilizamos os gráficos de burndown como forma de medir o desempenho e o progeresso durante a sprint:
   
  ![Burndown Chart](https://user-images.githubusercontent.com/92696799/163481889-2437818c-bdb1-4c7a-b16f-e78ee6afe424.png)
  
- ![Tarefas da sprint](https://user-images.githubusercontent.com/92696799/163482971-bf152d18-be96-4270-8b33-98c68c556097.jpg)
-
   
-     
-#### Sprint 2
-| CÓDIGO | DESCRIÇÃO |
-|:------:|:---------:|
-| RF 01 | Sistema de cadastro e login |
-| RF 04 | Sistema de avaliação do chamado 
-| RF 05 | Filtragem de chamados por tipo de problema |
-| RF 06 | Filtragem de chamados por data |
-
-#### Sprint 3
-| CÓDIGO | DESCRIÇÃO |
-|:------:|:---------:|
-| RF 07 | Geração de estatíticas | SPRINT 3 |
-
 </div>     
-
 <span id="prototipo"> 
   
 ## :desktop_computer: Prótotipo
