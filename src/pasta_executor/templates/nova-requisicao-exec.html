@@ -7,7 +7,7 @@
     </head>
     <body>
         <header>
-            <img src="../../static/images/Usuario.svg"> 
+            <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button> 
             <nav>
                 <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg">  Meus Chamados</a>
                 <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas requisições</a>
@@ -15,6 +15,36 @@
                 <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
                 </a>
             </nav>
+            <div id="perfil" class="modal">
+                <div class="icon-fechar"></div>
+                <div class="profile">
+            
+                    <div class="header">
+                        <b>Meu Perfil</b>
+                    </div>
+                    <form action="/perfil_exec" method='POST'>
+                        <div class="informations">
+                            <div>
+                                <label>Nome</label>
+                                <input name="nome" type="name" placeholder="{{nome}}">
+                                <label>Email</label>
+                                <input name="troca_email" type="email" placeholder="{{email}}">
+                            </div>
+                
+                            <div class="linha-vertical"></div>
+                
+                            <div>
+                                <label>Senha</label>
+                                <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
+                            </div>
+                        </div>
+                
+                        <div class="submit">
+                            <button id="alterar">Alterar Dados</button>
+                            </form>
+                            <a href="/logout" id="sair">Deslogar</a>
+                        </div>
+                    </div>
         </header>
         <p class="title-nova-req"> Nova Requisição</p>
         <form class="formulario" action="/executor/solicitacao" method="POST">
@@ -44,6 +74,23 @@
             <div class="buttons">
                 <input class="enviar" type="submit" value="Enviar">                   
             </div>
-        </form>  
+        </form>
+        <script>
+            var modalperfil = document.getElementById("perfil");
+            var btnsperfil = document.getElementsByClassName("btnperfil")[0];
+            var fechar = document.getElementsByClassName("icon-fechar")[0];
+
+            btnsperfil.onclick = function() {
+                modalperfil.style.display = "block";
+            }
+            fechar.onclick = function() {
+                modalperfil.style.display = "none";
+            }
+            window.onclick = function(event) {
+              if (event.target == modalperfil) {
+                modalperfil.style.display = "none";
+              }
+            }
+        </script>  
     </body>
 </html>

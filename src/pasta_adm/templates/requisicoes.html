@@ -5,22 +5,6 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
         <style type="text/css"> 
-            
-            /*Modal Padrão*/
-            .modal {
-                display: none; 
-                position: fixed; 
-                z-index: 1; 
-                padding-top: 100px;
-                left: 0;
-                top: 0;
-                width: 100%; 
-                height: 100%; 
-                overflow: auto;
-                background-color: rgb(0,0,0); 
-                background-color: rgba(0,0,0,0.6); 
-            }
-
             /* Style Modal Aceitar Chamado*/
             .box-aceitar{
                 border:solid 5px #A8A7A7;
@@ -146,65 +130,20 @@
                 height: 40px;
                 width: 40px;
             }
-            .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            text-align: left;
-        }
-
-        .dropdown-content a:hover {background-color: #f1f1f1;}
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown{
-            margin: 30px;
-            list-style-type: none
-        }
-
-        .info-user{
-            display: flex;   
-            align-items: center;
-            justify-content: space-between;
-            margin-top:10px
-        }
-
-        .sequencia-botao button{
-            margin-left: 10px;
-            padding: 0 16px;
-            height: 35px;
-            border: none;
-            border-radius: 10px;
-            background-color: #009B22;
-            color: #FCFCFC;
-            font-size: 13px;    
-        }
-
-            </style>
+        </style>
+        
     </head>
     <body>
         <header>
-            <img src="../../static/images/Usuario.svg"> 
+            <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button>
             <nav>
-                <a class="minha-chamada" href="/adm"><img class="icon-chamada" src="../../static/images/Manutencao.svg"> Controle de usuários </a>
+                <a class="minha-chamada" href="/adm"> Controle de usuários </a>
                 <ul>
                     <li class="dropdown">
                         <a href="javascript:void(0)" class="dropbtn">Requisições do Sistema</a>
                         <div class="dropdown-content">
                             <a href="/adm/requisicoes">Todas as Requsições</a>
-                            <a href="/adm/estatisticas">Estatisticas das requisições</a>
+                            <a href="/adm/estatisticas">Estatísticas das requisições</a>
                         </div>
                     </li>
                 </ul>
@@ -218,6 +157,37 @@
                     </li>
                 </ul>
             </nav>
+            <div id="perfil" class="modal">
+                <div class="icon-fechar"></div>
+                <div class="profile">
+            
+                    <div class="header">
+                        <b>Meu Perfil</b>
+                    </div>
+            
+                    <form action="/perfil_adm" method='POST'>
+                        <div class="informations">
+                            <div>
+                                <label>Nome</label>
+                                <input name="nome" type="name" placeholder="{{nome}}">
+                                <label>Email</label>
+                                <input name="troca_email" type="email" placeholder="{{email}}">
+                            </div>
+                
+                            <div class="linha-vertical"></div>
+                
+                            <div>
+                                <label>Senha</label>
+                                <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
+                            </div>
+                        </div>
+                
+                        <div class="submit">
+                            <button id="alterar">Alterar Dados</button>
+                            </form>
+                            <a href="/logout" id="sair">Deslogar</a>
+                        </div>
+                    </div>
         </header>
         <main>
             <!--chamados em análise-->
@@ -266,7 +236,7 @@
                                         </div>
                                     </div>
                                     <div class="botao-concluir">
-                                        <form action="/recusando/{{solicitacao.0}}" method="POST">
+                                        <form action="/recusando_adm/{{solicitacao.0}}" method="POST">
                                             <textarea name="codigo" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
                                             <button class="bot-conclu" type="submit">Rejeitar Chamado</button>
                                         </form>
@@ -278,7 +248,7 @@
                             <div class="box-aceitar">
                                 <div class="icon-fechar"></div>
                                 <p>Chamada Aceita</p>
-                                <form action="/aceitando/{{solicitacao.0}}" method="POST"> 
+                                <form action="/aceitando_adm/{{solicitacao.0}}" method="POST"> 
                                     <button class="aceitar" type="submit">Aceitar</button>
                                 </form> 
                             </div> 
@@ -334,7 +304,7 @@
                                         </div>
                                     </div>
                                     <div class="botao-concluir">
-                                        <form action="/andamento/{{solicitacao.0}}" method="POST">
+                                        <form action="/andamento_adm/{{solicitacao.0}}" method="POST">
                                             <textarea name="comentario" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
                                             <button class="bot-conclu" type="submit">Concluir Chamado</button>
                                         </form>
@@ -426,6 +396,11 @@
 <!--script-->
         
         <script>
+            var modalperfil = document.getElementById("perfil");
+            var btnsperfil = document.getElementsByClassName("btnperfil")[0];
+            var fechar = document.getElementsByClassName("icon-fechar")[0];
+
+            
             var modalaceitar = document.getElementById("aceitar");
             var modalrejeitar = document.getElementById("rejeitar");
             var modalconcluir = document.getElementById("concluir");
@@ -441,6 +416,10 @@
                 modalrejeitar.style.display = "block";
             }
             
+            btnsperfil.onclick = function() {
+                modalperfil.style.display = "block";
+            }
+            
             btnsconcluir.onclick = function() {
                 modalconcluir.style.display = "block";
             }
@@ -453,6 +432,9 @@
             fechar.onclick = function() {
                 modalconcluir.style.display = "none";
             }
+            fechar.onclick = function() {
+                modalperfil.style.display = "none";
+            }
             window.onclick = function(event) {
               if (event.target == modalaceitar) {
                 modalaceitar.style.display = "none";
@@ -463,6 +445,9 @@
               }
               if (event.target == modalconcluir) {
                 modalconcluir.style.display = "none";
+              }
+              if (event.target == modalperfil) {
+                modalperfil.style.display = "none";
               }
             }
             </script>

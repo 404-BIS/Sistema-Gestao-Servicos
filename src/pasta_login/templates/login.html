@@ -7,8 +7,8 @@
         <title>Login</title>
     </head>
     <body class="containerLogin">
+        {% with messages = get_flashed_messages() %}
         <div class="login">
-            {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="notification is-danger">
                     {{ messages[0] }}

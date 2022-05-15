@@ -5,22 +5,6 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
         <style type="text/css"> 
-            
-            /*Modal Padrão*/
-            .modal {
-                display: none; 
-                position: fixed; 
-                z-index: 1; 
-                padding-top: 100px;
-                left: 0;
-                top: 0;
-                width: 100%; 
-                height: 100%; 
-                overflow: auto;
-                background-color: rgb(0,0,0); 
-                background-color: rgba(0,0,0,0.6); 
-            }
-
             /* Style Modal Aceitar Chamado*/
             .box-aceitar{
                 border:solid 5px #A8A7A7;
@@ -123,6 +107,7 @@
                 height: 60px;
                 width: 300px;
                 margin-top:40px;
+                margin-left: 230px;
             }
 
             .bot-conclu:hover{
@@ -134,7 +119,7 @@
                 justify-content: center;
                 align-items: center;    
             }
-           
+
             .superior{
                 display: flex;
                 justify-content: space-between;
@@ -150,9 +135,8 @@
             </style>
     </head>
     <body>
-        
         <header>
-            <img src="../../static/images/Usuario.svg"> 
+            <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button> 
             <nav>
                 <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg"> Meus Chamados</a>
                 <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas Requisições</a>
@@ -160,6 +144,36 @@
                 <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
                 </a>
             </nav>
+            <div id="perfil" class="modal">
+                <div class="icon-fechar"></div>
+                <div class="profile">
+            
+                    <div class="header">
+                        <b>Meu Perfil</b>
+                    </div>
+                    <form action="/perfil_exec" method='POST'>
+                        <div class="informations">
+                            <div>
+                                <label>Nome</label>
+                                <input name="nome" type="name" placeholder="{{nome}}">
+                                <label>Email</label>
+                                <input name="troca_email" type="email" placeholder="{{email}}">
+                            </div>
+                
+                            <div class="linha-vertical"></div>
+                
+                            <div>
+                                <label>Senha</label>
+                                <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
+                            </div>
+                        </div>
+                
+                        <div class="submit">
+                            <button id="alterar">Alterar Dados</button>
+                            </form>
+                            <a href="/logout" id="sair">Deslogar</a>
+                        </div>
+                    </div>
         </header>
         <main>
             <!--chamados em análise-->
@@ -170,7 +184,7 @@
                 </div>
             {% else %}
             {% for solicitacao in Details %}   
-                    {% if solicitacao[3] =="Aberta" and solicitacao[6] != conta[0] %}
+                    {% if solicitacao[3] =="Aberta" and solicitacao[9] != conta[0] %}
                         <details>
                             <summary>
                                 <p>{{solicitacao[1]}}</p><!--variavel titulo-->
@@ -239,7 +253,7 @@
                 </div>
             {%else%}
                 {% for solicitacao in Details %}
-                    {%if solicitacao[3] == 'Andamento' and solicitacao[6] !=conta[0] %} 
+                    {%if solicitacao[3] == 'Andamento' and solicitacao[9] !=conta[0] and solicitacao[12]== pk_user %} 
                         <details>
                             <summary>
                                 <p>{{solicitacao[1]}}</p><!--variavel titulo-->
@@ -298,7 +312,7 @@
                 </div>
             {%else%}
                 {% for solicitacao in Details %}
-                    {%if solicitacao[3] == 'Fechada'%} 
+                    {%if solicitacao[3] == 'Fechada' and solicitacao[9] !=conta[0]  and solicitacao[12]== pk_user %} 
                         <details>
                             <summary>
                                 <p>{{solicitacao[1]}}</p><!--variavel titulo-->
@@ -368,6 +382,8 @@
 <!--script-->
         
         <script>
+            var modalperfil = document.getElementById("perfil");
+            var btnsperfil = document.getElementsByClassName("btnperfil")[0];
             var modalaceitar = document.getElementById("aceitar");
             var modalrejeitar = document.getElementById("rejeitar");
             var modalconcluir = document.getElementById("concluir");
@@ -376,18 +392,22 @@
             var btnsconcluir = document.getElementsByClassName("btnconcluir")[0];
             var fechar = document.getElementsByClassName("icon-fechar")[0];
             
+            btnsperfil.onclick = function() {
+                modalperfil.style.display = "block";
+            }
             btnsaceitar.onclick = function() {
                 modalaceitar.style.display = "block";
             }
             btnsrejeitar.onclick = function() {
                 modalrejeitar.style.display = "block";
             }
-            
             btnsconcluir.onclick = function() {
                 modalconcluir.style.display = "block";
             }
             
-           
+            fechar.onclick = function() {
+                modalperfil.style.display = "none";
+            }
             fechar.onclick = function() {
                 modalaceitar.style.display = "none";
             }
@@ -398,6 +418,10 @@
                 modalconcluir.style.display = "none";
             }
             window.onclick = function(event) {
+              if (event.target == modalperfil) {
+                modalperfil.style.display = "none";
+              }
+            
               if (event.target == modalaceitar) {
                 modalaceitar.style.display = "none";
               }

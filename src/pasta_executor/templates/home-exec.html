@@ -5,53 +5,53 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     </head>
-    <style type="text/css"> 
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 1; 
-            padding-top: 100px;
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto;
-            background-color: rgb(0,0,0); 
-            background-color: rgba(0,0,0,0.6); 
-        }
-
-        
-    </style>
     <body>
+        {% if current_user.is_authenticated %}
+            Hi {{ current_user.name }}!
+        {% endif %}
         <header>
-            <img src="../../static/images/Usuario.svg"> 
-            {% if current_user.is_authenticated %}
-                Hi {{ current_user.name }}!
-            {% endif %}
-            <header>
-                <img src="../../static/images/Usuario.svg"> 
-                <nav>
-                    <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg">  Meus Chamados</a>
-                    <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas requisições</a>
-                    <a href="/executor/solicitacao">
-                    <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
-                    </a>
-                </nav>
-            </header>
+            <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button> 
+            <nav>
+                <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg">  Meus Chamados</a>
+                <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas requisições</a>
+                <a href="/executor/solicitacao">
+                <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
+                </a>
+            </nav>
+            <div id="perfil" class="modal">
+                <div class="icon-fechar"></div>
+                <div class="profile">
+            
+                    <div class="header">
+                        <b>Meu Perfil</b>
+                    </div>
+                    <form action="/perfil_exec" method='POST'>
+                        <div class="informations">
+                            <div>
+                                <label>Nome</label>
+                                <input name="nome" type="name" placeholder="{{nome}}">
+                                <label>Email</label>
+                                <input name="troca_email" type="email" placeholder="{{email}}">
+                            </div>
+                
+                            <div class="linha-vertical"></div>
+                
+                            <div>
+                                <label>Senha</label>
+                                <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
+                            </div>
+                        </div>
+                
+                        <div class="submit">
+                            <button id="alterar">Alterar Dados</button>
+                            </form>
+                            <a href="/logout" id="sair">Deslogar</a>
+                        </div>
+                    </div>
         </header>
+
         <main>
-            <div class="bbb">
-                <p class="req-aberta">Requisições Abertas  </p>
-                <div class="filtro">
-                    <p>Filtrar por:
-                    <select>
-                        <option value="1">Mais Recente</option>
-                        <option value="2">Mais Antigo</option>
-                        <option value="3">A a Z</option>
-                        <option value="4">Z a A</option>
-                    </select></p>
-                </div>
-            </div>
+            <p class="req-aberta">Requisições Abertas  </p>
             {%  if leitoraberto == 0 or Values ==0 %}
                 <div class="box-req">
                 <p>Sem requisições abertas no momento</p>
@@ -80,18 +80,7 @@
                     </details>
                 {% endif %}
             {% endfor %}
-            <div class="bbb">
-                <p class="req-fechada">Requisições Fechadas</p>
-                <div class="filtro">
-                    <p>Filtrar por:
-                    <select>
-                        <option value="1">Mais Recente</option>
-                        <option value="2">Mais Antigo</option>
-                        <option value="3">A a Z</option>
-                        <option value="4">Z a A</option>
-                    </select></p>
-                </div>
-            </div>
+            <p class="req-fechada">Requisições Fechadas</p> 
             {%  if leitorfechado == 0 or Values==0 %}
                 <div class="box-req">
                 <p>Sem requisições abertas no momento</p>
@@ -115,18 +104,29 @@
                         <p>{{solicitacao[8]}}</p>
                         <p>Descrição: <span>{{solicitacao[2]}}</span></p>
                     </div>
+                    <div class="aaa"> 
+                        <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}}</span></p> 
+                        <div class="caras">
+                            {% if solicitacao[10]==1 %}
+                                <img src='../static/images/pessimo.png'>
+                            {% elif solicitacao[10]==2 %}
+                                <img src='../static/images/ruim.png'>
+                            {% elif solicitacao[10]==3 %}
+                                <img src='../static/images/mediano.png'>
+                            {% elif solicitacao[10]==4 %}
+                                <img src='../static/images/bom.png'>
+                            {% elif solicitacao[10]==5 %}
+                                <img src='../static/images/otimo.png'>
+                            {% endif %}
+                        </div>
+                    </div>
                     {%if solicitacao[10] != 1 and solicitacao[10] != 2 and solicitacao[10] != 3 and solicitacao[10] != 4 and solicitacao[10] != 5%}
                     <div class="avaliar">
                         <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}} </span></p> 
-                        
-                        <button class="concluir btnconcluir" type="submit">Concluir</button>
+                        <button class="avaliar btnavaliar" type="submit">Avaliar</button>
                     </div>
-                    {%endif%}
-                    <div class="texto-fechamento">
-                        <span> {{solicitacao[5]}}</span>    
-                    </div>
-                </details>
-                <div id="concluir" class="modal">
+                
+                <div id="avaliar" class="modal">
                     <div class="icon-fechar"></div>
                     <form class="avaliacao" action="/avaliar/{{solicitacao.0}}" method="POST"> 
                             <div class="icon-fechar"></div>
@@ -134,27 +134,34 @@
                                 <b>Avaliação</b>
                                 <!--<button><span class="material-icons close">close</span></button>-->
                             </div>
-                            <div class="caras">           
-                                <input name="pes" value="1" type="checkbox">
+                            <div class="caras">      
+                                <div>     
                                     <img src="../static/images/pessimo.png">
                                     <span>Péssimo</span>
-                                 </input>
-                                <input name="ruim" value="2" type="checkbox">
+                                    <input name="pes" value="1" type="checkbox"></input>
+                                </div>
+                                <div>  
                                     <img src='../static/images/ruim.png'>
                                     <span>Ruim</span>
-                                </input>
-                                <input name="med" value="3" type="checkbox">
+                                    <input name="ruim" value="2" type="checkbox"></input>
+                                </div>
+                                
+                                <div>
                                     <img src="../static/images/mediano.png">
                                     <span>Mediano</span>
-                                </input>
-                                <input name="bom" value="4" type="checkbox">
+                                    <input name="med" value="3" type="checkbox"></input>
+                                </div>
+                                <div>
                                     <img src='../static/images/bom.png'>
                                     <span>Bom</span>
-                                </input>
-                                <input name="otimo" value="5"type="checkbox">
+                                    <input name="bom" value="4" type="checkbox"></input>
+                                </div>
+
+                                <div>
                                     <img src='../static/images/otimo.png'>
                                     <span>Ótimo</span>
-                            </input>
+                                    <input name="otimo" value="5"type="checkbox"></input>
+                                </div>
                             </div>
                             <textarea placeholder="Descreva sua avaliação" name="avaliacao"></textarea>
                             <div class="submit">
@@ -162,6 +169,11 @@
                             </div>
                     </form>
                 </div>
+                {%endif%}
+                <div class="texto-fechamento">
+                    <span> {{solicitacao[5]}}</span>    
+                </div>
+            </details>
             {% endif %}
             {% endfor %}
             
@@ -193,19 +205,32 @@
                 </div>  
             </div>
         </main>
-        <script>
-            // var modalavaliar = document.getElementById("avaliar");
-            var modalconcluir = document.getElementById("concluir");
-            var btnsconcluir = document.getElementsByClassName("btnconcluir")[0];
+        <script>  
+            var modalperfil = document.getElementById("perfil");
+            var btnsperfil = document.getElementsByClassName("btnperfil")[0];
+            var fechar = document.getElementsByClassName("icon-fechar")[0];
+
+            btnsperfil.onclick = function() {
+                modalperfil.style.display = "block";
+            }
+            fechar.onclick = function() {
+                modalperfil.style.display = "none";
+            }
+            window.onclick = function(event) {
+              if (event.target == modalperfil) {
+                modalperfil.style.display = "none";
+              }
+            }   
+
+            var modalconcluir = document.getElementById("avaliar");
+            var btnsconcluir = document.getElementsByClassName("btnavaliar")[0];
             var fechar = document.getElementsByClassName("icon-fechar")[0];
 
             btnsconcluir.onclick = function() {
-                console.log('oi')
                 modalconcluir.style.display = "block";
             }
 
             fechar.onclick = function() {
-                console.log('socorro')
                 modalconcluir.style.display = "none";
             }
 
@@ -214,6 +239,8 @@
                 modalconcluir.style.display = "none";
               }
             }
+
+            
         </script>
     </body>
 </html>
