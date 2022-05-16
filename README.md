@@ -185,4 +185,4 @@ http://127.0.0.1:5000/executor/menu
 | Sprint |  Link  |
 |:------:|:-------:|     
 |Sprint 1|[link do vídeo](https://drive.google.com/drive/folders/1dYaIAg5sDPl6jNXHNghidlp36edTh-SW?usp=sharing)|
-|Sprint 2|[link do vídeo](https://youtu.be/W7dM_NyNZIU)
+|Sprint 2|[link do vídeo](https://drive.google.com/drive/folders/1NHcv2cHfG5PK5t0rXE_CZ6ss8Z-7JPyd?usp=sharing)
