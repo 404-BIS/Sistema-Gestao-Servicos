@@ -23,6 +23,7 @@ Create table solicitacao(
     id_user int,
     avaliacao int,
     coment_avaliacao varchar(155),
+    id_fechador int,
     constraint ck_type_problem Check (type_problem in ('Problemas de Hardware','Problemas de Software','Duvidas ou Esclarecimentos'))
 );
 
