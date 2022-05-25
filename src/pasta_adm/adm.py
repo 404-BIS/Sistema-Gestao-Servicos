@@ -1,5 +1,4 @@
 from flask import Blueprint,render_template,request,redirect,session, url_for
-from flask_login import login_required, current_user
 from bd.db import mysql
 import datetime
 
@@ -18,7 +17,7 @@ def perfil():
     with mysql.cursor()as Cursor:
         Cursor.execute("UPDATE user SET nome_user = %s, email_user=%s, pass_user = %s WHERE id_user = %s ",(nome_troca,email_troca,troca_senha,pk_user,))
         mysql.commit()
-        Cursor.close()    
+            
     return redirect(url_for('admin.adm'))
 
 
@@ -33,7 +32,6 @@ def adm():
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-    with mysql.cursor()as Cursor:    
         Values = Cursor.execute("SELECT * FROM user")
         if Values > 0:
             Details = Cursor.fetchall()
@@ -52,20 +50,19 @@ def index():
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-    if request.method == 'POST':
-        Details = request.form
-        titulo = Details['titulo']
-        descricao = Details['descricao']
-        tipo = Details['tipo']   
-        status_sol = 'Aberta'
-        comentario= ''
-        hora= datetime.datetime.now()
-        with mysql.cursor()as Cursor:
+        if request.method == 'POST':
+            Details = request.form
+            titulo = Details['titulo']
+            descricao = Details['descricao']
+            tipo = Details['tipo']   
+            status_sol = 'Aberta'
+            comentario= ''
+            hora= datetime.datetime.now()
+
             id_admin = session["id_admin"]
             Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio) VALUES(%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,id_admin,hora,))
             mysql.commit()
-            Cursor.close()
-        return redirect("/adm/menu")
+            return redirect("/adm/menu")
     return render_template('/nova-requisicao-adm.html',senha=senha,email=email,nome=nome)
 
 
@@ -79,7 +76,6 @@ def home():
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-    with mysql.cursor()as Cursor:
         pk_user = session["id_admin"]
         Cursor.execute("SELECT id_user FROM solicitacao WHERE id_user = %s", (pk_user,))
         conta = Cursor.fetchone()
@@ -107,7 +103,7 @@ def requisicoes():
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-    with mysql.cursor()as Cursor:
+
         cont_hardware=Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Hardware'")
         cont_software= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Software'")
         cont_duv= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos'")
@@ -117,11 +113,11 @@ def requisicoes():
         leitorandamento= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
 
         Values=Cursor.execute("SELECT * FROM solicitacao")
-    if Values > 0:
-        Details = Cursor.fetchall()
-        Cursor.close()
-        return render_template('/requisicoes.html', Details=Details,Values=Values,cont_hardware = cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto = leitoraberto ,leitorfechado = leitorfechado ,leitorandamento=leitorandamento,senha = senha , email=email, nome = nome)
-    return render_template('/requisicoes.html',Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,senha = senha , email=email, nome = nome)
+        if Values > 0:
+            Details = Cursor.fetchall()
+            
+            return render_template('/requisicoes.html', Details=Details,Values=Values,cont_hardware = cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto = leitoraberto ,leitorfechado = leitorfechado ,leitorandamento=leitorandamento,senha = senha , email=email, nome = nome)
+        return render_template('/requisicoes.html',Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,senha = senha , email=email, nome = nome)
 
 @admin.route("/adm/estatisticas",methods=["GET"])
 def estatisticas():
@@ -133,7 +129,6 @@ def estatisticas():
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-    with mysql.cursor()as Cursor:
         tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware'")
         tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software'")
         tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos'")
@@ -144,8 +139,8 @@ def estatisticas():
         num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
         num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
 
-        avaliacao_ruim=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1'")
-        avaliacao_pessima = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2'")
+        avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1'")
+        avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2'")
         avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3'")
         avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4'")
         avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5'")
@@ -163,7 +158,6 @@ def avaliacao(id):
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-    with mysql.cursor()as Cursor:
         leitorfechado= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Fechada' and id_fechador =%s and avaliacao!=0 ",(id,))
 
         cont_hardware_adm =Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Hardware' and id_fechador =%s and avaliacao != 0 ",(id,))
@@ -171,15 +165,17 @@ def avaliacao(id):
         cont_duv_adm = Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and id_fechador =%s and avaliacao != 0 ",(id,))
         Cursor.execute("SELECT id_user FROM user WHERE id_user= %s ",(id))
         vai = Cursor.fetchone()
+        Cursor.execute("SELECT nome_user FROM user WHERE id_user= %s ",(id))
+        nomeuser = Cursor.fetchone()
 
         Cursor.execute("SELECT * FROM solicitacao WHERE id_fechador = %s",(id,))
         Details = Cursor.fetchall()
         Values=Cursor.execute("SELECT * FROM solicitacao WHERE id_fechador = %s",(id,))
         if Values > 0:
             Details = Cursor.fetchall()
-            Cursor.close()
+            
         
-    return render_template("/Historico-avaliacao.html",Values=Values,Details=Details,cont_hardware_adm=cont_hardware_adm,cont_software_adm=cont_software_adm,cont_duv_adm=cont_duv_adm,leitorfechado=leitorfechado,vai=vai,nome=nome,email=email,senha=senha)
+    return render_template("/Historico-avaliacao.html",Values=Values,Details=Details,cont_hardware_adm=cont_hardware_adm,cont_software_adm=cont_software_adm,cont_duv_adm=cont_duv_adm,leitorfechado=leitorfechado,vai=vai,nome=nome,email=email,senha=senha,nomeuser=nomeuser)
 
 
 @admin.route("/cargo<id>")
@@ -192,11 +188,11 @@ def cargo(id):
         if eounaoe[0] == "user":
             Cursor.execute("UPDATE user set type_user = 'exec' WHERE id_user = %s",(id,))
             mysql.commit()
-            Cursor.close()
+            
         else:
             Cursor.execute("UPDATE user set type_user = 'user' WHERE id_user = %s",(id,))
             mysql.commit()
-            Cursor.close()
+            
     return redirect(url_for("admin.adm"))
 
     
@@ -210,7 +206,6 @@ def vizu(id):
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-    with mysql.cursor()as Cursor:
         leitoraberto= Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and id_user =%s",(id,))
         leitorfechado= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Fechada' and id_user =%s",(id,))
         leitorandamento= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Andamento' and id_user =%s",(id,))
@@ -223,14 +218,17 @@ def vizu(id):
         Cursor.execute("SELECT id_user FROM user WHERE id_user= %s ",(id))
         vai = Cursor.fetchone()
 
+        Cursor.execute("SELECT nome_user FROM user WHERE id_user= %s ",(id))
+        nomeuser = Cursor.fetchone()
+
         Cursor.execute("SELECT * FROM solicitacao WHERE id_user= %s",(id,))
         Details = Cursor.fetchall()
 
         Values=Cursor.execute("SELECT * FROM solicitacao WHERE id_user= %s",(id,))
         if Values > 0:
             Details = Cursor.fetchall()
-            Cursor.close()
-    return render_template("/view_solicit_user.html",Values=Values,nome=nome,Details=Details,leitoraberto=leitoraberto,leitorfechado=leitorfechado,leitorandamento=leitorandamento,vai=vai,cont_software_adm=cont_software_adm,cont_hardware_adm=cont_hardware_adm, cont_duv_adm= cont_duv_adm,email=email,senha=senha)
+            
+    return render_template("/view_solicit_user.html",Values=Values,nome=nome,Details=Details,leitoraberto=leitoraberto,leitorfechado=leitorfechado,leitorandamento=leitorandamento,vai=vai,cont_software_adm=cont_software_adm,cont_hardware_adm=cont_hardware_adm, cont_duv_adm= cont_duv_adm,email=email,senha=senha, nomeuser=nomeuser)
 
 @admin.route('/aceitando_adm/<id>', methods=['POST'])
 def aceitar(id):
@@ -239,7 +237,7 @@ def aceitar(id):
     with mysql.cursor()as Cursor:
         Cursor.execute("UPDATE solicitacao SET status_sol ='Andamento' WHERE id_sol = %s",(id,))
         mysql.commit()
-        Cursor.close()
+        
     return redirect ('/adm/requisicoes')
 
 @admin.route('/recusando_adm/<id>', methods=['POST'])
@@ -254,7 +252,7 @@ def recusando(id):
         with mysql.cursor()as Cursor:
             Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,nome_exec=%s,comentario=%s WHERE id_sol = %s",(hora,nome,comentario,id,))
             mysql.commit()
-            Cursor.close()
+            
     return redirect ('/adm/requisicoes')
 
 @admin.route('/andamento_adm/<id>', methods=['POST'])
@@ -269,5 +267,5 @@ def fechamento(id):
         with mysql.cursor()as Cursor:
             Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,nome_exec=%s,comentario=%s WHERE id_sol = %s",(hora,nome,comentario,id,))
             mysql.commit()
-            Cursor.close()
+            
     return redirect ('/adm/requisicoes')

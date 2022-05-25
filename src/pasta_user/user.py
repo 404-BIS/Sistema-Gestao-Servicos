@@ -58,11 +58,9 @@ def home():
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-    with mysql.cursor()as Cursor:
         pk_user = session["id_user"]
         Cursor.execute("SELECT id_user FROM solicitacao WHERE id_user = %s", (pk_user,))
-        conta = Cursor.fetchone()
-    with mysql.cursor()as Cursor:    
+        conta = Cursor.fetchone() 
         cont_hardware=Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Hardware' and id_user= %s",(pk_user,))
         cont_software= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Software' and id_user =%s", (pk_user,))
         cont_duv= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos'and id_user =%s", (pk_user,))

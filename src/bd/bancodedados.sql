@@ -17,7 +17,7 @@ Create table solicitacao(
     status_sol varchar(55) not null,
     type_problem varchar(40),
     comentario varchar(155),
-    nome_exec varchar(55),
+    foto blob,
     data_inicio datetime,
     data_final datetime,
     id_user int,

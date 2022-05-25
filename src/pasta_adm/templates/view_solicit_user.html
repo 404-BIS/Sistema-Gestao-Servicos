@@ -210,7 +210,7 @@
                 </div>
     </header>
     <main>
-        <p class="chamado-analise">Chamados em Análise do {{nome[0]}}</p>
+        <p class="chamado-analise">Chamados em Análise de {{nomeuser[0]}}</p>
         {% if leitoraberto == 0 %}
         <div class="box-req">
             <p id="btnaceitar" class="btnrejeitar">Sem requisições para análise no momento</p>
@@ -281,7 +281,7 @@
 
 
         <!--chamados andamento-->
-        <p class="chamado-andamento">Chamados em Andamento do {{nome[0]}}</p>
+        <p class="chamado-andamento">Chamados em Andamento de {{nomeuser[0]}}</p>
         {% if Values == 0 or leitorandamento == 0%}
         <div class="box-req">
             <p class="btnconcluir">Sem chamados em andamento no momento</p>
@@ -348,7 +348,7 @@
 
 
         <!--chamados fechado-->
-        <p class="chamado-fechada">Chamados Fechados do {{nome[0]}}</p>
+        <p class="chamado-fechada">Chamados Fechados de {{nomeuser[0]}}</p>
         {% if leitorfechado == 0 or Values==0 %}
         <div class="box-req">
             <p>Sem chamados fechadas no momento</p>
