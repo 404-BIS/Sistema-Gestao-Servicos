@@ -91,10 +91,10 @@
             {%block content%}
             <div>
                 <p>Categoria das Solicitações</p>
-                <canvas id="income_vs_expense"></canvas>
+                <canvas id="income_vs_expense"></canvas>''
             </div>
             <div>
-                <p>Comparação Usuarios e Executores Cadastrados</p>
+                <p>Comparação Usuarios e Executores Cadastrados em %</p>
                 <canvas id="income_vs_category"></canvas>
             </div>
 
@@ -159,23 +159,20 @@
 
         const sim = document.getElementById('income_vs_category').getContext('2d');
         const es = new Chart(sim, {
-            type: 'bar',
+            type: 'pie',
             data: {
-                labels: ['Usuários', 'Executores'],
+                labels: [
+                    'Usuario',
+                    'Executor',
+                ],
                 datasets: [{
-                    label: '',
-                    data: ['{{num_user}}', '{{num_exec}}'],
+                    label: 'My First Dataset',
+                    data: ['{{ num_user }}','{{ num_exec }}'],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)'
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)'
                     ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)'
-                    ],
-                    borderWidth: 1
+                    hoverOffset: 4
                 }]
             },
             options: {
@@ -186,6 +183,7 @@
                 }
             }
         });
+        
 
         const tes = document.getElementById('overtime_expenditure').getContext('2d');
         const ze = new Chart(tes, {

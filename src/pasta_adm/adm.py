@@ -139,13 +139,21 @@ def estatisticas():
         num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
         num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
 
+        somatotal = num_exec + num_user
+        porcentoUser = str((num_user/somatotal)*100)
+        porcentoExec = str((num_exec/somatotal)*100)
+        aporcentoUser = porcentoUser[:2]
+        aporcentoExec = porcentoExec[:2]
+ 
+
+
         avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1'")
         avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2'")
         avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3'")
         avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4'")
         avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5'")
 
-    return render_template("char.html",tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=num_exec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=num_user,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome)
+    return render_template("char.html",tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome)
 
 
 @admin.route("/historico-avaliacao<id>")
