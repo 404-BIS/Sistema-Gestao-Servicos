@@ -29,9 +29,13 @@ def index():
     pk_user = session['id_user']
     nome = session['nome_user']
     email = session['email_user']
+
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
+        Cursor.execute("SELECT id_user FROM user WHERE type_user = 'exec'")
+        allExec = Cursor.fetchall()
+
     if request.method == 'POST':
         Details = request.form
         titulo = Details['titulo']
@@ -40,13 +44,57 @@ def index():
         status_sol = 'Aberta'
         comentario= ''
         hora= datetime.datetime.now()
+
         with mysql.cursor()as Cursor:
-            id_user = session["id_user"]
-            Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio) VALUES(%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,id_user,hora,))
-            mysql.commit()
-            Cursor.close()
-        return redirect("/usuario/menu")
-    return render_template('/nova-requisicao-user.html',nome=nome,email=email,senha=senha)
+            if len(allExec) == 0:
+                Cursor.execute("INSERT INTO solicitacao (title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_user) VALUES (%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,tipo,status_sol,comentario,hora,pk_user,))
+                mysql.commit()
+                Cursor.close()
+                return redirect("/usuario/menu")
+
+            elif len(allExec) == 1:
+                execone = allExec[0]
+                Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,pk_user,hora,execone,))
+                mysql.commit()
+                Cursor.close()
+                return redirect("/usuario/menu")
+            else:
+                Cursor.execute("SELECT * FROM solicitacao")
+                tudo = Cursor.fetchall()
+                if len(tudo) >= 1 :
+                    Cursor.execute("SELECT id_fechador FROM solicitacao ORDER BY id_sol DESC LIMIT 1")
+                    ultimoChamado = Cursor.fetchall()
+                    for x in range (len(allExec)):
+                        if allExec[x] == ultimoChamado[0]:
+                            if allExec.index(allExec[x]) + 1 < len(allExec):
+                                print(allExec.index(allExec[x]))
+                                print(allExec[x])
+                                a = allExec[x+1]
+
+                            elif allExec.index(allExec[x]) + 2 > len(allExec):
+                                a = allExec[0]
+
+                            elif allExec.index(allExec[x]) + 1 == len(allExec):
+                                print(allExec.index(allExec[x]))
+                                print(allExec[x])
+                                print(len(allExec))
+                                a = allExec[-1]
+                        else:
+                            a = allExec[x+1]                        
+                            
+                            Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,pk_user,hora,a))
+                            mysql.commit()
+                            Cursor.close()
+                            return redirect("/usuario/menu")
+        
+                else:
+                    for x in allExec:
+                        Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,pk_user,hora,x,))
+                        mysql.commit()
+                        Cursor.close()
+                        return redirect("/usuario/menu")
+
+    return render_template('/nova-requisicao-user.html',nome=nome,email=email,senha=senha,)
 
 @user_blueprint.route('/usuario/menu',methods=['GET','POST'])
 def home():
