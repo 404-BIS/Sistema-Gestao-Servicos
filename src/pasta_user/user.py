@@ -62,30 +62,52 @@ def index():
                 Cursor.execute("SELECT * FROM solicitacao")
                 tudo = Cursor.fetchall()
                 if len(tudo) >= 1 :
-                    Cursor.execute("SELECT id_fechador FROM solicitacao ORDER BY id_sol DESC LIMIT 1")
+                    Cursor.execute("SELECT id_fechador FROM solicitacao ORDER BY id_sol DESC LIMIT 2")
                     ultimoChamado = Cursor.fetchall()
                     for x in range (len(allExec)):
-                        if allExec[x] == ultimoChamado[0]:
-                            if allExec.index(allExec[x]) + 1 < len(allExec):
-                                print(allExec.index(allExec[x]))
-                                print(allExec[x])
-                                a = allExec[x+1]
+                        if not allExec[x] in ultimoChamado[0]:
+                            if allExec[x] == ultimoChamado[1]:
+                                if allExec.index(allExec[x]) + 1 < len(allExec):
+                                    print(allExec.index(allExec[x]))
+                                    print(allExec[x])
+                                    a = allExec[x+1]
 
-                            elif allExec.index(allExec[x]) + 2 > len(allExec):
-                                a = allExec[0]
+                                elif allExec.index(allExec[x]) + 2 > len(allExec):
+                                    a = allExec[0]
 
-                            elif allExec.index(allExec[x]) + 1 == len(allExec):
-                                print(allExec.index(allExec[x]))
-                                print(allExec[x])
-                                print(len(allExec))
-                                a = allExec[-1]
+                                elif allExec.index(allExec[x]) + 1 == len(allExec):
+                                    print(allExec.index(allExec[x]))
+                                    print(allExec[x])
+                                    print(len(allExec))
+                                    a = allExec[-1]
+                                                
+                                
+                                Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,pk_user,hora,a))
+                                mysql.commit()
+                                Cursor.close()
+                                return redirect("/usuario/menu")
                         else:
-                            a = allExec[x+1]                        
-                            
-                            Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,pk_user,hora,a))
-                            mysql.commit()
-                            Cursor.close()
-                            return redirect("/usuario/menu")
+                            if allExec[x] == ultimoChamado[0]:
+                                if allExec.index(allExec[x]) + 1 < len(allExec):
+                                    print(allExec.index(allExec[x]))
+                                    print(allExec[x])
+                                    a = allExec[x+1]
+
+                                elif allExec.index(allExec[x]) + 2 > len(allExec):
+                                    a = allExec[0]
+
+                                elif allExec.index(allExec[x]) + 1 == len(allExec):
+                                    print(allExec.index(allExec[x]))
+                                    print(allExec[x])
+                                    print(len(allExec))
+                                    a = allExec[-1]
+                                                
+                                
+                                Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,pk_user,hora,a))
+                                mysql.commit()
+                                Cursor.close()
+                                return redirect("/usuario/menu")
+
         
                 else:
                     for x in allExec:

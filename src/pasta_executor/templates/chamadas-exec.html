@@ -184,7 +184,7 @@
                 </div>
             {% else %}
             {% for solicitacao in Details %}   
-                    {% if solicitacao[3] =="Aberta" and solicitacao[9] != conta[0] %}
+                    {% if solicitacao[3] =="Aberta" and solicitacao[9] != conta[0] and solicitacao[12] == pk_user %}
                         <details>
                             <summary>
                                 <p>{{solicitacao[1]}}</p><!--variavel titulo-->
@@ -253,7 +253,7 @@
                 </div>
             {%else%}
                 {% for solicitacao in Details %}
-                    {%if solicitacao[3] == 'Andamento' and solicitacao[9] !=conta[0] and solicitacao[12]== pk_user %} 
+                    {%if solicitacao[3] == 'Andamento' and solicitacao[9] != conta[0] and solicitacao[12] == pk_user %} 
                         <details>
                             <summary>
                                 <p>{{solicitacao[1]}}</p><!--variavel titulo-->
@@ -312,7 +312,7 @@
                 </div>
             {%else%}
                 {% for solicitacao in Details %}
-                    {%if solicitacao[3] == 'Fechada' and solicitacao[9] !=conta[0]  and solicitacao[12]== pk_user %} 
+                    {%if solicitacao[3] == 'Fechada' and solicitacao[9] !=conta[0]  and solicitacao[12] == pk_user %} 
                         <details>
                             <summary>
                                 <p>{{solicitacao[1]}}</p><!--variavel titulo-->
