@@ -70,8 +70,6 @@
                     <select>
                         <option value="1">Mais Recente</option>
                         <option value="2">Mais Antigo</option>
-                        <option value="3">A a Z</option>
-                        <option value="4">Z a A</option>
                     </select></p>
                 </div>
             </div>
@@ -139,7 +137,7 @@
                     <p>Descrição: <span>{{solicitacao[2]}}</span></p>
                 </div>
                 <div class="aaa"> 
-                    <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}}</span></p> 
+                    <p class="detalhes-fechamento"> Requisição Fechada por: <span> </span></p> 
                     <div class="caras">
                         {% if solicitacao[10]==1 %}
                             <img src='../static/images/pessimo.png'>
@@ -156,7 +154,7 @@
                 </div>
                 {%if solicitacao[10] != 1 and solicitacao[10] != 2 and solicitacao[10] != 3 and solicitacao[10] != 4 and solicitacao[10] != 5%}
                     <div class="avaliar">
-                        <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}} </span></p> 
+                        <p class="detalhes-fechamento"> Requisição Fechada por: <span>  </span></p> 
                         <button class="avaliar btnavaliar" type="submit">Avaliar</button>
                     </div>
                     <div id="avaliar" class="modal">

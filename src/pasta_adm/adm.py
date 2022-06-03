@@ -1,4 +1,5 @@
 from flask import Blueprint,render_template,request,redirect,session, url_for
+from sqlalchemy import null
 from bd.db import mysql
 import datetime
 
@@ -50,6 +51,8 @@ def index():
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
+        Cursor.execute("SELECT id_user FROM user WHERE type_user = 'exec'")
+        allExec = Cursor.fetchall()
         if request.method == 'POST':
             Details = request.form
             titulo = Details['titulo']
@@ -58,11 +61,89 @@ def index():
             status_sol = 'Aberta'
             comentario= ''
             hora= datetime.datetime.now()
+            if len(allExec) == 0:
+                with mysql.cursor()as Cursor:
+                    Cursor.execute("INSERT INTO solicitacao (title_sol, desc_sol, status_sol ,type_problem, comentario, data_inicio,id_user) VALUES (%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,hora,pk_user)) 
+                    mysql.commit()
+                    Cursor.close()
+                    return redirect("/adm/menu")
 
-            id_admin = session["id_admin"]
-            Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio) VALUES(%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,id_admin,hora,))
-            mysql.commit()
-            return redirect("/adm/menu")
+            elif len(allExec) == 1:
+                execone = allExec[0]
+                with mysql.cursor()as Cursor:
+                    Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,pk_user,hora,execone,))
+                    mysql.commit()
+                    Cursor.close()
+                    return redirect("/adm/menu")
+            else:
+                with mysql.cursor()as Cursor:
+                    Cursor.execute("SELECT id_sol FROM solicitacao")
+                    tudo = Cursor.fetchall()
+                    if len(tudo) >= 1 :
+                        Cursor.execute("SELECT id_fechador FROM solicitacao ORDER BY id_sol DESC LIMIT 2")
+                        ultimoChamado = Cursor.fetchall()
+                        for x in range (len(allExec)):
+                            if ultimoChamado[0] in allExec == True:
+                                    print(ultimoChamado[0])
+                                    print(allExec)
+                                    if allExec[x] == ultimoChamado[0]:
+                                        if allExec.index(allExec[x]) + 1 < len(allExec):
+                                            print(allExec.index(allExec[x]),'== Primeira cond')
+                                            print(allExec[x])
+                                            a = allExec[x+1]
+
+                                        elif allExec.index(allExec[x]) + 2 > len(allExec):
+                                            print('segunda faixa')
+                                            a = allExec[0]
+
+                                        elif allExec.index(allExec[x]) + 1 == len(allExec):
+                                            print('terceira faixa')
+                                            print(allExec.index(allExec[x]))
+                                            print(allExec[x])
+                                            print(len(allExec))
+                                            a = allExec[-1]
+                                                        
+                                        
+                                        Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,pk_user,hora,a))
+                                        mysql.commit()
+                                        Cursor.close()
+                                        return redirect("/adm/menu")
+
+                            else:
+                                    print(allExec[x],ultimoChamado)
+                                    if allExec[x] == ultimoChamado[0]:
+                                        if allExec.index(allExec[x]) + 1 < len(allExec):
+                                            print('Diferente 1')
+                                            print(allExec.index(allExec[x]))
+                                            print(allExec[x])
+                                        
+                                            
+                                            print(len(allExec))
+                                            a = allExec[x+1]
+
+                                        elif allExec.index(allExec[x]) + 2 > len(allExec):
+                                            print('diferente 2')
+                                            a = allExec[0]
+
+                                        elif allExec.index(allExec[x]) + 1 == len(allExec):
+                                            print('diferente 3')
+                                            print(allExec.index(allExec[x]))
+                                            print(allExec[x])
+                                            print(len(allExec))
+                                            a = allExec[-1]
+                                                        
+                                        
+                                        Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,pk_user,hora,a))
+                                        mysql.commit()
+                                        Cursor.close()
+                                        return redirect("/adm/menu")
+                    else:
+                        for x in allExec:
+                            Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,pk_user,hora,x,))
+                            mysql.commit()
+                            Cursor.close()
+                            return redirect("/adm/menu")
+
     return render_template('/nova-requisicao-adm.html',senha=senha,email=email,nome=nome)
 
 
@@ -200,6 +281,33 @@ def cargo(id):
         else:
             Cursor.execute("UPDATE user set type_user = 'user' WHERE id_user = %s",(id,))
             mysql.commit()
+            Cursor.execute("SELECT id_sol FROM solicitacao WHERE id_fechador =%s and status_sol = 'aberta'",(id,))
+            solicitacaoExe = Cursor.fetchall()
+            Cursor.execute("SELECT id_user FROM user WHERE type_user = 'exec'") 
+            allExec = Cursor.fetchall()
+            x = 0 
+            for i in range (len(solicitacaoExe)):
+
+                if len(allExec) == 0:
+                    Cursor.execute("UPDATE solicitacao set id_fechador = NULL WHERE id_sol = %s",(solicitacaoExe[i][0],))
+                    mysql.commit()
+                elif len (allExec) == 1:
+                    Cursor.execute("UPDATE solicitacao set id_fechador = %s WHERE id_sol = %s",(allExec[0][0],solicitacaoExe[i][0],))
+                    mysql.commit()
+                else:
+                    if allExec.index(allExec[x]) == 0:
+                        a = allExec[0]
+                        x += 1
+                    elif allExec.index(allExec[x]) + 1 < len(allExec):
+                        a = allExec[x+1]
+                        x += 1
+                    elif allExec.index(allExec[x]) + 1 == len(allExec):
+                        a = allExec[-1]
+                        x = 0
+            
+                    Cursor.execute("UPDATE solicitacao set id_fechador = %s WHERE id_sol = %s",(a,solicitacaoExe[i][0]))
+                    mysql.commit()
+
             
     return redirect(url_for("admin.adm"))
 
@@ -255,10 +363,10 @@ def recusando(id):
     formulario= request.form
     comentario= formulario['codigo']
     hora= datetime.datetime.now()
-    nome= session['nome_admin']
+
     if comentario != None:
         with mysql.cursor()as Cursor:
-            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,nome_exec=%s,comentario=%s WHERE id_sol = %s",(hora,nome,comentario,id,))
+            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,comentario=%s WHERE id_sol = %s",(hora,comentario,id,))
             mysql.commit()
             
     return redirect ('/adm/requisicoes')
@@ -270,10 +378,9 @@ def fechamento(id):
     formulario= request.form
     comentario = formulario['comentario']
     hora= datetime.datetime.now()
-    nome= session['nome_admin']
     if comentario != None:
         with mysql.cursor()as Cursor:
-            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,nome_exec=%s,comentario=%s WHERE id_sol = %s",(hora,nome,comentario,id,))
+            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,comentario=%s WHERE id_sol = %s",(hora,comentario,id,))
             mysql.commit()
             
     return redirect ('/adm/requisicoes')

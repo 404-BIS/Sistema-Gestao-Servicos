@@ -28,11 +28,13 @@ def novaExecutor():
     if not 'loggedin' in session:
         return redirect ('/login')
     pk_user = session['id_exec']
-    nome = session['nome_exec']
+    
     email = session['email_exec']
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
+        Cursor.execute("SELECT id_user FROM user WHERE type_user = 'exec' and id_user != %s",(pk_user,))
+        allExec = Cursor.fetchall()
         if request.method == 'POST':
             Details = request.form
             titulo = Details['titulo']
@@ -41,13 +43,101 @@ def novaExecutor():
             status_sol = 'Aberta'
             comentario= ''
             hora= datetime.datetime.now()
-            id_user = session["id_exec"]
-            Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio) VALUES(%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,id_user,hora))
-            mysql.commit()
-                
-            return redirect("/executor/menu")
-        return render_template('/nova-requisicao-exec.html',nome=nome,senha=senha,email=email)
+            with mysql.cursor()as Cursor:
+                if len(allExec) == 0:
+                    Cursor.execute("INSERT INTO solicitacao (title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_user) VALUES (%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,type_problem,status_sol,comentario,hora,pk_user,))
+                    mysql.commit()
+                    Cursor.close()
+                    return redirect("/executor/menu")
 
+                elif len(allExec) == 1:
+                    execone = allExec[0]
+                    Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,pk_user,hora,execone,))
+                    mysql.commit()
+                    Cursor.close()
+                    return redirect("/executor/menu")
+                else:
+                    Cursor.execute("SELECT id_sol FROM solicitacao")
+                    tudo = Cursor.fetchall()
+                    if len(tudo) > 1 :
+                        Cursor.execute("SELECT id_fechador FROM solicitacao ORDER BY id_sol DESC LIMIT 2")
+                        ultimoChamado = Cursor.fetchall()
+                        for x in range (len(allExec)):
+                            if ultimoChamado[0] in allExec == True:
+                                print(ultimoChamado[0])
+                                print(allExec)
+                                if allExec[x] == ultimoChamado[0]:
+                                    if allExec.index(allExec[x]) + 1 < len(allExec):
+                                        print(allExec.index(allExec[x]),'== Primeira cond')
+                                        print(allExec[x])
+                                        a = allExec[x+1]
+
+                                    elif allExec.index(allExec[x]) + 2 > len(allExec):
+                                        print('segunda faixa')
+                                        a = allExec[0]
+
+                                    elif allExec.index(allExec[x]) + 1 == len(allExec):
+                                        print('terceira faixa')
+                                        print(allExec.index(allExec[x]))
+                                        print(allExec[x])
+                                        print(len(allExec))
+                                        a = allExec[-1]
+                                                    
+                                    
+                                    Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,pk_user,hora,a))
+                                    mysql.commit()
+                                    Cursor.close()
+                                    return redirect("/executor/menu")
+
+                            else:
+                                print(allExec[x],ultimoChamado)
+                                if allExec[x] == ultimoChamado[0]:
+                                    if allExec.index(allExec[x]) + 1 < len(allExec):
+                                        print('Diferente 1')
+                                        print(allExec.index(allExec[x]))
+                                        print(allExec[x])
+                                        print(ultimoChamado[0])
+                                        print(ultimoChamado[1])
+                                        print(len(allExec))
+                                        a = allExec[x+1]
+
+                                    elif allExec.index(allExec[x]) + 2 > len(allExec):
+                                        print('diferente 2')
+                                        a = allExec[0]
+
+                                    elif allExec.index(allExec[x]) + 1 == len(allExec):
+                                        print('diferente 3')
+                                        print(allExec.index(allExec[x]))
+                                        print(allExec[x])
+                                        print(len(allExec))
+                                        a = allExec[-1]
+                                                    
+                                    
+                                    Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,pk_user,hora,a))
+                                    mysql.commit()
+                                    Cursor.close()
+                                    return redirect("/executor/menu")
+
+
+                    elif len(tudo) == 1:
+                        Cursor.execute("SELECT id_fechador FROM solicitacao ORDER BY id_sol DESC LIMIT 1")
+                        ultimoChamado = Cursor.fetchall()
+                        a = allExec[1]
+                        print(allExec)
+                        print(allExec[1])
+                        Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,pk_user,hora,a))
+                        mysql.commit()
+                        Cursor.close()
+                        return redirect("/executor/menu")
+
+                    else:
+                        for x in allExec:
+                            Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,pk_user,hora,x,))
+                            mysql.commit()
+                            Cursor.close()
+                            return redirect("/executor/menu")
+
+        return render_template('/nova-requisicao-exec.html',nome=nome,senha=senha,email=email)
 
 @executor_blueprint.route('/executor/menu' , methods=['GET','POST'])
 def exec():
@@ -123,11 +213,10 @@ def recusando(id):
     formulario= request.form
     comentario= formulario['codigo']
     hora= datetime.datetime.now()
-    nome= session['nome_exec']
     id_de_qm_fechou = session['id_exec']
     if comentario != None:
         with mysql.cursor()as Cursor:
-            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,nome_exec=%s,comentario=%s,id_fechador=%s WHERE id_sol = %s",(hora,nome,comentario,id_de_qm_fechou,id,))
+            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,comentario=%s,id_fechador=%s WHERE id_sol = %s",(hora,comentario,id_de_qm_fechou,id,))
             mysql.commit()
             
     return redirect ('/executor/chamadas-exec')
@@ -139,10 +228,9 @@ def fechamento(id):
     formulario= request.form
     comentario = formulario['comentario']
     hora= datetime.datetime.now()
-    nome= session['nome_exec']
     if comentario != None:
         with mysql.cursor()as Cursor:
-            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,nome_exec=%s,comentario=%s WHERE id_sol = %s",(hora,nome,comentario,id,))
+            Cursor.execute("UPDATE solicitacao SET status_sol ='Fechada',data_final=%s,comentario=%s WHERE id_sol = %s",(hora,comentario,id,))
             mysql.commit()
             
     return redirect ('/executor/chamadas-exec')
