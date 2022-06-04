@@ -149,6 +149,12 @@ a{
     font-size: 15px;
 }
 
+.btnflt{
+    border: none;
+    width: 130px;
+    font-size: 15px;
+}
+
 /* Formulario */
 .title-nova-req{
     font-weight: 500;
