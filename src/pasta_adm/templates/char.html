@@ -87,22 +87,26 @@
     <main>
         <p class="req-aberta">Estatísticas das requisições</p>
         <div class="filtros-adm">
-            <div class="filtro-tempo">
-                <p>Intervalo de tempo:
-                <select>
-                    <option value="1">1 Dia</option>
-                    <option value="2">7 Dias</option>
-                    <option value="3">15 Dias</option>
-                    <option value="4">30 Dias</option>
-                </select></p>
-            </div>
-            <div class="filtro-dia">
-                <form>
+            <form action="/adm/estatisticas" method="post">
+                <div class="filtro-tempo">
+                    <p>Intervalo de tempo:
+                    <select id="days" name="days">
+                        <option value="1">1 Dia</option>
+                        <option value="2">7 Dias</option>
+                        <option value="3">15 Dias</option>
+                        <option value="4">30 Dias</option>
+                    </select></p>
+                </div>
+                <div class="filtro-dia">
                     <div>
                         <label for="diaa">Data Inícial:</label>
                         <input type="date" id="data" name="data">
                     </div>
-                </form>
+                </div>
+                <div class="btnflt">
+                    <input type="submit" id="filtro" name="filtro">
+                </div>
+            </form>
         </div>
 
         <section class="graficos">

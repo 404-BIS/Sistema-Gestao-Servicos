@@ -104,7 +104,7 @@ def requisicoes():
             return render_template('/requisicoes.html', Details=Details,Values=Values,cont_hardware = cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto = leitoraberto ,leitorfechado = leitorfechado ,leitorandamento=leitorandamento,senha = senha , email=email, nome = nome)
         return render_template('/requisicoes.html',Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,senha = senha , email=email, nome = nome)
 
-@admin.route("/adm/estatisticas",methods=["GET"])
+@admin.route("/adm/estatisticas",methods=['GET', 'POST'])
 def estatisticas():
     if not 'loggedin' in session:
         return redirect ('/login')
@@ -114,29 +114,46 @@ def estatisticas():
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-        tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware'")
-        tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software'")
-        tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos'")
+        # pegando infos do html
+        dias_select = ['days']
+        dia_certo = ['data']
+        # Conta
+        DATA_ATUAL = dia_certo
+        ano = DATA_ATUAL[:4]
+        mes = DATA_ATUAL[5:7]
+        dia = DATA_ATUAL[8:]
+        MENOS_1 = ("%s-%s-%s", (ano, mes, (dia-1)))
+        MENOS_7 = ("%s-%s-%s", (ano, mes, (dia-7)))
+        MENOS_15 = ("%s-%s-%s", (ano, mes, (dia-15)))
+        MENOS_30 = ("%s-%s-%s", (ano, mes, (dia-30)))
+        # checking days
+        if dias_select == 1:
+            tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
 
-        num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
-        num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
-        num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
-        num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
-        num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+            tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
 
-        somatotal = num_exec + num_user
-        porcentoUser = str((num_user/somatotal)*100)
-        porcentoExec = str((num_exec/somatotal)*100)
-        aporcentoUser = porcentoUser[:2]
-        aporcentoExec = porcentoExec[:2]
- 
+            tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+
+            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+            num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+            num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+            num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+
+            somatotal = num_exec + num_user
+            porcentoUser = str((num_user/somatotal)*100)
+            porcentoExec = str((num_exec/somatotal)*100)
+            aporcentoUser = porcentoUser[:2]
+            aporcentoExec = porcentoExec[:2]
+    
 
 
-        avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1'")
-        avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2'")
-        avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3'")
-        avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4'")
-        avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5'")
+            avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1'")
+            avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2'")
+            avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3'")
+            avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4'")
+            avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5'")
+            
 
     return render_template("char.html",tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome)
 
