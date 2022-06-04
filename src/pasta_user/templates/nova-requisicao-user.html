@@ -17,7 +17,7 @@
         <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button>
         <nav>
             <a class="minha-req" href="/usuario/menu"><img class="icon-req" src="../../static/images/Requisição.svg">
-                Minhas requisições</a>
+                Minhas Requisições</a>
             <a href="/usuario/solicitacao"><button class="nova-req"> <img class="icon-mais"
                         src="../../static/images/Mais.svg">Nova Requisição</button>
             </a>
@@ -50,12 +50,12 @@
                     <div class="submit">
                         <button id="alterar">Alterar Dados</button>
                 </form>
-                <a href="/logout" id="sair">Deslogar</a>
+                <a href="/logout" id="sair">Sair</a>
             </div>
         </div>
     </header>
     <p class="title-nova-req"> Nova Requisição</p>
-    <form class="formulario" action="/usuario/solicitacao" method="POST">
+    <form class="formulario" action="/usuario/solicitacao" method="POST" enctype="multipart/form-data">
         <div class="title">
             <div>
                 <label>Titulo</label>

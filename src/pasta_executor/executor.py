@@ -4,7 +4,11 @@ import datetime
 
 executor_blueprint= Blueprint('executor',__name__, template_folder='templates')
 
-
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
 
 @executor_blueprint.route('/perfil_exec',methods=['POST'])
 def perfil():
@@ -23,121 +27,6 @@ def perfil():
     return redirect(url_for('executor.exec'))
 
 
-@executor_blueprint.route('/executor/solicitacao', methods=['GET','POST'])
-def novaExecutor():
-    if not 'loggedin' in session:
-        return redirect ('/login')
-    pk_user = session['id_exec']
-    
-    email = session['email_exec']
-    with mysql.cursor()as Cursor:
-        Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
-        senha = Cursor.fetchone()
-        Cursor.execute("SELECT id_user FROM user WHERE type_user = 'exec' and id_user != %s",(pk_user,))
-        allExec = Cursor.fetchall()
-        if request.method == 'POST':
-            Details = request.form
-            titulo = Details['titulo']
-            descricao = Details['descricao']
-            type_problem = Details['tipo']   
-            status_sol = 'Aberta'
-            comentario= ''
-            hora= datetime.datetime.now()
-            with mysql.cursor()as Cursor:
-                if len(allExec) == 0:
-                    Cursor.execute("INSERT INTO solicitacao (title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_user) VALUES (%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,type_problem,status_sol,comentario,hora,pk_user,))
-                    mysql.commit()
-                    Cursor.close()
-                    return redirect("/executor/menu")
-
-                elif len(allExec) == 1:
-                    execone = allExec[0]
-                    Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,pk_user,hora,execone,))
-                    mysql.commit()
-                    Cursor.close()
-                    return redirect("/executor/menu")
-                else:
-                    Cursor.execute("SELECT id_sol FROM solicitacao")
-                    tudo = Cursor.fetchall()
-                    if len(tudo) > 1 :
-                        Cursor.execute("SELECT id_fechador FROM solicitacao ORDER BY id_sol DESC LIMIT 2")
-                        ultimoChamado = Cursor.fetchall()
-                        for x in range (len(allExec)):
-                            if ultimoChamado[0] in allExec == True:
-                                print(ultimoChamado[0])
-                                print(allExec)
-                                if allExec[x] == ultimoChamado[0]:
-                                    if allExec.index(allExec[x]) + 1 < len(allExec):
-                                        print(allExec.index(allExec[x]),'== Primeira cond')
-                                        print(allExec[x])
-                                        a = allExec[x+1]
-
-                                    elif allExec.index(allExec[x]) + 2 > len(allExec):
-                                        print('segunda faixa')
-                                        a = allExec[0]
-
-                                    elif allExec.index(allExec[x]) + 1 == len(allExec):
-                                        print('terceira faixa')
-                                        print(allExec.index(allExec[x]))
-                                        print(allExec[x])
-                                        print(len(allExec))
-                                        a = allExec[-1]
-                                                    
-                                    
-                                    Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,pk_user,hora,a))
-                                    mysql.commit()
-                                    Cursor.close()
-                                    return redirect("/executor/menu")
-
-                            else:
-                                print(allExec[x],ultimoChamado)
-                                if allExec[x] == ultimoChamado[0]:
-                                    if allExec.index(allExec[x]) + 1 < len(allExec):
-                                        print('Diferente 1')
-                                        print(allExec.index(allExec[x]))
-                                        print(allExec[x])
-                                        print(ultimoChamado[0])
-                                        print(ultimoChamado[1])
-                                        print(len(allExec))
-                                        a = allExec[x+1]
-
-                                    elif allExec.index(allExec[x]) + 2 > len(allExec):
-                                        print('diferente 2')
-                                        a = allExec[0]
-
-                                    elif allExec.index(allExec[x]) + 1 == len(allExec):
-                                        print('diferente 3')
-                                        print(allExec.index(allExec[x]))
-                                        print(allExec[x])
-                                        print(len(allExec))
-                                        a = allExec[-1]
-                                                    
-                                    
-                                    Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,pk_user,hora,a))
-                                    mysql.commit()
-                                    Cursor.close()
-                                    return redirect("/executor/menu")
-
-
-                    elif len(tudo) == 1:
-                        Cursor.execute("SELECT id_fechador FROM solicitacao ORDER BY id_sol DESC LIMIT 1")
-                        ultimoChamado = Cursor.fetchall()
-                        a = allExec[1]
-                        print(allExec)
-                        print(allExec[1])
-                        Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,pk_user,hora,a))
-                        mysql.commit()
-                        Cursor.close()
-                        return redirect("/executor/menu")
-
-                    else:
-                        for x in allExec:
-                            Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,pk_user,hora,x,))
-                            mysql.commit()
-                            Cursor.close()
-                            return redirect("/executor/menu")
-
-        return render_template('/nova-requisicao-exec.html',nome=nome,senha=senha,email=email)
 
 @executor_blueprint.route('/executor/menu' , methods=['GET','POST'])
 def exec():
@@ -152,6 +41,11 @@ def exec():
         pk_user = session["id_exec"]
         Cursor.execute("SELECT id_user FROM solicitacao WHERE id_user = %s", (pk_user,))
         conta = Cursor.fetchone()  
+
+        Cursor.execute("SELECT * from solicitacao")
+        image = Cursor.fetchall()
+
+
         cont_hardware=Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Hardware' and id_user= %s",(pk_user,))
         cont_software= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Software' and id_user =%s", (pk_user,))
         cont_duv= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and id_user =%s", (pk_user,))
@@ -160,7 +54,7 @@ def exec():
         Values = Cursor.execute("SELECT * FROM solicitacao WHERE id_user= %s",(pk_user,))
         if Values > 0:
             Details = Cursor.fetchall()
-            return render_template('/home-exec.html', Details=Details,Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto=leitoraberto,leitorfechado=leitorfechado,conta=conta,senha=senha,email=email, nome = nome)
+            return render_template('/home-exec.html', Details=Details,Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto=leitoraberto,leitorfechado=leitorfechado,conta=conta,senha=senha,email=email, nome = nome,filename=image)
         else:
             return render_template('/home-exec.html', Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,pk_user=pk_user,senha=senha,email=email, nome = nome )
             

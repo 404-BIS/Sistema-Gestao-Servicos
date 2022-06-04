@@ -5,6 +5,15 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <style>
+        .tamanho {
+            min-width: 200px;
+            min-height: 100px;
+            max-width: 400px;
+            max-height: 300px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -49,7 +58,7 @@
                     <div class="submit">
                         <button id="alterar">Alterar Dados</button>
                 </form>
-                <a href="/logout" id="sair">Deslogar</a>
+                <a href="/logout" id="sair">Sair</a>
             </div>
         </div>
     </header>
@@ -76,13 +85,24 @@
                 <img class="icon" src="../static/images/Info.png" alt="icon">
                 {%endif%}
             </summary>
-            <div class="conteudo">
-                <p>Tipo: <span>{{solicitacao[1]}}</span></p>
-                <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+            <div class="card-completo">
+                <div class="conteudo">
+                    <p>Tipo: <span>{{solicitacao[1]}}</span></p>
+                    <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+                    {% if solicitacao[6]!=''%}
+                    <p>Anexo:</p>
+                    <div>
+                        <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                    </div>
+                    {% else %}
+                    {% endif %}
+
+                </div>
+                <form action="/usuario/{{solicitacao.0}}" method='POST'>
+                    <button class="botao-padrao" type="submit">Apagar</button>
+                </form>
+
             </div>
-            <form action="/usuario/{{solicitacao.0}}" method='POST'>
-                <button class="botao-padrao" type="submit">Apagar</button>
-            </form>
         </details>
         {% endif %}
         {% endfor %}

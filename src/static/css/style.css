@@ -846,3 +846,11 @@ span{
     background-color: rgb(0,0,0); 
     background-color: rgba(0,0,0,0.6); 
 }
+
+/* Filtro do adm*/
+.filtro-tempo{
+    margin-bottom: 16px;
+}
+.filtro-dia label{
+    font-weight: 400;
+}

@@ -4,13 +4,22 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+        <style>
+            .tamanho {
+                min-width: 200px;
+                min-height: 100px;
+                max-width: 400px;
+                max-height: 300px;
+                border-radius: 5px;
+            }
+        </style>
     </head>
     <body>
         <header>
             <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button> 
             <nav>
                 <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg">  Meus Chamados</a>
-                <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas requisições</a>
+                <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas Requisições</a>
                 <a href="/executor/solicitacao">
                 <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
                 </a>
@@ -42,12 +51,12 @@
                         <div class="submit">
                             <button id="alterar">Alterar Dados</button>
                             </form>
-                            <a href="/logout" id="sair">Deslogar</a>
+                            <a href="/logout" id="sair">Sair</a>
                         </div>
                     </div>
         </header>
         <p class="title-nova-req"> Nova Requisição</p>
-        <form class="formulario" action="/executor/solicitacao" method="POST">
+        <form class="formulario" action="/executor/solicitacao" method="POST" enctype="multipart/form-data">
             <div class="title">
                 <div>
                     <label>Titulo</label>
@@ -67,8 +76,8 @@
                 <textarea id="description" name="descricao"></textarea> 
             </div>
             <div class="archive">
-                <label>Anexar arquivo (PNG, JPEG, JPG)</label> <br>
-                <input type="file" id="archive" name="archive"> 
+                <label>Anexar arquivo (PNG, JPEG, JPG, GIF)</label> <br>
+                <input type="file" id="archive" name="file"> 
             </div> 
 
             <div class="buttons">

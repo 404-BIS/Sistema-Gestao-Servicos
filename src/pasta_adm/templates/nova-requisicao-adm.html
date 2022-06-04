@@ -1,111 +1,114 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">   
-    </head>
-    <body>
-        <header>
-            <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button>
-            <nav>
-                <a class="minha-chamada" href="/adm"> Controle de usuários </a>
-                <ul>
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropbtn">Requisições do Sistema</a>
-                        <div class="dropdown-content">
-                            <a href="/adm/requisicoes">Todas as Requsições</a>
-                            <a href="/adm/estatisticas">Estatísticas das requisições</a>
-                        </div>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropbtn">Minhas Requisições</a>
-                        <div class="dropdown-content">
-                            <a href="/adm/solicitacao">Criar chamados </a>
-                            <a href="/adm/menu">Minhas requisições</a>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-            <div id="perfil" class="modal">
-                <div class="icon-fechar"></div>
-                <div class="profile">
-            
-                    <div class="header">
-                        <b>Meu Perfil</b>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+</head>
+
+<body>
+    <header>
+        <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button>
+        <nav>
+            <a class="minha-chamada" href="/adm"> Controle de usuários </a>
+            <ul>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Requisições do Sistema</a>
+                    <div class="dropdown-content">
+                        <a href="/adm/requisicoes">Todas as Requsições</a>
+                        <a href="/adm/estatisticas">Estatísticas das Requisições</a>
                     </div>
-            
-                    <form action="/perfil_adm" method='POST'>
-                        <div class="informations">
-                            <div>
-                                <label>Nome</label>
-                                <input name="nome" type="name" placeholder="{{nome}}">
-                                <label>Email</label>
-                                <input name="troca_email" type="email" placeholder="{{email}}">
-                            </div>
-                
-                            <div class="linha-vertical"></div>
-                
-                            <div>
-                                <label>Senha</label>
-                                <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
-                            </div>
-                        </div>
-                
-                        <div class="submit">
-                            <button id="alterar">Alterar Dados</button>
-                            </form>
-                            <a href="/logout" id="sair">Deslogar</a>
-                        </div>
+                </li>
+            </ul>
+            <ul>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Minhas Requisições</a>
+                    <div class="dropdown-content">
+                        <a href="/adm/solicitacao">Criar chamados </a>
+                        <a href="/adm/menu">Minhas Requisições</a>
                     </div>
-        </header>
-        <p class="title-nova-req"> Nova Requisição</p>
-        <form class="formulario" action="/adm/solicitacao" method="POST">
-            <div class="title">
-                <div>
-                    <label>Titulo</label>
-                    <input type="text" id="title" name="titulo">
+                </li>
+            </ul>
+        </nav>
+        <div id="perfil" class="modal">
+            <div class="icon-fechar"></div>
+            <div class="profile">
+
+                <div class="header">
+                    <b>Meu Perfil</b>
                 </div>
-                <div>
-                    <label>Tipo</label>
-                    <select name="tipo">
-                        <option value="Problemas de Software">Problemas de Software</option>
-                        <option value="Problemas de Hardware">Problemas de Hardware</option>
-                        <option value="Dúvidas ou Esclarecimentos">Dúvidas ou Esclarecimentos</option>
-                    </select>
-                </div> 
-            </div> 
-            <div class="description">
-                <label>Descrição</label> <br>
-                <textarea id="description" name="descricao"></textarea> 
-            </div>
-            <div class="archive">
-                <label>Anexar arquivo (PNG, JPEG, JPG)</label> <br>
-                <input type="file" id="archive" name="arquivo"> 
-            </div> 
 
-            <div class="buttons">
-                <input class="enviar" type="submit" value="Enviar">                   
-            </div>
-        </form>  
-        <script>
-            var modalperfil = document.getElementById("perfil");
-            var btnsperfil = document.getElementsByClassName("btnperfil")[0];
-            var fechar = document.getElementsByClassName("icon-fechar")[0];
+                <form action="/perfil_adm" method='POST'>
+                    <div class="informations">
+                        <div>
+                            <label>Nome</label>
+                            <input name="nome" type="name" placeholder="{{nome}}">
+                            <label>Email</label>
+                            <input name="troca_email" type="email" placeholder="{{email}}">
+                        </div>
 
-            btnsperfil.onclick = function() {
-                modalperfil.style.display = "block";
-            }
-            fechar.onclick = function() {
+                        <div class="linha-vertical"></div>
+
+                        <div>
+                            <label>Senha</label>
+                            <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
+                        </div>
+                    </div>
+
+                    <div class="submit">
+                        <button id="alterar">Alterar Dados</button>
+                </form>
+                <a href="/logout" id="sair">Sair</a>
+            </div>
+        </div>
+    </header>
+    <p class="title-nova-req"> Nova Requisição</p>
+    <form class="formulario" action="/adm/solicitacao" method="POST" enctype="multipart/form-data">
+        <div class="title">
+            <div>
+                <label>Titulo</label>
+                <input type="text" id="title" name="titulo">
+            </div>
+            <div>
+                <label>Tipo</label>
+                <select name="tipo">
+                    <option value="Problemas de Software">Problemas de Software</option>
+                    <option value="Problemas de Hardware">Problemas de Hardware</option>
+                    <option value="Dúvidas ou Esclarecimentos">Dúvidas ou Esclarecimentos</option>
+                </select>
+            </div>
+        </div>
+        <div class="description">
+            <label>Descrição</label> <br>
+            <textarea id="description" name="descricao"></textarea>
+        </div>
+        <div class="archive">
+            <label>Anexar arquivo (PNG, JPEG, JPG)</label> <br>
+            <input type="file" id="archive" name="file">
+        </div>
+
+        <div class="buttons">
+            <input class="enviar" type="submit" value="Enviar">
+        </div>
+    </form>
+    <script>
+        var modalperfil = document.getElementById("perfil");
+        var btnsperfil = document.getElementsByClassName("btnperfil")[0];
+        var fechar = document.getElementsByClassName("icon-fechar")[0];
+
+        btnsperfil.onclick = function () {
+            modalperfil.style.display = "block";
+        }
+        fechar.onclick = function () {
+            modalperfil.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modalperfil) {
                 modalperfil.style.display = "none";
             }
-            window.onclick = function(event) {
-              if (event.target == modalperfil) {
-                modalperfil.style.display = "none";
-              }
-            }
-        </script> 
-    </body>
+        }
+    </script>
+</body>
+
 </html>
