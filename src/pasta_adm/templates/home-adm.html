@@ -74,17 +74,8 @@
     </header>
 
     <main>
-        <div class="bbb">
-            <p class="req-aberta">Requisições Abertas </p>
-            <div class="filtro">
-                <p>Filtrar por:
-                    <select>
-                        <option value="1">Mais Recente</option>
-                        <option value="2">Mais Antigo</option>
-                    </select>
-                </p>
-            </div>
-        </div>
+        <p class="req-aberta">Requisições Abertas </p>
+
         {% if leitoraberto == 0 or Values ==0 %}
         <div class="box-req">
             <p>Sem requisições abertas no momento</p>
@@ -107,7 +98,7 @@
             </summary>
             <div class="card-completo">
                 <div class="conteudo">
-                    <p>Tipo: <span>{{solicitacao[1]}}</span></p>
+                    <p>Tipo: <span>{{solicitacao[4]}}</span></p>
                     <p>Descrição: <span>{{solicitacao[2]}}</span></p>
                     {% if solicitacao[6]!=''%}
                     <p>Anexo:</p>
@@ -126,19 +117,7 @@
         </details>
         {% endif %}
         {% endfor %}
-        <div class="bbb">
-            <p class="req-fechada">Requisições Fechadas</p>
-            <div class="filtro">
-                <p>Filtrar por:
-                    <select>
-                        <option value="1">Mais Recente</option>
-                        <option value="2">Mais Antigo</option>
-                        <option value="3">A a Z</option>
-                        <option value="4">Z a A</option>
-                    </select>
-                </p>
-            </div>
-        </div>
+        <p class="req-fechada">Requisições Fechadas</p>
         {% if leitorfechado == 0 or Values==0 %}
         <div class="box-req">
             <p>Sem requisições abertas no momento</p>
@@ -163,9 +142,18 @@
                 <p>Tipo: <span>{{solicitacao[4]}}</span></p>
                 <p>{{solicitacao[8]}}</p>
                 <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
             </div>
+            {%if solicitacao[10] == 1 or solicitacao[10] == 2 or solicitacao[10] == 3 or solicitacao[10] == 4 or
+            solicitacao[10] == 5%}
             <div class="aaa">
-                <p class="detalhes-fechamento"> Requisição Fechada por: <span> </span></p>
+                <p class="detalhes-fechamento">Comentário Executor: <span></span></p>
                 <div class="caras">
                     {% if solicitacao[10]==1 %}
                     <img src='../static/images/pessimo.png'>
@@ -180,10 +168,11 @@
                     {% endif %}
                 </div>
             </div>
+            {%endif%}
             {%if solicitacao[10] != 1 and solicitacao[10] != 2 and solicitacao[10] != 3 and solicitacao[10] != 4 and
             solicitacao[10] != 5%}
             <div class="avaliar">
-                <p class="detalhes-fechamento"> Requisição Fechada por: <span> </span></p>
+                <p class="detalhes-fechamento">Comentário Executor: <span></span></p>
                 <button class="avaliar btnavaliar" type="submit">Avaliar</button>
             </div>
             <div id="avaliar" class="modal">
@@ -228,17 +217,14 @@
                         <button>Avaliar</button>
                     </div>
                 </form>
-
             </div>
             {%endif%}
             <div class="texto-fechamento">
                 <span> {{solicitacao[5]}}</span>
             </div>
-
         </details>
         {% endif %}
         {% endfor %}
-
 
 
         <p class="tipo-legenda">Tipos de Problemas</p>

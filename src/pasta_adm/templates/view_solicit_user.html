@@ -6,6 +6,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <style type="text/css">
+        .tamanho {
+            min-width: 200px;
+            min-height: 100px;
+            max-width: 400px;
+            max-height: 300px;
+            border-radius: 5px;
+        }
+
         .info-user {
             display: flex;
             align-items: center;
@@ -180,11 +188,11 @@
         <div id="perfil" class="modal">
             <div class="icon-fechar"></div>
             <div class="profile">
-        
+
                 <div class="header">
                     <b>Meu Perfil</b>
                 </div>
-        
+
                 <form action="/perfil_adm" method='POST'>
                     <div class="informations">
                         <div>
@@ -193,21 +201,21 @@
                             <label>Email</label>
                             <input name="troca_email" type="email" placeholder="{{email}}">
                         </div>
-            
+
                         <div class="linha-vertical"></div>
-            
+
                         <div>
                             <label>Senha</label>
                             <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
                         </div>
                     </div>
-            
+
                     <div class="submit">
                         <button id="alterar">Alterar Dados</button>
-                        </form>
-                        <a href="/logout" id="sair">Sair</a>
-                    </div>
-                </div>
+                </form>
+                <a href="/logout" id="sair">Sair</a>
+            </div>
+        </div>
     </header>
     <main>
         <p class="chamado-analise">Chamados em Análise de {{nomeuser[0]}}</p>
@@ -232,8 +240,15 @@
                 {%endif%}
             </summary>
             <div class="conteudo">
-                <p>Tipo: <span>{{solicitacao[1]}}</span></p>
+                <p>Tipo: <span>{{solicitacao[4]}}</span></p>
                 <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
             </div>
             <!-- <form action="/executor/chamadas-exec"> -->
             <div class="rejeitar-aceitar">
@@ -311,6 +326,13 @@
                 <p>Descrição: <span>{{solicitacao[2]}}
                         <!--variavel descricao-->
                     </span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
             </div>
             <div class="rejeitar-aceitar">
                 <button class="concluir btnconcluir" type="submit">Concluir</button>
@@ -376,9 +398,16 @@
                 <p>Descrição: <span>{{solicitacao[2]}}
                         <!--variavel descricao-->
                     </span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
             </div>
             <div class="aaa">
-                <p class="detalhes-fechamento"> Requisição Fechada por: <span> </span></p>
+                <p class="detalhes-fechamento">Comentário Executor: <span></span></p>
                 <div class="caras">
                     {% if solicitacao[10]==1 %}
                     <img src='../static/images/pessimo.png'>
@@ -394,6 +423,10 @@
                 </div>
             </div>
             <div class="texto-fechamento"> <span>{{solicitacao[5]}} </span> </div>
+            {%if solicitacao[11] != none %}
+            <p>FeedBack:</p>
+            <div class="texto-fechamento"> <span>{{solicitacao[11]}} </span> </div>
+            {%endif%}
         </details>
         {%endif%}
         {%endfor%}
@@ -438,7 +471,7 @@
         var btnsperfil = document.getElementsByClassName("btnperfil")[0];
         var fechar = document.getElementsByClassName("icon-fechar")[0];
 
-        
+
         var modalaceitar = document.getElementById("aceitar");
         var modalrejeitar = document.getElementById("rejeitar");
         var modalconcluir = document.getElementById("concluir");
@@ -457,12 +490,12 @@
         btnsconcluir.onclick = function () {
             modalconcluir.style.display = "block";
         }
-        
-        btnsperfil.onclick = function() {
+
+        btnsperfil.onclick = function () {
             modalperfil.style.display = "block";
         }
-        
-            
+
+
 
         fechar.onclick = function () {
             modalaceitar.style.display = "none";
@@ -474,7 +507,7 @@
             modalconcluir.style.display = "none";
         }
 
-        fechar.onclick = function() {
+        fechar.onclick = function () {
             modalperfil.style.display = "none";
         }
         window.onclick = function (event) {
@@ -489,10 +522,10 @@
                 modalconcluir.style.display = "none";
             }
             if (event.target == modalperfil) {
-            modalperfil.style.display = "none";
+                modalperfil.style.display = "none";
             }
         }
-        
+
     </script>
 </body>
 
