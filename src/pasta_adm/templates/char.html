@@ -11,19 +11,39 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         .graficos {
-            display: grid;
-            column-gap: 90px;
-            row-gap: 100px;
-            grid-template-columns: auto auto;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
         .graficos div {
-            margin-top: 32px;
+            margin-top: 80px;
             width: 600px !important;
             height: 300px !important;
             text-align: center;
+        }
+
+        .graficos .user-exec{
+            margin-bottom: 320px;
+        }
+
+        .graficos div hr{
+            margin-top:40px;
+            border: solid 0px #000;
+            border-radius: 3px;
+            height:2px;
+            width:100%;
+            background-color:rgba(0,0,0,0.6);
+        }
+
+        .filtros-adm .botao-filtrar{
+            height: 35px;
+            width: 120px;
+            background-color: rgba(87, 147, 228, 0.9);
+            color:#FCFCFC;
+            border-radius: 10px;
+            border: none;
         }
     </style>
 
@@ -43,14 +63,14 @@
                     <a href="javascript:void(0)" class="dropbtn">Requisições do Sistema</a>
                     <div class="dropdown-content">
                         <a href="/adm/requisicoes">Todas as Requsições</a>
-                        <a href="/adm/estatisticas">Estatisticas das requisições</a>
+                        <a href="/adm/estatisticas">Estatísticas das Requisições</a>
                     </div>
                 </li>
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">Minhas Requisições</a>
                     <div class="dropdown-content">
                         <a href="/adm/solicitacao">Criar chamados </a>
-                        <a href="/adm/menu">Minhas requisições</a>
+                        <a href="/adm/menu">Minhas Requisições</a>
                     </div>
                 </li>
             </ul>
@@ -67,16 +87,16 @@
                     <div class="informations">
                         <div>
                             <label>Nome</label>
-                            <input name="nome" type="name" placeholder="{{nome}}">
+                            <input name="nome" type="name" placeholder="{{nome}}" required>
                             <label>Email</label>
-                            <input name="troca_email" type="email" placeholder="{{email}}">
+                            <input name="troca_email" type="email" placeholder="{{email}}" required>
                         </div>
 
                         <div class="linha-vertical"></div>
 
                         <div>
                             <label>Senha</label>
-                            <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
+                            <input name="troca_senha" type="password" placeholder="{{senha[0]}}" required>
                         </div>
                     </div>
 
@@ -107,28 +127,30 @@
                             </select>
                         </p>
                     </div>
-                <input type="submit" value="Filtrar">
+                <input class="botao-filtrar" type="submit" value="Filtrar">
             </form>
         </div>
-
         <section class="graficos">
 
             {%block content%}
-            <div>
-                <p>Categoria das Solicitações</p>
-                <canvas id="income_vs_expense"></canvas>''
-            </div>
-            <div>
+
+            <div class="user-exec">
                 <p>Comparação Usuarios e Executores Cadastrados em %</p>
                 <canvas id="income_vs_category"></canvas>
+                <hr>
             </div>
-
-            <div>
+            <div class="tipo-solicit">
+                <p>Categoria das Solicitações</p>
+                <canvas id="income_vs_expense"></canvas>
+                <hr>
+            </div>
+            <div class="estado">
                 <p>Estados das Solicitações</p>
                 <canvas id="overtime_expenditure"></canvas>
+                <hr>
             </div>
 
-            <div>
+            <div class="media-avaliacao">
                 <p>Avaliações Gerais</p>
                 <canvas id="overtime_expen"></canvas>
             </div>
@@ -214,7 +236,7 @@
         const ze = new Chart(tes, {
             type: 'bar',
             data: {
-                labels: ['Análise', 'Fechadas'],
+                labels: ['Aberta', 'Fechadas'],
                 datasets: [{
                     label: '',
                     data: ['{{num_analise}}', '{{num_fechada}}'],

@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
-    </head>
-    <body>
-        <header>
-            <nav>
-                <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <style>
+        .tamanho {
+            min-width: 200px;
+            min-height: 100px;
+            max-width: 400px;
+            max-height: 300px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+             <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
                 <input type="checkbox" id="click">
                 <label for="click" class="menu-btn">
                     <i class="fas fa-bars"></i>
@@ -32,8 +42,7 @@
                     </li>
                 </ul>
             </nav>
-    
-            <div id="perfil" class="modal">
+        <div id="perfil" class="modal">
                 <div class="icon-fechar"></div>
                 <div class="profile">
     
@@ -61,82 +70,103 @@
                         <div class="submit">
                             <button id="alterar">Alterar Dados</button>
                     </form>
-                    <a href="/logout" id="sair">Deslogar</a>
+                    <a href="/logout" id="sair">Sair</a>
                 </div>
             </div>
-        </header>
-        <main>
-        <p class="chamado-fechada">Chamados Avaliados do {{nome[0]}}</p>
-        {%  if  leitorfechado == 0 or Values ==0 %}
-            <div class="box-req">
-                <p>Sem chamados Avaliados no momento </p>
-            </div>  
+    </header>
+    <main>
+        <p class="chamado-fechada">Chamados Avaliados de {{nomeuser[0]}}</p>
+        {% if leitorfechado == 0 or Values ==0 %}
+        <div class="box-req">
+            <p>Sem chamados Avaliados no momento </p>
+        </div>
         {%else%}
-            {% for solicitacao in Details %}
-                {%if solicitacao[10] == 1 or solicitacao[10] == 2 or solicitacao[10] == 3 or solicitacao[10] == 4 or solicitacao[10] == 5 %} 
-                    <details>
-                        <summary>
-                            <p>{{solicitacao[1]}}</p><!--variavel titulo-->
-                            {% if solicitacao[4] == 'Problemas de Hardware'%}
-                                <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                            {% elif solicitacao[4] == 'Problemas de Software'%}
-                                <img class="icon" src="../static/images/Software.png" alt="icon">
-                            {%else%}
-                                <img class="icon" src="../static/images/Info.png" alt="icon">
-                            {%endif%}
-                        </summary>
-                        <div class="conteudo">
-                            <p>Tipo: <span>{{solicitacao[4]}}<!--variavel tipo--></span></p>
-                            <p>Descrição: <span>{{solicitacao[2]}}<!--variavel descricao--></span></p>
-                        </div>
-                        <div class="aaa"> 
-                            <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}}</span></p> 
-                            <div class="caras">
-                                {% if solicitacao[10]==1 %}
-                                    <img src='../static/images/pessimo.png'>
-                                {% elif solicitacao[10]==2 %}
-                                    <img src='../static/images/ruim.png'>
-                                {% elif solicitacao[10]==3 %}
-                                    <img src='../static/images/mediano.png'>
-                                {% elif solicitacao[10]==4 %}
-                                    <img src='../static/images/bom.png'>
-                                {% elif solicitacao[10]==5 %}
-                                    <img src='../static/images/otimo.png'>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="texto-fechamento"> <span>{{solicitacao[5]}} </span> </div>
-                    </details>
-               {%endif%}
-            {%endfor%} 
+        {% for solicitacao in Details %}
+        {%if solicitacao[10] == 1 or solicitacao[10] == 2 or solicitacao[10] == 3 or solicitacao[10] == 4 or
+        solicitacao[10] == 5 %}
+        <details>
+            <summary>
+                <p>{{solicitacao[1]}}</p>
+                <!--variavel titulo-->
+                {% if solicitacao[4] == 'Problemas de Hardware'%}
+                <img class="icon" src="../static/images/Hardware.png" alt="icon">
+                <!--variavel icon-->
+                {% elif solicitacao[4] == 'Problemas de Software'%}
+                <img class="icon" src="../static/images/Software.png" alt="icon">
+                {%else%}
+                <img class="icon" src="../static/images/Info.png" alt="icon">
+                {%endif%}
+            </summary>
+            <div class="conteudo">
+                <p>Tipo: <span>{{solicitacao[4]}}
+                        <!--variavel tipo-->
+                    </span></p>
+                <p>Descrição: <span>{{solicitacao[2]}}
+                        <!--variavel descricao-->
+                    </span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
+            </div>
+            <div class="aaa">
+                <p class="detalhes-fechamento">Comentário Executor: <span> </span></p>
+                <div class="caras">
+                    {% if solicitacao[10]==1 %}
+                    <img src='../static/images/pessimo.png'>
+                    {% elif solicitacao[10]==2 %}
+                    <img src='../static/images/ruim.png'>
+                    {% elif solicitacao[10]==3 %}
+                    <img src='../static/images/mediano.png'>
+                    {% elif solicitacao[10]==4 %}
+                    <img src='../static/images/bom.png'>
+                    {% elif solicitacao[10]==5 %}
+                    <img src='../static/images/otimo.png'>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="texto-fechamento"> <span>{{solicitacao[5]}} </span> </div>
+            {%if solicitacao[11] != none %}
+            <p>FeedBack:</p>
+            <div class="texto-fechamento"> <span>{{solicitacao[11]}} </span> </div>
+            {%endif%}
+        </details>
+        {%endif%}
+        {%endfor%}
         {%endif%}
 
         <!--Legendas-->
         <p class="tipo-legenda">Tipos de Problemas</p>
         <div class="legenda">
-            <div class="hardware">            
+            <div class="hardware">
                 <div>
                     <p class="categoria">Problemas de Hardware</p>
-                    <p class="quant">Quantidade:{{cont_hardware_adm}}</p> <!--variavel de quantidade-->
-                </div>    
-            <img class="icon" src="../../static/images/Hardware.png" alt="icon">
-        </div>   
+                    <p class="quant">Quantidade:{{cont_hardware_adm}}</p>
+                    <!--variavel de quantidade-->
+                </div>
+                <img class="icon" src="../../static/images/Hardware.png" alt="icon">
+            </div>
 
             <div class="software">
                 <div>
                     <p class="categoria">Problemas de Software</p>
-                    <p class="quant">Quantidade:{{cont_software_adm}}</p> <!--variavel de quantidade-->
-                </div>    
+                    <p class="quant">Quantidade:{{cont_software_adm}}</p>
+                    <!--variavel de quantidade-->
+                </div>
                 <img class="icon" src="../../static/images/Software.png" alt="icon">
-            </div>  
+            </div>
 
             <div class="info">
                 <div>
                     <p class="categoria">Esclarecimento/informação</p>
-                    <p class="quant">Quantidade:{{cont_duv_adm}}</p> <!--variavel de quantidade-->
-                </div>    
+                    <p class="quant">Quantidade:{{cont_duv_adm}}</p>
+                    <!--variavel de quantidade-->
+                </div>
                 <img class="icon" src="../../static/images/Info.png" alt="icon">
-            </div>  
+            </div>
         </div>
     </main>
     <script>
@@ -144,17 +174,18 @@
         var btnsperfil = document.getElementsByClassName("btnperfil")[0];
         var fechar = document.getElementsByClassName("icon-fechar")[0];
 
-        btnsperfil.onclick = function() {
+        btnsperfil.onclick = function () {
             modalperfil.style.display = "block";
         }
-        fechar.onclick = function() {
+        fechar.onclick = function () {
             modalperfil.style.display = "none";
         }
-        window.onclick = function(event) {
-          if (event.target == modalperfil) {
-            modalperfil.style.display = "none";
-          }
+        window.onclick = function (event) {
+            if (event.target == modalperfil) {
+                modalperfil.style.display = "none";
+            }
         }
-    </script> 
+    </script>
 </body>
+
 </html>

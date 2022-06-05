@@ -17,7 +17,7 @@ Create table solicitacao(
     status_sol varchar(55) not null,
     type_problem varchar(40),
     comentario varchar(155),
-    nome_exec varchar(55),
+    foto varchar(999),
     data_inicio date,
     data_final date,
     id_user int,

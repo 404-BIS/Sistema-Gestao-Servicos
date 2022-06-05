@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     <style type="text/css">
+        .tamanho {
+            min-width: 200px;
+            min-height: 100px;
+            max-width: 400px;
+            max-height: 300px;
+            border-radius: 5px;
+        }
+
         .info-user {
             display: flex;
             align-items: center;
@@ -168,14 +176,14 @@
                     <a href="javascript:void(0)" class="dropbtn">Requisições do Sistema</a>
                     <div class="dropdown-content">
                         <a href="/adm/requisicoes">Todas as Requsições</a>
-                        <a href="/adm/estatisticas">Estatisticas das requisições</a>
+                        <a href="/adm/estatisticas">Estatísticas das Requisições</a>
                     </div>
                 </li>
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">Minhas Requisições</a>
                     <div class="dropdown-content">
                         <a href="/adm/solicitacao">Criar chamados </a>
-                        <a href="/adm/menu">Minhas requisições</a>
+                        <a href="/adm/menu">Minhas Requisições</a>
                     </div>
                 </li>
             </ul>
@@ -193,28 +201,28 @@
                     <div class="informations">
                         <div>
                             <label>Nome</label>
-                            <input name="nome" type="name" placeholder="{{nome}}">
+                            <input name="nome" type="name" placeholder="{{nome}}" required>
                             <label>Email</label>
-                            <input name="troca_email" type="email" placeholder="{{email}}">
+                            <input name="troca_email" type="email" placeholder="{{email}}" required>
                         </div>
 
                         <div class="linha-vertical"></div>
 
                         <div>
                             <label>Senha</label>
-                            <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
+                            <input name="troca_senha" type="password" placeholder="{{senha[0]}}" required>
                         </div>
                     </div>
 
                     <div class="submit">
                         <button id="alterar">Alterar Dados</button>
                 </form>
-                <a href="/logout" id="sair">Deslogar</a>
+                <a href="/logout" id="sair">Sair</a>
             </div>
         </div>
     </header>
     <main>
-        <p class="chamado-analise">Chamados em Análise do {{nome[0]}}</p>
+        <p class="chamado-analise">Chamados em Análise de {{nomeuser[0]}}</p>
         {% if leitoraberto == 0 %}
         <div class="box-req">
             <p id="btnaceitar" class="btnrejeitar">Sem requisições para análise no momento</p>
@@ -236,8 +244,15 @@
                 {%endif%}
             </summary>
             <div class="conteudo">
-                <p>Tipo: <span>{{solicitacao[1]}}</span></p>
+                <p>Tipo: <span>{{solicitacao[4]}}</span></p>
                 <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
             </div>
             <!-- <form action="/executor/chamadas-exec"> -->
             <div class="rejeitar-aceitar">
@@ -285,7 +300,7 @@
 
 
         <!--chamados andamento-->
-        <p class="chamado-andamento">Chamados em Andamento do {{nome[0]}}</p>
+        <p class="chamado-andamento">Chamados em Andamento de {{nomeuser[0]}}</p>
         {% if Values == 0 or leitorandamento == 0%}
         <div class="box-req">
             <p class="btnconcluir">Sem chamados em andamento no momento</p>
@@ -315,6 +330,13 @@
                 <p>Descrição: <span>{{solicitacao[2]}}
                         <!--variavel descricao-->
                     </span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
             </div>
             <div class="rejeitar-aceitar">
                 <button class="concluir btnconcluir" type="submit">Concluir</button>
@@ -352,7 +374,7 @@
 
 
         <!--chamados fechado-->
-        <p class="chamado-fechada">Chamados Fechados do {{nome[0]}}</p>
+        <p class="chamado-fechada">Chamados Fechados de {{nomeuser[0]}}</p>
         {% if leitorfechado == 0 or Values==0 %}
         <div class="box-req">
             <p>Sem chamados fechadas no momento</p>
@@ -380,9 +402,16 @@
                 <p>Descrição: <span>{{solicitacao[2]}}
                         <!--variavel descricao-->
                     </span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
             </div>
             <div class="aaa">
-                <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}}</span></p>
+                <p class="detalhes-fechamento">Comentário Executor: <span></span></p>
                 <div class="caras">
                     {% if solicitacao[10]==1 %}
                     <img src='../static/images/pessimo.png'>
@@ -398,6 +427,10 @@
                 </div>
             </div>
             <div class="texto-fechamento"> <span>{{solicitacao[5]}} </span> </div>
+            {%if solicitacao[11] != none %}
+            <p>FeedBack:</p>
+            <div class="texto-fechamento"> <span>{{solicitacao[11]}} </span> </div>
+            {%endif%}
         </details>
         {%endif%}
         {%endfor%}
@@ -442,7 +475,7 @@
         var btnsperfil = document.getElementsByClassName("btnperfil")[0];
         var fechar = document.getElementsByClassName("icon-fechar")[0];
 
-        
+
         var modalaceitar = document.getElementById("aceitar");
         var modalrejeitar = document.getElementById("rejeitar");
         var modalconcluir = document.getElementById("concluir");
@@ -461,12 +494,12 @@
         btnsconcluir.onclick = function () {
             modalconcluir.style.display = "block";
         }
-        
-        btnsperfil.onclick = function() {
+
+        btnsperfil.onclick = function () {
             modalperfil.style.display = "block";
         }
-        
-            
+
+
 
         fechar.onclick = function () {
             modalaceitar.style.display = "none";
@@ -478,7 +511,7 @@
             modalconcluir.style.display = "none";
         }
 
-        fechar.onclick = function() {
+        fechar.onclick = function () {
             modalperfil.style.display = "none";
         }
         window.onclick = function (event) {
@@ -493,10 +526,10 @@
                 modalconcluir.style.display = "none";
             }
             if (event.target == modalperfil) {
-            modalperfil.style.display = "none";
+                modalperfil.style.display = "none";
             }
         }
-        
+
     </script>
 </body>
 

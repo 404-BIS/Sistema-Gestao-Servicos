@@ -88,28 +88,61 @@
             <div class="archive">
                 <label>Anexar arquivo (PNG, JPEG, JPG)</label> <br>
                 <input type="file" id="archive" name="arquivo"> 
-            </div> 
-
-            <div class="buttons">
-                <input class="enviar" type="submit" value="Enviar">                   
             </div>
-        </form>  
-        <script>
-            var modalperfil = document.getElementById("perfil");
-            var btnsperfil = document.getElementsByClassName("btnperfil")[0];
-            var fechar = document.getElementsByClassName("icon-fechar")[0];
 
-            btnsperfil.onclick = function() {
-                modalperfil.style.display = "block";
-            }
-            fechar.onclick = function() {
+                    <div class="submit">
+                        <button id="alterar">Alterar Dados</button>
+                </form>
+                <a href="/logout" id="sair">Sair</a>
+            </div>
+        </div>
+    </header>
+    <p class="title-nova-req"> Nova Requisição</p>
+    <form class="formulario" action="/adm/solicitacao" method="POST" enctype="multipart/form-data">
+        <div class="title">
+            <div>
+                <label>Titulo</label>
+                <input type="text" id="title" name="titulo" required>
+            </div>
+            <div>
+                <label>Tipo</label>
+                <select name="tipo">
+                    <option value="Problemas de Software">Problemas de Software</option>
+                    <option value="Problemas de Hardware">Problemas de Hardware</option>
+                    <option value="Dúvidas ou Esclarecimentos">Dúvidas ou Esclarecimentos</option>
+                </select>
+            </div>
+        </div>
+        <div class="description">
+            <label>Descrição</label> <br>
+            <textarea id="description" name="descricao" required></textarea>
+        </div>
+        <div class="archive">
+            <label>Anexar arquivo (PNG, JPEG, JPG)</label> <br>
+            <input type="file" id="archive" name="file">
+        </div>
+
+        <div class="buttons">
+            <input class="enviar" type="submit" value="Enviar">
+        </div>
+    </form>
+    <script>
+        var modalperfil = document.getElementById("perfil");
+        var btnsperfil = document.getElementsByClassName("btnperfil")[0];
+        var fechar = document.getElementsByClassName("icon-fechar")[0];
+
+        btnsperfil.onclick = function () {
+            modalperfil.style.display = "block";
+        }
+        fechar.onclick = function () {
+            modalperfil.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modalperfil) {
                 modalperfil.style.display = "none";
             }
-            window.onclick = function(event) {
-              if (event.target == modalperfil) {
-                modalperfil.style.display = "none";
-              }
-            }
-        </script> 
-    </body>
+        }
+    </script>
+</body>
+
 </html>
