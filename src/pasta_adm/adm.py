@@ -100,7 +100,7 @@ def requisicoes():
             return render_template('/requisicoes.html', Details=Details,Values=Values,cont_hardware = cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto = leitoraberto ,leitorfechado = leitorfechado ,leitorandamento=leitorandamento,senha = senha , email=email, nome = nome)
         return render_template('/requisicoes.html',Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,senha = senha , email=email, nome = nome)
 
-@admin.route("/adm/estatisticas",methods=['GET', 'POST'])
+@admin.route("/adm/estatisticas",methods=['GET'])
 def estatisticas():
     if not 'loggedin' in session:
         return redirect ('/login')
@@ -111,18 +111,42 @@ def estatisticas():
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
         # pegando infos do html
-            
+        mescom31 = ['01', '03', '05', '07', '08', '10', '12']    
         dias_select = request.args.get('days')
         dataaa = request.args.get('dataaa')
         # Conta
         DATA_ATUAL = dataaa
         # checking days
-        if dias_select == 1:
+        if dias_select == '1':
             ano = DATA_ATUAL[:4]
             mes = DATA_ATUAL[5:7]
-            dia = DATA_ATUAL[8:]
+            dia = int(DATA_ATUAL[8:])
             print(dia, mes, ano)
+            if (dia - 1 <= 0):
+                if int(ano) %4 == 0:
+                    if mes == '02':
+                        cdias = (dia - 1)*(-1)
+                        dia = 29 + cdias
+                        mes = '01'
+                elif int(ano) %4 != 0:
+                    if mes == '02':
+                        cdias = (dia - 1)*(-1)
+                        dia = 28 + cdias
+                        mes = '01'
+                elif mes in mescom31:
+                    cdias = (dia - 1)*(-1)
+                    dia = 31 + cdias
+                    mes = int(mes)
+                    mess=mes-1
+                    mes = '0' + str(mess)
+                else:
+                    cdias = (dia - 1)*(-1)
+                    dia = 30 + cdias
+                    mes = int(mes)
+                    mess=mes-1
+                    mes = '0' + str(mess)
             MENOS_1 = f"{ano}-{mes}-{dia-1}"
+            print(MENOS_1)
 
             tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
 
@@ -130,8 +154,8 @@ def estatisticas():
 
             tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
 
-            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
             num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
             num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
             num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
@@ -149,11 +173,40 @@ def estatisticas():
             avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
             avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
             avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-        elif dias_select == 7:
+        elif dias_select == '7':
             ano = DATA_ATUAL[:4]
             mes = DATA_ATUAL[5:7]
-            dia = DATA_ATUAL[8:]
+            dia = int(DATA_ATUAL[8:])
+            if (dia - 7 <= 0):
+                if int(ano) %4 == 0:
+                    if int(ano) %4 == 0:
+                        if mes == '02':
+                            cdias = (dia - 7)*(-1)
+                            dia = 29 + cdias
+                            mes = '01'
+                elif int(ano) %4 != 0:
+                    if mes == '02':
+                        cdias = (dia - 7)*(-1)
+                        dia = 28 + cdias
+                        mes = '01'
+                    else:
+                        cdias = (dia - 7)*(-1)
+                        dia = 28 + cdias
+                        mes = '01'
+                elif mes in mescom31:
+                    cdias = (dia - 7)*(-1)
+                    dia = 31 + cdias
+                    mes = int(mes)
+                    mess=mes-1
+                    mes = '0' + str(mess)
+                else:
+                    cdias = (dia - 7)*(-1)
+                    dia = 30 + cdias
+                    mes = int(mes)
+                    mess=mes-1
+                    mes = '0' + str(mess)
             MENOS_7 = (f"{ano}-{mes}-{dia-7}")
+            print(MENOS_7)
         
             tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
 
@@ -161,8 +214,8 @@ def estatisticas():
 
             tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
 
-            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
             num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
             num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
             num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
@@ -180,10 +233,37 @@ def estatisticas():
             avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
             avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
             avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-        elif dias_select == 15:
+        elif dias_select == '15':
             ano = DATA_ATUAL[:4]
             mes = DATA_ATUAL[5:7]
-            dia = DATA_ATUAL[8:]
+            dia = int(DATA_ATUAL[8:])
+            if (dia - 15 <= 0):
+                if int(ano) %4 == 0:
+                    if mes == '02':
+                        cdias = (dia - 15)*(-1)
+                        dia = 29 + cdias
+                        mes = '01'
+                elif int(ano) %4 != 0:
+                    if mes == '02':
+                        cdias = (dia - 15)*(-1)
+                        dia = 28 + cdias
+                        mes = '01'
+                    else:
+                        cdias = (dia - 15)*(-1)
+                        dia = 28 + cdias
+                        mes = '01'
+                elif mes in mescom31:
+                    cdias = (dia - 15)*(-1)
+                    dia = 31 + cdias
+                    mes = int(mes)
+                    mess=mes-1
+                    mes = '0' + str(mess)
+                else:
+                    cdias = (dia - 15)*(-1)
+                    dia = 30 + cdias
+                    mes = int(mes)
+                    mess=mes-1
+                    mes = '0' + str(mess)
             MENOS_15 = (f"{ano}-{mes}-{dia-15}")
         
             tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
@@ -192,8 +272,8 @@ def estatisticas():
 
             tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
 
-            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
             num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
             num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
             num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
@@ -212,10 +292,32 @@ def estatisticas():
             avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
             avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
 
-        elif dias_select == 30:
+        elif dias_select == '30':
             ano = DATA_ATUAL[:4]
             mes = DATA_ATUAL[5:7]
-            dia = DATA_ATUAL[8:]
+            dia = int(DATA_ATUAL[8:])
+            if (dia - 30 <= 0):
+                if int(ano) %4 == 0:
+                    if mes == '02':
+                        cdias = (dia - 30)*(-1)
+                        dia = 29 + cdias
+                        mes = '01'
+                    else:
+                        cdias = (dia - 30)*(-1)
+                        dia = 28 + cdias
+                        mes = '01'
+                elif mes in mescom31:
+                    cdias = (dia - 30)*(-1)
+                    dia = 31 + cdias
+                    mes = int(mes)
+                    mess=mes-1
+                    mes = '0' + str(mess)
+                else:
+                    cdias = (dia - 30)*(-1)
+                    dia = 30 + cdias
+                    mes = int(mes)
+                    mess= mes-1
+                    mes = '0' + str(mess)
             MENOS_30 = (f"{ano}-{mes}-{dia-30}")
             tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
 
@@ -223,8 +325,8 @@ def estatisticas():
 
             tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
 
-            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
             num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
             num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
             num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
