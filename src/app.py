@@ -76,6 +76,7 @@ def user():
         else:
             filename=''
         if len(allExec) == 0:
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             with mysql.cursor()as Cursor:
                 Cursor.execute("INSERT INTO solicitacao (title_sol, desc_sol, status_sol ,type_problem, comentario,foto, data_inicio, id_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,filename,hora,pk_user)) 
                 mysql.commit()
@@ -94,6 +95,10 @@ def user():
                 Cursor.close()
                 return redirect("/usuario/menu")
         else:
+            if file:
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else :
+                filename=''
             with mysql.cursor()as Cursor:
                 Cursor.execute("SELECT id_sol FROM solicitacao")
                 tudo = Cursor.fetchall()
@@ -102,23 +107,14 @@ def user():
                     ultimoChamado = Cursor.fetchall()
                     for x in range (len(allExec)):
                         if ultimoChamado[0] in allExec == True:
-                                print(ultimoChamado[0])
-                                print(allExec)
                                 if allExec[x] == ultimoChamado[0]:
                                     if allExec.index(allExec[x]) + 1 < len(allExec):
-                                        print(allExec.index(allExec[x]),'== Primeira cond')
-                                        print(allExec[x])
                                         a = allExec[x+1]
 
                                     elif allExec.index(allExec[x]) + 2 > len(allExec):
-                                        print('segunda faixa')
                                         a = allExec[0]
 
                                     elif allExec.index(allExec[x]) + 1 == len(allExec):
-                                        print('terceira faixa')
-                                        print(allExec.index(allExec[x]))
-                                        print(allExec[x])
-                                        print(len(allExec))
                                         a = allExec[-1]
                                                     
                                     
@@ -128,29 +124,16 @@ def user():
                                     return redirect("/usuario/menu")
 
                         else:
-                                print(allExec[x],ultimoChamado)
                                 if allExec[x] == ultimoChamado[0]:
-                                    if allExec.index(allExec[x]) + 1 < len(allExec):
-                                        print('Diferente 1')
-                                        print(allExec.index(allExec[x]))
-                                        print(allExec[x])
-                                    
-                                        
-                                        print(len(allExec))
+                                    if allExec.index(allExec[x]) + 1 < len(allExec):                                       
                                         a = allExec[x+1]
 
-                                    elif allExec.index(allExec[x]) + 2 > len(allExec):
-                                        print('diferente 2')
+                                    elif allExec.index(allExec[x]) + 2 > len(allExec):                            
                                         a = allExec[0]
 
                                     elif allExec.index(allExec[x]) + 1 == len(allExec):
-                                        print('diferente 3')
-                                        print(allExec.index(allExec[x]))
-                                        print(allExec[x])
-                                        print(len(allExec))
                                         a = allExec[-1]
-                                                    
-                                    
+                                                        
                                     Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,foto,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,filename,pk_user,hora,a))
                                     mysql.commit()
                                     Cursor.close()
@@ -192,6 +175,7 @@ def index():
         else:
             filename=''
         if len(allExec) == 0:
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             with mysql.cursor()as Cursor:
                 Cursor.execute("INSERT INTO solicitacao (title_sol, desc_sol, status_sol ,type_problem, comentario,foto, data_inicio,id_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,filename,hora,pk_user)) 
                 mysql.commit()
@@ -210,6 +194,10 @@ def index():
                 Cursor.close()
                 return redirect("/adm/menu")
         else:
+            if file:
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else :
+                filename=''
             with mysql.cursor()as Cursor:
                 Cursor.execute("SELECT id_sol FROM solicitacao")
                 tudo = Cursor.fetchall()
@@ -218,23 +206,18 @@ def index():
                     ultimoChamado = Cursor.fetchall()
                     for x in range (len(allExec)):
                         if ultimoChamado[0] in allExec == True:
-                                print(ultimoChamado[0])
-                                print(allExec)
+                                
                                 if allExec[x] == ultimoChamado[0]:
                                     if allExec.index(allExec[x]) + 1 < len(allExec):
-                                        print(allExec.index(allExec[x]),'== Primeira cond')
-                                        print(allExec[x])
+                                        
                                         a = allExec[x+1]
 
                                     elif allExec.index(allExec[x]) + 2 > len(allExec):
-                                        print('segunda faixa')
+                                        
                                         a = allExec[0]
 
                                     elif allExec.index(allExec[x]) + 1 == len(allExec):
-                                        print('terceira faixa')
-                                        print(allExec.index(allExec[x]))
-                                        print(allExec[x])
-                                        print(len(allExec))
+                                        
                                         a = allExec[-1]
                                                     
                                     
@@ -244,26 +227,18 @@ def index():
                                     return redirect("/adm/menu")
 
                         else:
-                                print(allExec[x],ultimoChamado)
+                                
                                 if allExec[x] == ultimoChamado[0]:
                                     if allExec.index(allExec[x]) + 1 < len(allExec):
-                                        print('Diferente 1')
-                                        print(allExec.index(allExec[x]))
-                                        print(allExec[x])
-                                    
-                                        
-                                        print(len(allExec))
+                                                                                                     
                                         a = allExec[x+1]
 
                                     elif allExec.index(allExec[x]) + 2 > len(allExec):
-                                        print('diferente 2')
+                                        
                                         a = allExec[0]
 
                                     elif allExec.index(allExec[x]) + 1 == len(allExec):
-                                        print('diferente 3')
-                                        print(allExec.index(allExec[x]))
-                                        print(allExec[x])
-                                        print(len(allExec))
+                                        
                                         a = allExec[-1]
                                                     
                                     
@@ -291,7 +266,7 @@ def novaExecutor():
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-        Cursor.execute("SELECT id_user FROM user WHERE type_user = 'exec' and id_user != %s",(pk_user,))
+        Cursor.execute("SELECT id_user FROM user WHERE type_user = 'exec'and id_user != %s",(pk_user,))
         allExec = Cursor.fetchall()
 
     if request.method == 'POST':
@@ -307,24 +282,32 @@ def novaExecutor():
             filename = secure_filename(file.filename)
         else:
             filename=''
-        with mysql.cursor()as Cursor:
-            if len(allExec) == 0:
+        if len(allExec) == 0:
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            with mysql.cursor()as Cursor:
+                
                 Cursor.execute("INSERT INTO solicitacao (title_sol,desc_sol,status_sol,type_problem,comentario,foto,id_user,data_inicio) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,filename,pk_user,hora))
                 mysql.commit()
                 Cursor.close()
                 return redirect("/executor/menu")
 
-            elif len(allExec) == 1:
-                execone = allExec[0]
-                if file:
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                else :
-                    filename=''
+        elif len(allExec) == 1:
+            execone = allExec[0]
+            if file:
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else :
+                filename=''
+            with mysql.cursor()as Cursor:
                 Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,foto,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,filename,pk_user,hora,execone,))
                 mysql.commit()
                 Cursor.close()
                 return redirect("/executor/menu")
-            else:
+        else:
+            if file:
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else :
+                filename=''
+            with mysql.cursor()as Cursor:
                 Cursor.execute("SELECT id_sol FROM solicitacao")
                 tudo = Cursor.fetchall()
                 if len(tudo) > 1 :
@@ -332,23 +315,18 @@ def novaExecutor():
                     ultimoChamado = Cursor.fetchall()
                     for x in range (len(allExec)):
                         if ultimoChamado[0] in allExec == True:
-                            print(ultimoChamado[0])
-                            print(allExec)
+                            
                             if allExec[x] == ultimoChamado[0]:
                                 if allExec.index(allExec[x]) + 1 < len(allExec):
-                                    print(allExec.index(allExec[x]),'== Primeira cond')
-                                    print(allExec[x])
+                                    
                                     a = allExec[x+1]
 
                                 elif allExec.index(allExec[x]) + 2 > len(allExec):
-                                    print('segunda faixa')
+                                    
                                     a = allExec[0]
 
                                 elif allExec.index(allExec[x]) + 1 == len(allExec):
-                                    print('terceira faixa')
-                                    print(allExec.index(allExec[x]))
-                                    print(allExec[x])
-                                    print(len(allExec))
+                                    
                                     a = allExec[-1]
                                                 
                                 
@@ -358,26 +336,18 @@ def novaExecutor():
                                 return redirect("/executor/menu")
 
                         else:
-                            print(allExec[x],ultimoChamado)
+                            
                             if allExec[x] == ultimoChamado[0]:
                                 if allExec.index(allExec[x]) + 1 < len(allExec):
-                                    print('Diferente 1')
-                                    print(allExec.index(allExec[x]))
-                                    print(allExec[x])
-                                    print(ultimoChamado[0])
-                                    print(ultimoChamado[1])
-                                    print(len(allExec))
+                                    
                                     a = allExec[x+1]
 
                                 elif allExec.index(allExec[x]) + 2 > len(allExec):
-                                    print('diferente 2')
+                                    
                                     a = allExec[0]
 
                                 elif allExec.index(allExec[x]) + 1 == len(allExec):
-                                    print('diferente 3')
-                                    print(allExec.index(allExec[x]))
-                                    print(allExec[x])
-                                    print(len(allExec))
+
                                     a = allExec[-1]
                                                 
                                 
@@ -391,8 +361,7 @@ def novaExecutor():
                     Cursor.execute("SELECT id_fechador FROM solicitacao ORDER BY id_sol DESC LIMIT 1")
                     ultimoChamado = Cursor.fetchall()
                     a = allExec[1]
-                    print(allExec)
-                    print(allExec[1])
+                    
                     Cursor.execute("INSERT INTO solicitacao(title_sol,desc_sol,status_sol,type_problem,comentario,foto,id_user,data_inicio,id_fechador) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,type_problem,comentario,filename,pk_user,hora,a))
                     mysql.commit()
                     Cursor.close()

@@ -1,7 +1,5 @@
 from flask import Blueprint,render_template,request,redirect,session,url_for
-from flask_login import login_required, current_user 
 from bd.db import mysql
-import os
 
 user_blueprint= Blueprint('user', __name__ , template_folder='templates')
  
