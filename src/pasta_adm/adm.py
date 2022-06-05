@@ -115,24 +115,143 @@ def estatisticas():
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
         # pegando infos do html
-        dias_select = ['days']
-        dia_certo = ['data']
+            
+        dias_select = request.args.get('days')
+        dataaa = request.args.get('dataaa')
         # Conta
-        DATA_ATUAL = dia_certo
-        ano = DATA_ATUAL[:4]
-        mes = DATA_ATUAL[5:7]
-        dia = DATA_ATUAL[8:]
-        MENOS_1 = ("%s-%s-%s", (ano, mes, (dia-1)))
-        MENOS_7 = ("%s-%s-%s", (ano, mes, (dia-7)))
-        MENOS_15 = ("%s-%s-%s", (ano, mes, (dia-15)))
-        MENOS_30 = ("%s-%s-%s", (ano, mes, (dia-30)))
+        DATA_ATUAL = dataaa
         # checking days
         if dias_select == 1:
+            ano = DATA_ATUAL[:4]
+            mes = DATA_ATUAL[5:7]
+            dia = DATA_ATUAL[8:]
+            print(dia, mes, ano)
+            MENOS_1 = f"{ano}-{mes}-{dia-1}"
+
+            tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+
+            tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+
+            tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+
+            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+            num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+            num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+            num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+
+            somatotal = num_exec + num_user
+            porcentoUser = str((num_user/somatotal)*100)
+            porcentoExec = str((num_exec/somatotal)*100)
+            aporcentoUser = porcentoUser[:2]
+            aporcentoExec = porcentoExec[:2]
+    
+
+
+            avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+            avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+            avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+            avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+            avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+        elif dias_select == 7:
+            ano = DATA_ATUAL[:4]
+            mes = DATA_ATUAL[5:7]
+            dia = DATA_ATUAL[8:]
+            MENOS_7 = (f"{ano}-{mes}-{dia-7}")
+        
+            tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+
+            tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+
+            tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+
+            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+            num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+            num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+            num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+
+            somatotal = num_exec + num_user
+            porcentoUser = str((num_user/somatotal)*100)
+            porcentoExec = str((num_exec/somatotal)*100)
+            aporcentoUser = porcentoUser[:2]
+            aporcentoExec = porcentoExec[:2]
+    
+
+
+            avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+            avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+            avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+            avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+            avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+        elif dias_select == 15:
+            ano = DATA_ATUAL[:4]
+            mes = DATA_ATUAL[5:7]
+            dia = DATA_ATUAL[8:]
+            MENOS_15 = (f"{ano}-{mes}-{dia-15}")
+        
+            tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+
+            tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+
+            tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+
+            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+            num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+            num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+            num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+
+            somatotal = num_exec + num_user
+            porcentoUser = str((num_user/somatotal)*100)
+            porcentoExec = str((num_exec/somatotal)*100)
+            aporcentoUser = porcentoUser[:2]
+            aporcentoExec = porcentoExec[:2]
+    
+
+
+            avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+            avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+            avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+            avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+            avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+
+        elif dias_select == 30:
+            ano = DATA_ATUAL[:4]
+            mes = DATA_ATUAL[5:7]
+            dia = DATA_ATUAL[8:]
+            MENOS_30 = (f"{ano}-{mes}-{dia-30}")
             tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
 
             tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
 
             tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+
+            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+            num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+            num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+            num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+
+            somatotal = num_exec + num_user
+            porcentoUser = str((num_user/somatotal)*100)
+            porcentoExec = str((num_exec/somatotal)*100)
+            aporcentoUser = porcentoUser[:2]
+            aporcentoExec = porcentoExec[:2]
+    
+
+
+            avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+            avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+            avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+            avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+            avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+        else:
+            tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware'")
+
+            tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software'")
+
+            tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos'")
 
             num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
             num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
@@ -153,9 +272,10 @@ def estatisticas():
             avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3'")
             avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4'")
             avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5'")
-            
 
-    return render_template("char.html",tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome)
+            print('else', DATA_ATUAL)
+        
+    return render_template("char.html",tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa)
 
 
 @admin.route("/historico-avaliacao<id>")

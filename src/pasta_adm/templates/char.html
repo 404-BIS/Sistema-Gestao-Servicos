@@ -88,24 +88,25 @@
         <p class="req-aberta">Estatísticas das requisições</p>
         <div class="filtros-adm">
             <form action="/adm/estatisticas" method="post">
-                <div class="filtro-tempo">
-                    <p>Intervalo de tempo:
-                    <select id="days" name="days">
-                        <option value="1">1 Dia</option>
-                        <option value="2">7 Dias</option>
-                        <option value="3">15 Dias</option>
-                        <option value="4">30 Dias</option>
-                    </select></p>
-                </div>
                 <div class="filtro-dia">
                     <div>
                         <label for="diaa">Data Inícial:</label>
-                        <input type="date" id="data" name="data">
+                        <input type="date" id="dataaa" name="dataaa">
                     </div>
                 </div>
-                <div class="btnflt">
-                    <input type="submit" id="filtro" name="filtro">
-                </div>
+                <form action="/adm/estatisticas" method="post" id="days" name="days">
+                    <div class="filtro-tempo">
+                        <p>Intervalo de tempo:
+                            <select id="days" name="days" form="days" onchange="this.form.submit()">
+                                <option value="1">1 Dia</option>
+                                <option value="7">7 Dias</option>
+                                <option value="15">15 Dias</option>
+                                <option value="30">30 Dias</option>
+                            </select>
+                        </p>
+                    </div>
+                </form>
+                <input type="submit" value="Filtrar">
             </form>
         </div>
 
