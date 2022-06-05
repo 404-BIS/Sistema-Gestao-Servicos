@@ -1,457 +1,512 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
-        <style type="text/css"> 
-            /* Style Modal Aceitar Chamado*/
-            .box-aceitar{
-                border:solid 5px #A8A7A7;
-                border-radius: 20px;
-                background-color: #fcfcfc;
-                width: 600px;
-                height: 200px;
-                display: flex;
-                align-items: center;
-                flex-direction: column;
-                margin: auto;
-            }
 
-            .box-aceitar p{
-                padding: 0px 0px 20px 0px; 
-                font-size: 26px;
-            }
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <style type="text/css">
+        .tamanho {
+            min-width: 200px;
+            min-height: 100px;
+            max-width: 400px;
+            max-height: 300px;
+            border-radius: 5px;
+        }
 
-            .box-aceitar button{
-                border:none;
-                font-size:24px;
-                color:#FCFCFC;
-                background-color: rgba(0, 155, 34, 1);
-                border-radius:10px;
-                height: 60px;
-                width: 200px;
-            }
+        /* Style Modal Aceitar Chamado*/
+        .box-aceitar {
+            border: solid 5px #A8A7A7;
+            border-radius: 20px;
+            background-color: #fcfcfc;
+            width: 600px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            margin: auto;
+        }
 
-            /* Style Modal fechar chamado em analise*/
+        .box-aceitar p {
+            padding: 0px 0px 20px 0px;
+            font-size: 26px;
+        }
 
-            .card-conclu main{
-                margin:0px 110px 0px 110px;
-            }
+        .box-aceitar button {
+            border: none;
+            font-size: 24px;
+            color: #FCFCFC;
+            background-color: rgba(0, 155, 34, 1);
+            border-radius: 10px;
+            height: 60px;
+            width: 200px;
+        }
 
-            .card-conclu{
-                border:solid 5px #A8A7A7;
-                border-radius: 20px;
-                background-color: #fcfcfc;
-                width: 1010px;
-                height: 600px;
-                margin: auto;
-            }
+        /* Style Modal fechar chamado em analise*/
 
-            .conclusao-chamado{
-                font-weight: 500;
-                font-size: 26px;
-                display: flex;
-                justify-content: center;
-            }
+        .card-conclu main {
+            margin: 0px 110px 0px 110px;
+        }
 
-            .card-2{
-                border:solid 2px #A8A7A7;
-                border-radius: 10px;
-                width:100%;
-                align-items: center;
-                padding: 20px;
-                margin: 20px 0px 24px 0px;
-            }
+        .card-conclu {
+            border: solid 5px #A8A7A7;
+            border-radius: 20px;
+            background-color: #fcfcfc;
+            width: 1010px;
+            height: 600px;
+            margin: auto;
+        }
 
-            .info-conclu{
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 16px;    
-            }
+        .conclusao-chamado {
+            font-weight: 500;
+            font-size: 26px;
+            display: flex;
+            justify-content: center;
+        }
 
-            .titulo-conclu{
-                font-weight: 600;  
-                font-size: 18px;
-            }
-   
-            .tipo-conclu{
-                font-weight: 600; 
-                margin-bottom: 16px;
-                font-size: 14px;
-            }
+        .card-2 {
+            border: solid 2px #A8A7A7;
+            border-radius: 10px;
+            width: 100%;
+            align-items: center;
+            padding: 20px;
+            margin: 20px 0px 24px 0px;
+        }
 
-            .descricao-conclu{
-                font-weight: 600; 
-                font-size: 14px;
-            }
-            
-            textarea{
-                font-size: 18px;
-                font-weight:600;
-                border: solid 2px #A8A7A7;
-                border-radius: 10px;
-                height: 164px;
-                width: 100%;
-                resize: vertical;
-                padding: 10px;
-            }
-    
-            .bot-conclu{
-                border:none;
-                font-size:24px;
-                color:#FCFCFC;
-                background-color: rgba(0, 155, 34, 1);
-                border-radius:10px;
-                height: 60px;
-                width: 300px;
-                margin-top:40px;
-                margin-left: 230px;
+        .info-conclu {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
 
-            }
+        .titulo-conclu {
+            font-weight: 600;
+            font-size: 18px;
+        }
 
-            .bot-conclu:hover{
-                font-size: 27px;
-            }
+        .tipo-conclu {
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
 
-            .botao-concluir{
-                display: flex;
-                justify-content: center;
-                align-items: center;    
-            }
-           
-            .superior{
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-right:10px;
-            }
+        .descricao-conclu {
+            font-weight: 600;
+            font-size: 14px;
+        }
 
-            .icon-fechar{
-                height: 40px;
-                width: 40px;
-            }
-        </style>
-        
-    </head>
-    <body>
-        <header>
-            <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button>
-            <nav>
-                <a class="minha-chamada" href="/adm"> Controle de usuários </a>
-                <ul>
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropbtn">Requisições do Sistema</a>
-                        <div class="dropdown-content">
-                            <a href="/adm/requisicoes">Todas as Requsições</a>
-                            <a href="/adm/estatisticas">Estatísticas das Requisições</a>
-                        </div>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropbtn">Minhas Requisições</a>
-                        <div class="dropdown-content">
-                            <a href="/adm/solicitacao">Criar chamados </a>
-                            <a href="/adm/menu">Minhas Requisições</a>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-            <div id="perfil" class="modal">
-                <div class="icon-fechar"></div>
-                <div class="profile">
-            
-                    <div class="header">
-                        <b>Meu Perfil</b>
+        textarea {
+            font-size: 18px;
+            font-weight: 600;
+            border: solid 2px #A8A7A7;
+            border-radius: 10px;
+            height: 164px;
+            width: 100%;
+            resize: vertical;
+            padding: 10px;
+        }
+
+        .bot-conclu {
+            border: none;
+            font-size: 24px;
+            color: #FCFCFC;
+            background-color: rgba(0, 155, 34, 1);
+            border-radius: 10px;
+            height: 60px;
+            width: 300px;
+            margin-top: 40px;
+            margin-left: 230px;
+
+        }
+
+        .bot-conclu:hover {
+            font-size: 27px;
+        }
+
+        .botao-concluir {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .superior {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .icon-fechar {
+            height: 40px;
+            width: 40px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button>
+        <nav>
+            <a class="minha-chamada" href="/adm"> Controle de usuários </a>
+            <ul>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Requisições do Sistema</a>
+                    <div class="dropdown-content">
+                        <a href="/adm/requisicoes">Todas as Requsições</a>
+                        <a href="/adm/estatisticas">Estatísticas das Requisições</a>
                     </div>
-            
-                    <form action="/perfil_adm" method='POST'>
-                        <div class="informations">
-                            <div>
-                                <label>Nome</label>
-                                <input name="nome" type="name" placeholder="{{nome}}">
-                                <label>Email</label>
-                                <input name="troca_email" type="email" placeholder="{{email}}">
-                            </div>
-                
-                            <div class="linha-vertical"></div>
-                
-                            <div>
-                                <label>Senha</label>
-                                <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
-                            </div>
+                </li>
+            </ul>
+            <ul>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Minhas Requisições</a>
+                    <div class="dropdown-content">
+                        <a href="/adm/solicitacao">Criar chamados </a>
+                        <a href="/adm/menu">Minhas Requisições</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div id="perfil" class="modal">
+            <div class="icon-fechar"></div>
+            <div class="profile">
+
+                <div class="header">
+                    <b>Meu Perfil</b>
+                </div>
+
+                <form action="/perfil_adm" method='POST'>
+                    <div class="informations">
+                        <div>
+                            <label>Nome</label>
+                            <input name="nome" type="name" placeholder="{{nome}}">
+                            <label>Email</label>
+                            <input name="troca_email" type="email" placeholder="{{email}}">
                         </div>
-                
-                        <div class="submit">
-                            <button id="alterar">Alterar Dados</button>
-                            </form>
-                            <a href="/logout" id="sair">Sair</a>
+
+                        <div class="linha-vertical"></div>
+
+                        <div>
+                            <label>Senha</label>
+                            <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
                         </div>
                     </div>
-        </header>
-        <main>
-            <!--chamados em análise-->
-            <p class="chamado-analise">Chamados em Análise</p>
-            {%  if Values == 0 or leitoraberto == 0%}
-                <div class="box-req">
-                    <p id="btnaceitar" class="btnrejeitar">Sem requisições para análise no momento</p>
-                </div>
-            {% else %}
-            {% for solicitacao in Details %}   
-                    {% if solicitacao[3] =="Aberta" %}
-                        <details>
-                            <summary>
-                                <p>{{solicitacao[1]}}</p><!--variavel titulo-->
-                                {% if solicitacao[4] == 'Problemas de Hardware'%}
-                                    <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                                {% elif solicitacao[4] == 'Problemas de Software'%}
-                                    <img class="icon" src="../static/images/Software.png" alt="icon">
-                                {%else%}
-                                    <img class="icon" src="../static/images/Info.png" alt="icon">
-                                {%endif%}
-                            </summary>
-                            <div class="conteudo">
-                                <p>Tipo: <span>{{solicitacao[1]}}</span></p>
-                                <p>Descrição: <span>{{solicitacao[2]}}</span></p>
-                            </div>
-                            <!-- <form action="/executor/chamadas-exec"> -->
-                            <div class="rejeitar-aceitar"> 
-                                <button class="rejeitar btnrejeitar" type="submit">Rejeitar</button>
-                                <button class="aceitar" type="submit" id="btnaceitar">Aceitar</button>
-                            </div>
-                        </details>
-                        <div id="rejeitar" class="modal">
-                            <div class="card-conclu">   
-                                <main>
-                                    <div class="icon-fechar"></div>
-                                    <p class="conclusao-chamado"> Rejeição de Chamado </p> 
-                                    <div class="card-2">
-                                        <div class="info-conclu">
-                                            <p class="titulo-conclu">{{solicitacao[1]}}</p><!--variavel titulo-->
-                                            <p>{{solicitacao[7]}}</p>
-                                        </div>
-                                        <div class="conteudo-conclu">
-                                            <p class="tipo-conclu">Tipo: <span>{{solicitacao[4]}}</span></p>
-                                            <p class="descricao-conclu">Descrição: <span>{{solicitacao[2]}}</span></p>
-                                        </div>
-                                    </div>
-                                    <div class="botao-concluir">
-                                        <form action="/recusando_adm/{{solicitacao.0}}" method="POST">
-                                            <textarea name="codigo" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
-                                            <button class="bot-conclu" type="submit">Rejeitar Chamado</button>
-                                        </form>
-                                    </div>
-                                </main>
-                            </div> 
-                        </div>
-                        <div id="aceitar" class="modal">
-                            <div class="box-aceitar">
-                                <div class="icon-fechar"></div>
-                                <p>Chamada Aceita</p>
-                                <form action="/aceitando_adm/{{solicitacao.0}}" method="POST"> 
-                                    <button class="aceitar" type="submit">Aceitar</button>
-                                </form> 
-                            </div> 
-                        </div>
-                    {%endif%}   
-                {% endfor %}
-            {% endif %}
-            
-            
-            <!--chamados andamento-->
-            <p class="chamado-andamento">Chamados em Andamento</p>
-            {%  if Values == 0 or leitorandamento == 0%}
-                <div class="box-req">
-                    <p class="btnconcluir">Sem chamados em andamento no momento</p>
-                    
-                </div>
-            {%else%}
-                {% for solicitacao in Details %}
-                    {%if solicitacao[3] == 'Andamento' %} 
-                        <details>
-                            <summary>
-                                <p>{{solicitacao[1]}}</p><!--variavel titulo-->
-                                {% if solicitacao[4] == 'Problemas de Hardware'%}
-                                    <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                                {% elif solicitacao[4] == 'Problemas de Software'%}
-                                    <img class="icon" src="../static/images/Software.png" alt="icon">
-                                {%else%}
-                                    <img class="icon" src="../static/images/Info.png" alt="icon">
-                                {%endif%}
 
-                            </summary>
-                            <div class="conteudo">
-                                <p>Tipo: <span>{{solicitacao[4]}}<!--variavel tipo--></span></p>
-                                <p>Descrição: <span>{{solicitacao[2]}}<!--variavel descricao--></span></p>
-                            </div>
-                            <div class="rejeitar-aceitar"> 
-                                <button class="concluir btnconcluir" type="submit">Concluir</button>
-                            </div>
-                        </details>
-                        <div id="concluir" class="modal">
-                            <div class="card-conclu">   
-                                <main>
-                                    <div class="icon-fechar"></div>
-                                    <p class="conclusao-chamado"> Conclusão de Chamada </p> 
-                                    <div class="card-2">
-                                        <div class="info-conclu">
-                                            <p class="titulo-conclu">{{solicitacao[1]}}</p><!--variavel titulo-->
-                                            <p>{{solicitacao[7]}}</p>
-                                        </div>
-                                        <div class="conteudo-conclu">
-                                            <p class="tipo-conclu">Tipo: <span>{{solicitacao[4]}}</span></p>
-                                            <p class="descricao-conclu">Descrição: <span>{{solicitacao[2]}}</span></p>
-                                        </div>
-                                    </div>
-                                    <div class="botao-concluir">
-                                        <form action="/andamento_adm/{{solicitacao.0}}" method="POST">
-                                            <textarea name="comentario" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
-                                            <button class="bot-conclu" type="submit">Concluir Chamado</button>
-                                        </form>
-                                    </div>
-                                </main>
-                            </div> 
-                        </div>
-                    {%endif%}
-                {%endfor%}
-            {%endif%}
-            
-            
-
-            <!--chamados fechado-->
-            <p class="chamado-fechada">Chamados Fechados</p>
-            {%  if leitorfechado == 0 or Values==0 %}
-                <div class="box-req">
-                    <p>Sem chamados fechadas no momento</p>
-                </div>
-            {%else%}
-                {% for solicitacao in Details %}
-                    {%if solicitacao[3] == 'Fechada'%} 
-                        <details>
-                            <summary>
-                                <p>{{solicitacao[1]}}</p><!--variavel titulo-->
-                                {% if solicitacao[4] == 'Problemas de Hardware'%}
-                                    <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                                {% elif solicitacao[4] == 'Problemas de Software'%}
-                                    <img class="icon" src="../static/images/Software.png" alt="icon">
-                                {%else%}
-                                    <img class="icon" src="../static/images/Info.png" alt="icon">
-                                {%endif%}
-                            </summary>
-                            <div class="conteudo">
-                                <p>Tipo: <span>{{solicitacao[4]}}<!--variavel tipo--></span></p>
-                                <p>Descrição: <span>{{solicitacao[2]}}<!--variavel descricao--></span></p>
-                            </div>
-                            <div class="aaa"> 
-                                <p class="detalhes-fechamento"> Requisição Fechada por: <span> </span></p> 
-                                <div class="caras">
-                                    {% if solicitacao[10]==1 %}
-                                        <img src='../static/images/pessimo.png'>
-                                    {% elif solicitacao[10]==2 %}
-                                        <img src='../static/images/ruim.png'>
-                                    {% elif solicitacao[10]==3 %}
-                                        <img src='../static/images/mediano.png'>
-                                    {% elif solicitacao[10]==4 %}
-                                        <img src='../static/images/bom.png'>
-                                    {% elif solicitacao[10]==5 %}
-                                        <img src='../static/images/otimo.png'>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="texto-fechamento"> <span>{{solicitacao[5]}} </span> </div>
-                        </details>
-                   {%endif%}
-                {%endfor%} 
-            {%endif%}
-
-            <!--Legendas-->
-            <p class="tipo-legenda">Tipos de Problemas</p>
-            <div class="legenda">
-                <div class="hardware">            
-                    <div>
-                        <p class="categoria">Problemas de Hardware</p>
-                        <p class="quant">Quantidade:{{cont_hardware}}</p> <!--variavel de quantidade-->
-                    </div>    
-                <img class="icon" src="../../static/images/Hardware.png" alt="icon">
-            </div>   
-    
-                <div class="software">
-                    <div>
-                        <p class="categoria">Problemas de Software</p>
-                        <p class="quant">Quantidade:{{cont_software}}</p> <!--variavel de quantidade-->
-                    </div>    
-                    <img class="icon" src="../../static/images/Software.png" alt="icon">
-                </div>  
-    
-                <div class="info">
-                    <div>
-                        <p class="categoria">Esclarecimento/informação</p>
-                        <p class="quant">Quantidade:{{cont_duv}}</p> <!--variavel de quantidade-->
-                    </div>    
-                    <img class="icon" src="../../static/images/Info.png" alt="icon">
-                </div>  
+                    <div class="submit">
+                        <button id="alterar">Alterar Dados</button>
+                </form>
+                <a href="/logout" id="sair">Sair</a>
             </div>
-        </main>
+        </div>
+    </header>
+    <main>
+        <!--chamados em análise-->
+        <p class="chamado-analise">Chamados em Análise</p>
+        {% if Values == 0 or leitoraberto == 0%}
+        <div class="box-req">
+            <p id="btnaceitar" class="btnrejeitar">Sem requisições para análise no momento</p>
+        </div>
+        {% else %}
+        {% for solicitacao in Details %}
+        {% if solicitacao[3] =="Aberta" %}
+        <details>
+            <summary>
+                <p>{{solicitacao[1]}}</p>
+                <!--variavel titulo-->
+                {% if solicitacao[4] == 'Problemas de Hardware'%}
+                <img class="icon" src="../static/images/Hardware.png" alt="icon">
+                <!--variavel icon-->
+                {% elif solicitacao[4] == 'Problemas de Software'%}
+                <img class="icon" src="../static/images/Software.png" alt="icon">
+                {%else%}
+                <img class="icon" src="../static/images/Info.png" alt="icon">
+                {%endif%}
+            </summary>
+            <div class="conteudo">
+                <p>Tipo: <span>{{solicitacao[4]}}</span></p>
+                <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
+            </div>
+            <!-- <form action="/executor/chamadas-exec"> -->
+            <div class="rejeitar-aceitar">
+                <button class="rejeitar btnrejeitar" type="submit">Rejeitar</button>
+                <button class="aceitar" type="submit" id="btnaceitar">Aceitar</button>
+            </div>
+        </details>
+        <div id="rejeitar" class="modal">
+            <div class="card-conclu">
+                <main>
+                    <div class="icon-fechar"></div>
+                    <p class="conclusao-chamado"> Rejeição de Chamado </p>
+                    <div class="card-2">
+                        <div class="info-conclu">
+                            <p class="titulo-conclu">{{solicitacao[1]}}</p>
+                            <!--variavel titulo-->
+                            <p>{{solicitacao[7]}}</p>
+                        </div>
+                        <div class="conteudo-conclu">
+                            <p class="tipo-conclu">Tipo: <span>{{solicitacao[4]}}</span></p>
+                            <p class="descricao-conclu">Descrição: <span>{{solicitacao[2]}}</span></p>
+                        </div>
+                    </div>
+                    <div class="botao-concluir">
+                        <form action="/recusando_adm/{{solicitacao.0}}" method="POST">
+                            <textarea name="codigo" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
+                            <button class="bot-conclu" type="submit">Rejeitar Chamado</button>
+                        </form>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <div id="aceitar" class="modal">
+            <div class="box-aceitar">
+                <div class="icon-fechar"></div>
+                <p>Chamada Aceita</p>
+                <form action="/aceitando_adm/{{solicitacao.0}}" method="POST">
+                    <button class="aceitar" type="submit">Aceitar</button>
+                </form>
+            </div>
+        </div>
+        {%endif%}
+        {% endfor %}
+        {% endif %}
 
-<!--script-->
-        
-        <script>
-            var modalperfil = document.getElementById("perfil");
-            var btnsperfil = document.getElementsByClassName("btnperfil")[0];
-            var fechar = document.getElementsByClassName("icon-fechar")[0];
 
-            
-            var modalaceitar = document.getElementById("aceitar");
-            var modalrejeitar = document.getElementById("rejeitar");
-            var modalconcluir = document.getElementById("concluir");
-            var btnsaceitar = document.getElementById("btnaceitar");
-            var btnsrejeitar = document.getElementsByClassName("btnrejeitar")[0];
-            var btnsconcluir = document.getElementsByClassName("btnconcluir")[0];
-            var fechar = document.getElementsByClassName("icon-fechar")[0];
-            
-            btnsaceitar.onclick = function() {
-                modalaceitar.style.display = "block";
-            }
-            btnsrejeitar.onclick = function() {
-                modalrejeitar.style.display = "block";
-            }
-            
-            btnsperfil.onclick = function() {
-                modalperfil.style.display = "block";
-            }
-            
-            btnsconcluir.onclick = function() {
-                modalconcluir.style.display = "block";
-            }
-            fechar.onclick = function() {
+        <!--chamados andamento-->
+        <p class="chamado-andamento">Chamados em Andamento</p>
+        {% if Values == 0 or leitorandamento == 0%}
+        <div class="box-req">
+            <p class="btnconcluir">Sem chamados em andamento no momento</p>
+
+        </div>
+        {%else%}
+        {% for solicitacao in Details %}
+        {%if solicitacao[3] == 'Andamento' %}
+        <details>
+            <summary>
+                <p>{{solicitacao[1]}}</p>
+                <!--variavel titulo-->
+                {% if solicitacao[4] == 'Problemas de Hardware'%}
+                <img class="icon" src="../static/images/Hardware.png" alt="icon">
+                <!--variavel icon-->
+                {% elif solicitacao[4] == 'Problemas de Software'%}
+                <img class="icon" src="../static/images/Software.png" alt="icon">
+                {%else%}
+                <img class="icon" src="../static/images/Info.png" alt="icon">
+                {%endif%}
+
+            </summary>
+            <div class="conteudo">
+                <p>Tipo: <span>{{solicitacao[4]}}
+                        <!--variavel tipo-->
+                    </span></p>
+                <p>Descrição: <span>{{solicitacao[2]}}
+                        <!--variavel descricao-->
+                    </span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
+            </div>
+            <div class="rejeitar-aceitar">
+                <button class="concluir btnconcluir" type="submit">Concluir</button>
+            </div>
+        </details>
+        <div id="concluir" class="modal">
+            <div class="card-conclu">
+                <main>
+                    <div class="icon-fechar"></div>
+                    <p class="conclusao-chamado"> Conclusão de Chamada </p>
+                    <div class="card-2">
+                        <div class="info-conclu">
+                            <p class="titulo-conclu">{{solicitacao[1]}}</p>
+                            <!--variavel titulo-->
+                            <p>{{solicitacao[7]}}</p>
+                        </div>
+                        <div class="conteudo-conclu">
+                            <p class="tipo-conclu">Tipo: <span>{{solicitacao[4]}}</span></p>
+                            <p class="descricao-conclu">Descrição: <span>{{solicitacao[2]}}</span></p>
+                        </div>
+                    </div>
+                    <div class="botao-concluir">
+                        <form action="/andamento_adm/{{solicitacao.0}}" method="POST">
+                            <textarea name="comentario" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
+                            <button class="bot-conclu" type="submit">Concluir Chamado</button>
+                        </form>
+                    </div>
+                </main>
+            </div>
+        </div>
+        {%endif%}
+        {%endfor%}
+        {%endif%}
+
+
+
+        <!--chamados fechado-->
+        <p class="chamado-fechada">Chamados Fechados</p>
+        {% if leitorfechado == 0 or Values==0 %}
+        <div class="box-req">
+            <p>Sem chamados fechadas no momento</p>
+        </div>
+        {%else%}
+        {% for solicitacao in Details %}
+        {%if solicitacao[3] == 'Fechada'%}
+        <details>
+            <summary>
+                <p>{{solicitacao[1]}}</p>
+                <!--variavel titulo-->
+                {% if solicitacao[4] == 'Problemas de Hardware'%}
+                <img class="icon" src="../static/images/Hardware.png" alt="icon">
+                <!--variavel icon-->
+                {% elif solicitacao[4] == 'Problemas de Software'%}
+                <img class="icon" src="../static/images/Software.png" alt="icon">
+                {%else%}
+                <img class="icon" src="../static/images/Info.png" alt="icon">
+                {%endif%}
+            </summary>
+            <div class="conteudo">
+                <p>Tipo: <span>{{solicitacao[4]}}
+                        <!--variavel tipo-->
+                    </span></p>
+                <p>Descrição: <span>{{solicitacao[2]}}
+                        <!--variavel descricao-->
+                    </span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
+            </div>
+            <div class="aaa">
+                <p class="detalhes-fechamento">Comentário Executor: <span></span></p>
+                <div class="caras">
+                    {% if solicitacao[10]==1 %}
+                    <img src='../static/images/pessimo.png'>
+                    {% elif solicitacao[10]==2 %}
+                    <img src='../static/images/ruim.png'>
+                    {% elif solicitacao[10]==3 %}
+                    <img src='../static/images/mediano.png'>
+                    {% elif solicitacao[10]==4 %}
+                    <img src='../static/images/bom.png'>
+                    {% elif solicitacao[10]==5 %}
+                    <img src='../static/images/otimo.png'>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="texto-fechamento"> <span>{{solicitacao[5]}} </span> </div>
+            {%if solicitacao[11] != none %}
+            <p>FeedBack:</p>
+            <div class="texto-fechamento"> <span>{{solicitacao[11]}} </span> </div>
+            {%endif%}
+        </details>
+        {%endif%}
+        {%endfor%}
+        {%endif%}
+
+        <!--Legendas-->
+        <p class="tipo-legenda">Tipos de Problemas</p>
+        <div class="legenda">
+            <div class="hardware">
+                <div>
+                    <p class="categoria">Problemas de Hardware</p>
+                    <p class="quant">Quantidade:{{cont_hardware}}</p>
+                    <!--variavel de quantidade-->
+                </div>
+                <img class="icon" src="../../static/images/Hardware.png" alt="icon">
+            </div>
+
+            <div class="software">
+                <div>
+                    <p class="categoria">Problemas de Software</p>
+                    <p class="quant">Quantidade:{{cont_software}}</p>
+                    <!--variavel de quantidade-->
+                </div>
+                <img class="icon" src="../../static/images/Software.png" alt="icon">
+            </div>
+
+            <div class="info">
+                <div>
+                    <p class="categoria">Esclarecimento/informação</p>
+                    <p class="quant">Quantidade:{{cont_duv}}</p>
+                    <!--variavel de quantidade-->
+                </div>
+                <img class="icon" src="../../static/images/Info.png" alt="icon">
+            </div>
+        </div>
+    </main>
+
+    <!--script-->
+
+    <script>
+        var modalperfil = document.getElementById("perfil");
+        var btnsperfil = document.getElementsByClassName("btnperfil")[0];
+        var fechar = document.getElementsByClassName("icon-fechar")[0];
+
+
+        var modalaceitar = document.getElementById("aceitar");
+        var modalrejeitar = document.getElementById("rejeitar");
+        var modalconcluir = document.getElementById("concluir");
+        var btnsaceitar = document.getElementById("btnaceitar");
+        var btnsrejeitar = document.getElementsByClassName("btnrejeitar")[0];
+        var btnsconcluir = document.getElementsByClassName("btnconcluir")[0];
+        var fechar = document.getElementsByClassName("icon-fechar")[0];
+
+        btnsaceitar.onclick = function () {
+            modalaceitar.style.display = "block";
+        }
+        btnsrejeitar.onclick = function () {
+            modalrejeitar.style.display = "block";
+        }
+
+        btnsperfil.onclick = function () {
+            modalperfil.style.display = "block";
+        }
+
+        btnsconcluir.onclick = function () {
+            modalconcluir.style.display = "block";
+        }
+        fechar.onclick = function () {
+            modalaceitar.style.display = "none";
+        }
+        fechar.onclick = function () {
+            modalrejeitar.style.display = "none";
+        }
+        fechar.onclick = function () {
+            modalconcluir.style.display = "none";
+        }
+        fechar.onclick = function () {
+            modalperfil.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modalaceitar) {
                 modalaceitar.style.display = "none";
             }
-            fechar.onclick = function() {
-                modalrejeitar.style.display = "none";
-            }
-            fechar.onclick = function() {
-                modalconcluir.style.display = "none";
-            }
-            fechar.onclick = function() {
-                modalperfil.style.display = "none";
-            }
-            window.onclick = function(event) {
-              if (event.target == modalaceitar) {
-                modalaceitar.style.display = "none";
-              }
 
-              if (event.target == modalrejeitar) {
+            if (event.target == modalrejeitar) {
                 modalrejeitar.style.display = "none";
-              }
-              if (event.target == modalconcluir) {
-                modalconcluir.style.display = "none";
-              }
-              if (event.target == modalperfil) {
-                modalperfil.style.display = "none";
-              }
             }
-            </script>
-    </body>
+            if (event.target == modalconcluir) {
+                modalconcluir.style.display = "none";
+            }
+            if (event.target == modalperfil) {
+                modalperfil.style.display = "none";
+            }
+        }
+    </script>
+</body>
+
 </html>

@@ -42,19 +42,16 @@ def exec():
         Cursor.execute("SELECT id_user FROM solicitacao WHERE id_user = %s", (pk_user,))
         conta = Cursor.fetchone()  
 
-        Cursor.execute("SELECT * from solicitacao")
-        image = Cursor.fetchall()
-
 
         cont_hardware=Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Hardware' and id_user= %s",(pk_user,))
         cont_software= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Software' and id_user =%s", (pk_user,))
         cont_duv= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and id_user =%s", (pk_user,))
         leitoraberto= Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and id_user =%s",(pk_user,))
         leitorfechado= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Fechada' and id_user =%s",(pk_user,))
-        Values = Cursor.execute("SELECT * FROM solicitacao WHERE id_user= %s",(pk_user,))
+        Values = Cursor.execute("SELECT * FROM solicitacao WHERE id_user= %s order by id_sol DESC",(pk_user,))
         if Values > 0:
             Details = Cursor.fetchall()
-            return render_template('/home-exec.html', Details=Details,Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto=leitoraberto,leitorfechado=leitorfechado,conta=conta,senha=senha,email=email, nome = nome,filename=image)
+            return render_template('/home-exec.html', Details=Details,Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto=leitoraberto,leitorfechado=leitorfechado,conta=conta,senha=senha,email=email, nome = nome)
         else:
             return render_template('/home-exec.html', Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,pk_user=pk_user,senha=senha,email=email, nome = nome )
             
@@ -80,7 +77,7 @@ def ExecChamada():
         leitorfechado= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Fechada' and not id_user =%s and id_fechador= %s",(pk_user,pk_user,))
         leitorandamento= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Andamento' and not id_user =%s and id_fechador= %s",(pk_user,pk_user,))
 
-        Values=Cursor.execute("SELECT * FROM solicitacao")
+        Values=Cursor.execute("SELECT * FROM solicitacao order by id_sol DESC")
 
     if Values > 0:
         Details = Cursor.fetchall()

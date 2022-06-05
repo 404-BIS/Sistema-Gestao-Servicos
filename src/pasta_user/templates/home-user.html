@@ -87,7 +87,7 @@
             </summary>
             <div class="card-completo">
                 <div class="conteudo">
-                    <p>Tipo: <span>{{solicitacao[1]}}</span></p>
+                    <p>Tipo: <span>{{solicitacao[4]}}</span></p>
                     <p>Descrição: <span>{{solicitacao[2]}}</span></p>
                     {% if solicitacao[6]!=''%}
                     <p>Anexo:</p>
@@ -112,6 +112,7 @@
             <p>Sem requisições abertas no momento</p>
         </div>
         {%endif%}
+
         {% for solicitacao in Details %}
         {% if solicitacao[3] =="Fechada" and solicitacao[9] == conta[0] %}
         <details>
@@ -131,9 +132,19 @@
                 <p>Tipo: <span>{{solicitacao[4]}}</span></p>
                 <p>{{solicitacao[8]}}</p>
                 <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+                {% if solicitacao[6]!=''%}
+                <p>Anexo:</p>
+                <div>
+                    <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
+                </div>
+                {% else %}
+                {% endif %}
             </div>
+            {%if solicitacao[10] == 1 or solicitacao[10] == 2 or solicitacao[10] == 3 or solicitacao[10] == 4 or
+            solicitacao[10] == 5%}
             <div class="aaa">
-                <p class="detalhes-fechamento"> Requisição Fechada por: <span></span></p>
+                <p class="detalhes-fechamento">Comentário Executor: <span></span></p>
+
                 <div class="caras">
                     {% if solicitacao[10]==1 %}
                     <img src='../static/images/pessimo.png'>
@@ -148,13 +159,15 @@
                     {% endif %}
                 </div>
             </div>
+            {%endif%}
             {%if solicitacao[10] != 1 and solicitacao[10] != 2 and solicitacao[10] != 3 and solicitacao[10] != 4 and
             solicitacao[10] != 5%}
+  
             <div class="avaliar">
-                <p class="detalhes-fechamento"> Requisição Fechada por: <span> </span></p>
+                <p class="detalhes-fechamento">Comentário Executor: <span></span></p>
                 <button class="avaliar btnavaliar" type="submit">Avaliar</button>
             </div>
-
+     
             <div id="avaliar" class="modal">
                 <div class="icon-fechar"></div>
                 <form class="avaliacao" action="/avaliar/{{solicitacao.0}}" method="POST">
