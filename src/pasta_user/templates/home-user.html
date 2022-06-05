@@ -1,243 +1,266 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
-    </head>
-    <body>
-        <header>
-            <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button> 
-            {% if current_user.is_authenticated %}
-                Hi {{ current_user.name }}!
-            {% endif %}
-            <nav>
-                <a class="minha-req" href="/usuario/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas Requisições</a>
-                <a href="/usuario/solicitacao">
-                <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
-                </a>
-            </nav>
-            <div id="perfil" class="modal">
-                <div class="icon-fechar"></div>
-                <div class="profile">
-            
-                    <div class="header">
-                        <b>Meu Perfil</b>
-                    </div>
-                    <form class="form-perfil" action="/perfil" method='POST'>
-                        <div class="informations">
-                            <div>
-                                <label>Nome</label>
-                                <input name="nome" type="name" placeholder="{{nome}}">
-                                <label>Email</label>
-                                <input name="troca_email" type="email" placeholder="{{email}}">
-                            </div>
-                
-                            <div class="linha-vertical"></div>
-                
-                            <div>
-                                <label>Senha</label>
-                                <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
-                            </div>
-                        </div>
-                
-                        <div class="submit">
-                            <button id="alterar">Alterar Dados</button>
-                            </form>
-                            <a href="/logout" id="sair">Deslogar</a>
-                        </div>
-                    </div>
-        </header>
-        <main>
-            <p class="req-aberta">Requisições Abertas  </p>
 
-            {%  if leitoraberto == 0 or Values ==0 %}
-                <div class="box-req">
-                <p>Sem requisições abertas no momento</p>
-                </div>
-            {% endif %}
-            {% for solicitacao in Details %}   
-                {% if solicitacao[3] =="Aberta" and solicitacao[9] == conta[0] %}
-                    <details>
-                        <summary>
-                            <p>{{solicitacao[1]}}</p><!--variavel titulo-->
-                            {% if solicitacao[4] == 'Problemas de Hardware'%}
-                                <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                            {% elif solicitacao[4] == 'Problemas de Software'%}
-                                <img class="icon" src="../static/images/Software.png" alt="icon">
-                            {%else%}
-                                <img class="icon" src="../static/images/Info.png" alt="icon">
-                            {%endif%}
-                        </summary>
-                        <div class="conteudo">
-                            <p>Tipo: <span>{{solicitacao[1]}}</span></p>
-                            <p>Descrição: <span>{{solicitacao[2]}}</span></p>
-                        </div>
-                        <form action="/usuario/{{solicitacao.0}}" method='POST'>
-                            <button class="botao-padrao" type="submit">Apagar</button>             
-                        </form>  
-                    </details>
-                {% endif %}
-            {% endfor %}
-            <p class="req-fechada">Requisições Fechadas</p>
-            {%  if leitorfechado == 0 or Values==0 %}
-                <div class="box-req">
-                <p>Sem requisições abertas no momento</p>
-                </div>
-            {%endif%}
-            {% for solicitacao in Details %}   
-            {% if solicitacao[3] =="Fechada" and solicitacao[9] == conta[0] %}
-            <details>
-                <summary>
-                    <p>{{solicitacao[1]}}</p><!--variavel titulo-->
-                    {% if solicitacao[4] == 'Problemas de Hardware'%}
-                        <img class="icon" src="../static/images/Hardware.png" alt="icon"> <!--variavel icon-->
-                    {% elif solicitacao[4] == 'Problemas de Software'%}
-                        <img class="icon" src="../static/images/Software.png" alt="icon">
-                    {%else%}
-                        <img class="icon" src="../static/images/Info.png" alt="icon">
-                    {%endif%}
-                </summary>
-                <div class="conteudo">
-                    <p>Tipo: <span>{{solicitacao[4]}}</span></p>
-                    <p>{{solicitacao[8]}}</p>
-                    <p>Descrição: <span>{{solicitacao[2]}}</span></p>
-                </div>
-                <div class="aaa"> 
-                    <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}}</span></p> 
-                    <div class="caras">
-                        {% if solicitacao[10]==1 %}
-                            <img src='../static/images/pessimo.png'>
-                        {% elif solicitacao[10]==2 %}
-                            <img src='../static/images/ruim.png'>
-                        {% elif solicitacao[10]==3 %}
-                            <img src='../static/images/mediano.png'>
-                        {% elif solicitacao[10]==4 %}
-                            <img src='../static/images/bom.png'>
-                        {% elif solicitacao[10]==5 %}
-                            <img src='../static/images/otimo.png'>
-                        {% endif %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+</head>
+
+<body>
+    <header>
+    <nav>
+        <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
+        {% if current_user.is_authenticated %}
+        Hi {{ current_user.name }}!
+        {% endif %}
+        <input type="checkbox" id="click">
+        <label for="click" class="menu-btn">
+            <i class="fas fa-bars"></i>
+        </label>
+        <ul>
+            <li class="dropdown"><a class="minha-req" href="/usuario/menu"><img class="icon-req"
+                        src="../../static/images/Requisição.svg"> Minhas Requisições</a></li>
+            <li class="dropdown">
+                <a href="/usuario/solicitacao">
+                    <button class="nova-req"> <img class="icon-mais" src="../../static/images/Mais.svg">Nova
+                        Requisição</button>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="perfil" class="modal">
+        <div class="icon-fechar"></div>
+        <div class="profile">
+
+            <div class="header">
+                <b>Meu Perfil</b>
+            </div>
+            <form class="form-perfil" action="/perfil" method='POST'>
+                <div class="informations">
+                    <div>
+                        <label>Nome</label>
+                        <input name="nome" type="name" placeholder="{{nome}}">
+                        <label>Email</label>
+                        <input name="troca_email" type="email" placeholder="{{email}}">
+                    </div>
+
+                    <div class="linha-vertical"></div>
+
+                    <div>
+                        <label>Senha</label>
+                        <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
                     </div>
                 </div>
-                {%if solicitacao[10] != 1 and solicitacao[10] != 2 and solicitacao[10] != 3 and solicitacao[10] != 4 and solicitacao[10] != 5%}
-                <div class="avaliar">
-                    <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}} </span></p> 
-                    <button class="avaliar btnavaliar" type="submit">Avaliar</button>
+
+                <div class="submit">
+                    <button id="alterar">Alterar Dados</button>
+            </form>
+            <a href="/logout" id="sair">Deslogar</a>
+        </div>
+    </div>
+    </header>
+    <main>
+        <p class="req-aberta">Requisições Abertas </p>
+
+        {% if leitoraberto == 0 or Values ==0 %}
+        <div class="box-req">
+            <p>Sem requisições abertas no momento</p>
+        </div>
+        {% endif %}
+        {% for solicitacao in Details %}
+        {% if solicitacao[3] =="Aberta" and solicitacao[9] == conta[0] %}
+        <details>
+            <summary>
+                <p>{{solicitacao[1]}}</p>
+                <!--variavel titulo-->
+                {% if solicitacao[4] == 'Problemas de Hardware'%}
+                <img class="icon" src="../static/images/Hardware.png" alt="icon">
+                <!--variavel icon-->
+                {% elif solicitacao[4] == 'Problemas de Software'%}
+                <img class="icon" src="../static/images/Software.png" alt="icon">
+                {%else%}
+                <img class="icon" src="../static/images/Info.png" alt="icon">
+                {%endif%}
+            </summary>
+            <div class="conteudo">
+                <p>Tipo: <span>{{solicitacao[1]}}</span></p>
+                <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+            </div>
+            <form action="/usuario/{{solicitacao.0}}" method='POST'>
+                <button class="botao-padrao" type="submit">Apagar</button>
+            </form>
+        </details>
+        {% endif %}
+        {% endfor %}
+        <p class="req-fechada">Requisições Fechadas</p>
+        {% if leitorfechado == 0 or Values==0 %}
+        <div class="box-req">
+            <p>Sem requisições abertas no momento</p>
+        </div>
+        {%endif%}
+        {% for solicitacao in Details %}
+        {% if solicitacao[3] =="Fechada" and solicitacao[9] == conta[0] %}
+        <details>
+            <summary>
+                <p>{{solicitacao[1]}}</p>
+                <!--variavel titulo-->
+                {% if solicitacao[4] == 'Problemas de Hardware'%}
+                <img class="icon" src="../static/images/Hardware.png" alt="icon">
+                <!--variavel icon-->
+                {% elif solicitacao[4] == 'Problemas de Software'%}
+                <img class="icon" src="../static/images/Software.png" alt="icon">
+                {%else%}
+                <img class="icon" src="../static/images/Info.png" alt="icon">
+                {%endif%}
+            </summary>
+            <div class="conteudo">
+                <p>Tipo: <span>{{solicitacao[4]}}</span></p>
+                <p>{{solicitacao[8]}}</p>
+                <p>Descrição: <span>{{solicitacao[2]}}</span></p>
+            </div>
+            <div class="aaa">
+                <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}}</span></p>
+                <div class="caras">
+                    {% if solicitacao[10]==1 %}
+                    <img src='../static/images/pessimo.png'>
+                    {% elif solicitacao[10]==2 %}
+                    <img src='../static/images/ruim.png'>
+                    {% elif solicitacao[10]==3 %}
+                    <img src='../static/images/mediano.png'>
+                    {% elif solicitacao[10]==4 %}
+                    <img src='../static/images/bom.png'>
+                    {% elif solicitacao[10]==5 %}
+                    <img src='../static/images/otimo.png'>
+                    {% endif %}
                 </div>
-            
+            </div>
+            {%if solicitacao[10] != 1 and solicitacao[10] != 2 and solicitacao[10] != 3 and solicitacao[10] != 4 and
+            solicitacao[10] != 5%}
+            <div class="avaliar">
+                <p class="detalhes-fechamento"> Requisição Fechada por: <span> {{solicitacao[6]}} </span></p>
+                <button class="avaliar btnavaliar" type="submit">Avaliar</button>
+            </div>
+
             <div id="avaliar" class="modal">
                 <div class="icon-fechar"></div>
-                <form class="avaliacao" action="/avaliar/{{solicitacao.0}}" method="POST"> 
-                        <div class="icon-fechar"></div>
-                        <div class="header">
-                            <b>Avaliação</b>
-                            <!--<button><span class="material-icons close">close</span></button>-->
+                <form class="avaliacao" action="/avaliar/{{solicitacao.0}}" method="POST">
+                    <div class="icon-fechar"></div>
+                    <div class="header">
+                        <b>Avaliação</b>
+                        <!--<button><span class="material-icons close">close</span></button>-->
+                    </div>
+                    <div class="caras">
+                        <div>
+                            <img src="../static/images/pessimo.png">
+                            <span>Péssimo</span>
+                            <input name="pes" value="1" type="checkbox"></input>
                         </div>
-                        <div class="caras">      
-                            <div>     
-                                <img src="../static/images/pessimo.png">
-                                <span>Péssimo</span>
-                                <input name="pes" value="1" type="checkbox"></input>
-                            </div>
-                            <div>  
-                                <img src='../static/images/ruim.png'>
-                                <span>Ruim</span>
-                                <input name="ruim" value="2" type="checkbox"></input>
-                            </div>
-                            
-                            <div>
-                                <img src="../static/images/mediano.png">
-                                <span>Mediano</span>
-                                <input name="med" value="3" type="checkbox"></input>
-                            </div>
-                            <div>
-                                <img src='../static/images/bom.png'>
-                                <span>Bom</span>
-                                <input name="bom" value="4" type="checkbox"></input>
-                            </div>
+                        <div>
+                            <img src='../static/images/ruim.png'>
+                            <span>Ruim</span>
+                            <input name="ruim" value="2" type="checkbox"></input>
+                        </div>
 
-                            <div>
-                                <img src='../static/images/otimo.png'>
-                                <span>Ótimo</span>
-                                <input name="otimo" value="5"type="checkbox"></input>
-                            </div>
+                        <div>
+                            <img src="../static/images/mediano.png">
+                            <span>Mediano</span>
+                            <input name="med" value="3" type="checkbox"></input>
                         </div>
-                        <textarea placeholder="Descreva sua avaliação" name="avaliacao"></textarea>
-                        <div class="submit">
-                            <button >Avaliar</button>
+                        <div>
+                            <img src='../static/images/bom.png'>
+                            <span>Bom</span>
+                            <input name="bom" value="4" type="checkbox"></input>
                         </div>
+
+                        <div>
+                            <img src='../static/images/otimo.png'>
+                            <span>Ótimo</span>
+                            <input name="otimo" value="5" type="checkbox"></input>
+                        </div>
+                    </div>
+                    <textarea placeholder="Descreva sua avaliação" name="avaliacao"></textarea>
+                    <div class="submit">
+                        <button>Avaliar</button>
+                    </div>
                 </form>
             </div>
             {%endif%}
             <div class="texto-fechamento">
-                <span> {{solicitacao[5]}}</span>    
+                <span> {{solicitacao[5]}}</span>
             </div>
         </details>
         {% endif %}
         {% endfor %}
-            
 
-            <p class="tipo-legenda">Tipos de Problemas</p>
-            <div class="legenda">
-                <div class="hardware">
-                    <div>
-                        <p class="categoria">Problemas de Hardware</p>
-                        <p class="quant">Quantidade:{{cont_hardware}}</p> <!--variavel de quantidade-->
-                    </div>    
-                    <img class="icon" src="../../static/images/Hardware.png" alt="hardware">
-                </div>   
-    
-                <div class="software">
-                    <div>
-                        <p class="categoria">Problemas de Software</p>
-                        <p class="quant">Quantidade:{{cont_software}}</p> <!--variavel de quantidade-->
-                    </div>    
-                    <img class="icon" src="../../static/images/Software.png" alt="hardware">
-                </div>  
-    
-                <div class="info">
-                    <div>
-                        <p class="categoria">Dúvidas/Esclarecimentos</p>
-                        <p class="quant">Quantidade:{{cont_duv}}</p> <!--variavel de quantidade-->
-                    </div>    
-                    <img class="icon" src="../../static/images/Info.png" alt="hardware">
-                </div>  
+
+        <p class="tipo-legenda">Tipos de Problemas</p>
+        <div class="legenda">
+            <div class="hardware">
+                <div>
+                    <p class="categoria">Problemas de Hardware</p>
+                    <p class="quant">Quantidade:{{cont_hardware}}</p>
+                    <!--variavel de quantidade-->
+                </div>
+                <img class="icon" src="../../static/images/Hardware.png" alt="hardware">
             </div>
-        </main>
-        <script>
-            var modalperfil = document.getElementById("perfil");
-            var btnsperfil = document.getElementsByClassName("btnperfil")[0];
-            var fechar = document.getElementsByClassName("icon-fechar")[0];
 
-            btnsperfil.onclick = function() {
-                modalperfil.style.display = "block";
-            }
-            fechar.onclick = function() {
+            <div class="software">
+                <div>
+                    <p class="categoria">Problemas de Software</p>
+                    <p class="quant">Quantidade:{{cont_software}}</p>
+                    <!--variavel de quantidade-->
+                </div>
+                <img class="icon" src="../../static/images/Software.png" alt="hardware">
+            </div>
+
+            <div class="info">
+                <div>
+                    <p class="categoria">Dúvidas/Esclarecimentos</p>
+                    <p class="quant">Quantidade:{{cont_duv}}</p>
+                    <!--variavel de quantidade-->
+                </div>
+                <img class="icon" src="../../static/images/Info.png" alt="hardware">
+            </div>
+        </div>
+    </main>
+    <script>
+        var modalperfil = document.getElementById("perfil");
+        var btnsperfil = document.getElementsByClassName("btnperfil")[0];
+        var fechar = document.getElementsByClassName("icon-fechar")[0];
+
+        btnsperfil.onclick = function () {
+            modalperfil.style.display = "block";
+        }
+        fechar.onclick = function () {
+            modalperfil.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modalperfil) {
                 modalperfil.style.display = "none";
             }
-            window.onclick = function(event) {
-              if (event.target == modalperfil) {
-                modalperfil.style.display = "none";
-              }
-            }
-            // var modalavaliar = document.getElementById("avaliar");
-            var modalconcluir = document.getElementById("avaliar");
-            var btnsconcluir = document.getElementsByClassName("btnavaliar")[0];
-            var fechar = document.getElementsByClassName("icon-fechar")[0];
+        }
+        // var modalavaliar = document.getElementById("avaliar");
+        var modalconcluir = document.getElementById("avaliar");
+        var btnsconcluir = document.getElementsByClassName("btnavaliar")[0];
+        var fechar = document.getElementsByClassName("icon-fechar")[0];
 
-            btnsconcluir.onclick = function() {
-                modalconcluir.style.display = "block";
-            }
+        btnsconcluir.onclick = function () {
+            modalconcluir.style.display = "block";
+        }
 
-            fechar.onclick = function() {
+        fechar.onclick = function () {
+            modalconcluir.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modalconcluir) {
                 modalconcluir.style.display = "none";
             }
+        }
+    </script>
+</body>
 
-            window.onclick = function(event) {
-              if (event.target == modalconcluir) {
-                modalconcluir.style.display = "none";
-              }
-            }
-        </script>
-    </body>
 </html>

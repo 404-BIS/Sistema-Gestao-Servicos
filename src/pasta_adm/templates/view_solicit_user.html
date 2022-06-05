@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     <style type="text/css">
         .info-user {
             display: flex;
@@ -155,19 +156,21 @@
 
 <body>
     <header>
-        <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button>
         <nav>
-            <a class="minha-chamada" href="/adm"> Controle de usuários </a>
+            <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
+            <input type="checkbox" id="click">
+            <label for="click" class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </label>
             <ul>
+                <li class="dropdown"><a class="minha-chamada" href="/adm"> Controle de usuários </a></li>
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">Requisições do Sistema</a>
                     <div class="dropdown-content">
                         <a href="/adm/requisicoes">Todas as Requsições</a>
-                        <a href="/adm/estatisticas">Estatísticas das requisições</a>
+                        <a href="/adm/estatisticas">Estatisticas das requisições</a>
                     </div>
                 </li>
-            </ul>
-            <ul>
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">Minhas Requisições</a>
                     <div class="dropdown-content">
@@ -177,14 +180,15 @@
                 </li>
             </ul>
         </nav>
+
         <div id="perfil" class="modal">
             <div class="icon-fechar"></div>
             <div class="profile">
-        
+
                 <div class="header">
                     <b>Meu Perfil</b>
                 </div>
-        
+
                 <form action="/perfil_adm" method='POST'>
                     <div class="informations">
                         <div>
@@ -193,21 +197,21 @@
                             <label>Email</label>
                             <input name="troca_email" type="email" placeholder="{{email}}">
                         </div>
-            
+
                         <div class="linha-vertical"></div>
-            
+
                         <div>
                             <label>Senha</label>
                             <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
                         </div>
                     </div>
-            
+
                     <div class="submit">
                         <button id="alterar">Alterar Dados</button>
-                        </form>
-                        <a href="/logout" id="sair">Deslogar</a>
-                    </div>
-                </div>
+                </form>
+                <a href="/logout" id="sair">Deslogar</a>
+            </div>
+        </div>
     </header>
     <main>
         <p class="chamado-analise">Chamados em Análise do {{nome[0]}}</p>

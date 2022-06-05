@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
         <style type="text/css"> 
             /* Style Modal Aceitar Chamado*/
             .box-aceitar{
@@ -136,14 +137,23 @@
     </head>
     <body>
         <header>
-            <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button> 
             <nav>
-                <a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg"> Meus Chamados</a>
-                <a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg"> Minhas Requisições</a>
-                <a href="/executor/solicitacao">
-                <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
-                </a>
+                <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
+                <input type="checkbox" id="click">
+                <label for="click" class="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </label>
+                <ul>
+                    <li class="dropdown"><a class="minha-chamada" href="/executor/chamadas-exec"><img class="icon-chamada" src="../../static/images/Manutencao.svg">Meus Chamados</a></li>
+                    <li class="dropdown"><a class="minha-req" href="/executor/menu"><img class="icon-req" src="../../static/images/Requisição.svg">Minhas requisições</a></li>
+                    <li class="dropdown">
+                        <a href="/executor/solicitacao">
+                            <button class="nova-req"> <img class="icon-mais"src="../../static/images/Mais.svg">Nova Requisição</button>
+                        </a>
+                    </li>
+                </ul>
             </nav>
+            
             <div id="perfil" class="modal">
                 <div class="icon-fechar"></div>
                 <div class="profile">

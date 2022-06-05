@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"
         integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -30,19 +31,21 @@
 
 <body>
     <header>
-        <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button>
         <nav>
-            <a class="minha-chamada" href="/adm"> Controle de usuários </a>
+            <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
+            <input type="checkbox" id="click">
+            <label for="click" class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </label>
             <ul>
+                <li class="dropdown"><a class="minha-chamada" href="/adm"> Controle de usuários </a></li>
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">Requisições do Sistema</a>
                     <div class="dropdown-content">
                         <a href="/adm/requisicoes">Todas as Requsições</a>
-                        <a href="/adm/estatisticas">Estatísticas das requisições</a>
+                        <a href="/adm/estatisticas">Estatisticas das requisições</a>
                     </div>
                 </li>
-            </ul>
-            <ul>
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">Minhas Requisições</a>
                     <div class="dropdown-content">
@@ -52,6 +55,7 @@
                 </li>
             </ul>
         </nav>
+
         <div id="perfil" class="modal">
             <div class="icon-fechar"></div>
             <div class="profile">
