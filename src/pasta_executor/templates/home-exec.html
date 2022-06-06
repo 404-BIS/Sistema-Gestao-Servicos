@@ -23,7 +23,7 @@
         <header>
             <nav>
                 <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
-                <input type="checkbox" id="click">
+                <input class="check-hamburguer" type="checkbox" id="click">
                 <label for="click" class="menu-btn">
                     <i class="fas fa-bars"></i>
                 </label>
@@ -41,42 +41,36 @@
             <div id="perfil" class="modal">
                 <div class="icon-fechar"></div>
                 <div class="profile">
-            
+    
                     <div class="header">
                         <b>Meu Perfil</b>
                     </div>
-                    <form action="/perfil_exec" method='POST'>
+    
+                    <form action="/perfil_adm" method='POST'>
                         <div class="informations">
                             <div>
                                 <label>Nome</label>
+    
                                 <input name="nome" type="name" placeholder="{{nome}}" required>
                                 <label>Email</label>
                                 <input name="troca_email" type="email" placeholder="{{email}}" required>
                             </div>
-                
+    
                             <div class="linha-vertical"></div>
-                
+    
                             <div>
                                 <label>Senha</label>
-                                <input name="troca_senha" type="password" placeholder="{{senha[0]}}">
+                                <input name="troca_senha" type="password" placeholder="{{senha[0]}}" required>
+    
                             </div>
-
                         </div>
-
-                        <div class="linha-vertical"></div>
-
-                        <div>
-                            <label>Senha</label>
-                            <input name="troca_senha" type="password" placeholder="{{senha[0]}}" required>
-                        </div>
-                    </div>
-
-                    <div class="submit">
-                        <button id="alterar">Alterar Dados</button>
-                </form>
-                <a href="/logout" id="sair">Sair</a>
+    
+                        <div class="submit">
+                            <button id="alterar">Alterar Dados</button>
+                    </form>
+                    <a href="/logout" id="sair">Sair</a>
+                </div>
             </div>
-        </div>
     </header>
 
     <main>
@@ -114,11 +108,10 @@
                     {% else %}
                     {% endif %}
 
+                    <form action="/executor/{{solicitacao.0}}" method='POST'>
+                        <button class="botao-padrao" type="submit">Apagar</button>
+                    </form>
                 </div>
-                <form action="/executor/{{solicitacao.0}}" method='POST'>
-                    <button class="botao-padrao" type="submit">Apagar</button>
-                </form>
-
             </div>
         </details>
         {% endif %}

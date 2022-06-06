@@ -24,27 +24,28 @@
             text-align: center;
         }
 
-        .graficos .user-exec{
+        .graficos .user-exec {
             margin-bottom: 320px;
         }
 
-        .graficos div hr{
-            margin-top:40px;
+        .graficos div hr {
+            margin-top: 40px;
             border: solid 0px #000;
             border-radius: 3px;
-            height:2px;
-            width:100%;
-            background-color:rgba(0,0,0,0.6);
+            height: 2px;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
         }
 
-        .filtros-adm .botao-filtrar{
+        .filtros-adm .botao-filtrar {
             height: 35px;
             width: 120px;
             background-color: rgba(87, 147, 228, 0.9);
-            color:#FCFCFC;
+            color: #FCFCFC;
             border-radius: 10px;
             border: none;
         }
+
     </style>
 
 </head>
@@ -53,7 +54,7 @@
     <header>
         <nav>
             <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
-            <input type="checkbox" id="click">
+            <input class="check-hamburguer" type="checkbox" id="click">
             <label for="click" class="menu-btn">
                 <i class="fas fa-bars"></i>
             </label>
@@ -113,20 +114,20 @@
             <form action="/adm/estatisticas" method="get" id="days" name="days">
                 <div class="filtro-dia">
                     <div>
-                        <label for="diaa">Data Inícial:</label>
+                        <label for="diaa">Data Final:</label>
                         <input type="date" id="dataaa" name="dataaa">
                     </div>
                 </div>
-                    <div class="filtro-tempo">
-                        <p>Intervalo de tempo:
-                            <select id="days" name="days" form="days">
-                                <option value="1">1 Dia</option>
-                                <option value="7">7 Dias</option>
-                                <option value="15">15 Dias</option>
-                                <option value="30">30 Dias</option>
-                            </select>
-                        </p>
-                    </div>
+                <div class="filtro-tempo">
+                    <p>Intervalo de tempo:
+                        <select id="days" name="days" form="days">
+                            <option value="1">1 Dia</option>
+                            <option value="7">7 Dias</option>
+                            <option value="15">15 Dias</option>
+                            <option value="30">30 Dias</option>
+                        </select>
+                    </p>
+                </div>
                 <input class="botao-filtrar" type="submit" value="Filtrar">
             </form>
         </div>
@@ -135,7 +136,7 @@
             {%block content%}
 
             <div class="user-exec">
-                <p>Comparação Usuarios e Executores Cadastrados em %</p>
+                <p>Comparação chamados abertos e fechados em  %</p>
                 <canvas id="income_vs_category"></canvas>
                 <hr>
             </div>
@@ -154,8 +155,36 @@
                 <p>Avaliações Gerais</p>
                 <canvas id="overtime_expen"></canvas>
             </div>
-            {%endblock%}
         </section>
+        {%endblock%}
+
+        <table border="1">
+            <tr>
+                <td>CHAMADAS ABERTAS</td>
+                <td>CHAMADAS FECHADAS</td>
+            </tr>
+            <tr>
+                {% for w in num_num_analisee  %}
+                <td>{{w[7]}}</td>
+                {% endfor %}
+                {% for w in num_fechadaa %}
+                <td>{{w[7]}}</td>
+                {% endfor %}
+            </tr>
+         </table>
+
+         <table border=1>
+             
+            <tr>
+                <td></td>
+                <td>{{aberta}}</td>
+                <td>{{fecha}}</td>
+            </tr>
+            
+         </table>
+
+        
+
     </main>
     {% block javascript%}
     <script>
@@ -209,15 +238,15 @@
             type: 'pie',
             data: {
                 labels: [
-                    'Usuario',
-                    'Executor',
+                    'Aberta',
+                    'Fechada',
                 ],
                 datasets: [{
                     label: 'My First Dataset',
-                    data: ['{{ num_user }}','{{ num_exec }}'],
+                    data: ['{{  aporcentoUsers }}', '{{ aporcentoExecs }}'],
                     backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)'
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)'
                     ],
                     hoverOffset: 4
                 }]
@@ -226,13 +255,13 @@
                 scales: {
                     y: {
                         beginAtZero: true
-                    }
+                    }   
                 }
             }
         });
-        
 
-        const tes = document.getElementById('overtime_expenditure').getContext('2d');
+
+        const tes = document.getElementById('overtime-expen').getContext('2d');
         const ze = new Chart(tes, {
             type: 'bar',
             data: {

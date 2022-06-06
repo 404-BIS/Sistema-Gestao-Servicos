@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     <style>
         .tamanho {
             min-width: 200px;
@@ -21,7 +21,7 @@
     <header>
         <nav>
             <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
-            <input type="checkbox" id="click">
+            <input class="check-hamburguer" type="checkbox" id="click">
             <label for="click" class="menu-btn">
                 <i class="fas fa-bars"></i>
             </label>
@@ -34,8 +34,6 @@
                         <a href="/adm/estatisticas">Estatisticas das Requisições</a>
                     </div>
                 </li>
-            </ul>
-            <ul>
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">Minhas Requisições</a>
                     <div class="dropdown-content">
@@ -115,11 +113,10 @@
                     {% else %}
                     {% endif %}
 
+                    <form action="/adm/{{solicitacao.0}}" method='POST'>
+                        <button class="botao-padrao" type="submit">Apagar</button>
+                    </form>
                 </div>
-                <form action="/adm/{{solicitacao.0}}" method='POST'>
-                    <button class="botao-padrao" type="submit">Apagar</button>
-                </form>
-
             </div>
         </details>
         {% endif %}
@@ -156,6 +153,7 @@
                 </div>
                 {% else %}
                 {% endif %}
+
             </div>
             {%if solicitacao[10] == 1 or solicitacao[10] == 2 or solicitacao[10] == 3 or solicitacao[10] == 4 or
             solicitacao[10] == 5%}
@@ -228,6 +226,11 @@
             <div class="texto-fechamento">
                 <span> {{solicitacao[5]}}</span>
             </div>
+        </details>
+        {% endif %}
+        {% endfor %}
+
+
         <p class="tipo-legenda">Tipos de Problemas</p>
         <div class="legenda">
             <div class="hardware">

@@ -76,7 +76,8 @@ def user():
         else:
             filename=''
         if len(allExec) == 0:
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            if file:
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             with mysql.cursor()as Cursor:
                 Cursor.execute("INSERT INTO solicitacao (title_sol, desc_sol, status_sol ,type_problem, comentario,foto, data_inicio, id_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(titulo,descricao,status_sol,tipo,comentario,filename,hora,pk_user)) 
                 mysql.commit()

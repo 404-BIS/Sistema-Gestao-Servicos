@@ -73,11 +73,11 @@ def ExecChamada():
         cont_software= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Problemas de Software' and id_fechador= %s",(pk_user,))
         cont_duv= Cursor.execute("SELECT type_problem FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and id_fechador= %s",(pk_user,))
 
-        leitoraberto= Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and not id_user =%s",(pk_user,))
-        leitorfechado= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Fechada' and not id_user =%s and id_fechador= %s",(pk_user,pk_user,))
-        leitorandamento= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Andamento' and not id_user =%s and id_fechador= %s",(pk_user,pk_user,))
+        leitoraberto= Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and  id_fechador =%s",(pk_user,))
+        leitorfechado= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Fechada' and id_fechador= %s",(pk_user,))
+        leitorandamento= Cursor.execute ("SELECT * FROM solicitacao WHERE status_sol='Andamento' and id_fechador= %s",(pk_user,))
 
-        Values=Cursor.execute("SELECT * FROM solicitacao order by id_sol DESC")
+        Values=Cursor.execute("SELECT * FROM solicitacao WHERE id_fechador=%s order by id_sol DESC",(pk_user,))
 
     if Values > 0:
         Details = Cursor.fetchall()

@@ -20,7 +20,7 @@
     <header>
         <nav>
              <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
-                <input type="checkbox" id="click">
+                <input class="check-hamburguer" type="checkbox" id="click">
                 <label for="click" class="menu-btn">
                     <i class="fas fa-bars"></i>
                 </label>
@@ -75,6 +75,8 @@
             </div>
     </header>
     <main>
+        
+        <p class="chamado-fechada"><center> Média avaliação de {{nomeuser[0]}}: {{media}}</center></p>
         <p class="chamado-fechada">Chamados Avaliados de {{nomeuser[0]}}</p>
         {% if leitorfechado == 0 or Values ==0 %}
         <div class="box-req">

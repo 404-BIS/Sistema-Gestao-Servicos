@@ -23,7 +23,7 @@
         {% if current_user.is_authenticated %}
         Hi {{ current_user.name }}!
         {% endif %}
-        <input type="checkbox" id="click">
+        <input class="check-hamburguer" type="checkbox" id="click">
         <label for="click" class="menu-btn">
             <i class="fas fa-bars"></i>
         </label>
@@ -38,37 +38,39 @@
             </li>
         </ul>
     </nav>
-        <div id="perfil" class="modal">
-            <div class="novo-fechar"></div>
-            <div class="profile">
+    <div id="perfil" class="modal">
+        <div class="icon-fechar"></div>
+        <div class="profile">
 
-                <div class="header">
-                    <b>Meu Perfil</b>
-                </div>
+            <div class="header">
+                <b>Meu Perfil</b>
+            </div>
 
-                <form action="/perfil" method='POST'>
-                    <div class="informations">
-                        <div>
-                            <label>Nome</label>
-                            <input name="nome" type="name" placeholder="{{nome}}" required>
-                            <label>Email</label>
-                            <input name="troca_email" type="email" placeholder="{{email}}" required>
-                        </div>
+            <form action="/perfil_adm" method='POST'>
+                <div class="informations">
+                    <div>
+                        <label>Nome</label>
 
-                        <div class="linha-vertical"></div>
-
-                        <div>
-                            <label>Senha</label>
-                            <input name="troca_senha" type="password" placeholder="{{senha[0]}}" required>
-                        </div>
+                        <input name="nome" type="name" placeholder="{{nome}}" required>
+                        <label>Email</label>
+                        <input name="troca_email" type="email" placeholder="{{email}}" required>
                     </div>
 
-                    <div class="submit">
-                        <button id="alterar">Alterar Dados</button>
-                </form>
-                <a href="/logout" id="sair">Sair</a>
-            </div>
+                    <div class="linha-vertical"></div>
+
+                    <div>
+                        <label>Senha</label>
+                        <input name="troca_senha" type="password" placeholder="{{senha[0]}}" required>
+
+                    </div>
+                </div>
+
+                <div class="submit">
+                    <button id="alterar">Alterar Dados</button>
+            </form>
+            <a href="/logout" id="sair">Sair</a>
         </div>
+    </div>
     </header>
     <main>
         <p class="req-aberta">Requisições Abertas </p>
@@ -101,15 +103,15 @@
                     <p>Anexo:</p>
                     <div>
                         <img class="tamanho" src="../static/uploads/{{solicitacao[6]}}">
-                    </div>
+                    </div>   
                     {% else %}
-                    {% endif %}
-
-                </div>
-                <form action="/usuario/{{solicitacao.0}}" method='POST'>
-                    <button class="botao-padrao" type="submit">Apagar</button>
-                </form>
-
+                    {% endif %}    
+                    
+                    <form action="/usuario/{{solicitacao.0}}" method='POST'>
+                        <button class="botao-padrao" type="submit">Apagar</button>
+                    </form> 
+                </div>    
+                 
             </div>
         </details>
         {% endif %}
@@ -210,7 +212,7 @@
                             <input name="otimo" value="5" type="checkbox"></input>
                         </div>
                     </div>
-                    <textarea placeholder="Descreva sua avaliação" name="avaliacao"></textarea>
+                    <textarea placeholder="Descreva sua avaliação" name="avaliacao" required></textarea>
                     <div class="submit">
                         <button>Avaliar</button>
                     </div>

@@ -166,7 +166,7 @@
     <header>
         <nav>
             <button class="btnperfil" type="submit"><img src="../../static/images/Usuario.svg"></button></div>
-            <input type="checkbox" id="click">
+            <input class="check-hamburguer" type="checkbox" id="click">
             <label for="click" class="menu-btn">
                 <i class="fas fa-bars"></i>
             </label>
@@ -360,7 +360,7 @@
                     </div>
                     <div class="botao-concluir">
                         <form action="/andamento_adm/{{solicitacao.0}}" method="POST">
-                            <textarea name="comentario" id="txtdesc" placeholder="Descreva a conclusão"></textarea>
+                            <textarea name="comentario" id="txtdesc" placeholder="Descreva a conclusão"></textarea required>
                             <button class="bot-conclu" type="submit">Concluir Chamado</button>
                         </form>
                     </div>

@@ -114,9 +114,11 @@ nav{
     cursor: pointer;
     display: none;
   }
-  input[type="checkbox"]{
-    display: none;
+
+  .check-hamburguer {
+    display: none ;
   }
+
   ul{
     margin-bottom: 0rem !important;
   }
@@ -402,7 +404,7 @@ summary img {
 
 .conteudo{
     overflow-wrap: break-word;
-    width: 80%;
+    width: 100%;
 }
 
 .conteudo p{
@@ -471,10 +473,13 @@ span{
     color:#FCFCFC;
     border-radius: 10px;
     border: none;
-    position: absolute;
-    right: 16px;
-    bottom: 16px;
 }
+
+.conteudo form{
+    display: flex;
+    justify-content: end;
+}
+
 
 .botao-padrao:hover{
     font-size: 14px;
@@ -949,3 +954,9 @@ span{
 .filtro-dia label{
     font-weight: 400;
 }
+.chartbox {
+    max-width: 700px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }

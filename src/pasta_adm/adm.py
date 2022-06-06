@@ -1,8 +1,7 @@
 from flask import Blueprint,render_template,request,redirect,session, url_for
 from bd.db import mysql
-import datetime
-
 admin = Blueprint('admin', __name__, template_folder='templates')
+import datetime
 
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -70,9 +69,9 @@ def home():
         Values = Cursor.execute("SELECT * FROM solicitacao WHERE id_user= %s  order by id_sol DESC",(pk_user))
         if Values > 0:
             Details = Cursor.fetchall()
-            return render_template('/home-adm.html', Details=Details,Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto=leitoraberto,leitorfechado=leitorfechado,conta=conta,senha = senha , email=email, nome = nome)
+            return render_template('/home-adm.html',Details=Details,Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,leitoraberto=leitoraberto,leitorfechado=leitorfechado,conta=conta,senha=senha,email=email, nome=nome)
         else:
-            return render_template('/home-adm.html', Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,pk_user=pk_user,senha = senha , email=email, nome = nome)
+            return render_template('/home-adm.html', Values=Values,cont_hardware=cont_hardware,cont_software=cont_software,cont_duv=cont_duv,pk_user=pk_user,senha=senha,email=email,nome =nome)
 
 @admin.route("/adm/requisicoes",methods=["GET"])
 def requisicoes():
@@ -117,6 +116,8 @@ def estatisticas():
         # Conta
         DATA_ATUAL = dataaa
         # checking days
+        if dataaa == '':
+            DATA_ATUAL = '2022-06-06'
         if dias_select == '1':
             ano = DATA_ATUAL[:4]
             mes = DATA_ATUAL[5:7]
@@ -156,15 +157,27 @@ def estatisticas():
 
             num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
             num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+            totaluser = Cursor.execute("SELECT id_user from user WHERE type_user = 'user' ")
+            totalexec = Cursor.execute("SELECT id_user from user WHERE type_user = 'exec' ")
+            
             num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
             num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
             num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+            seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+            seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
 
             somatotal = num_exec + num_user
             porcentoUser = str((num_user/somatotal)*100)
             porcentoExec = str((num_exec/somatotal)*100)
-            aporcentoUser = porcentoUser[:2]
-            aporcentoExec = porcentoExec[:2]
+            aporcentoUser = porcentoUser[:2] 
+            aporcentoExec = porcentoExec[:2] 
+
+            seila = seila2 + seila3
+            porcentoUsera = str((seila2/seila)*100)
+            porcentoExeca = str((seila3/seila)*100)
+            aporcentoUsers = porcentoUsera[:2]
+            aporcentoExecs = porcentoExeca[:2]
+    
     
 
 
@@ -176,7 +189,7 @@ def estatisticas():
         elif dias_select == '7':
             ano = DATA_ATUAL[:4]
             mes = DATA_ATUAL[5:7]
-            dia = int(DATA_ATUAL[8:])
+            dia = int(DATA_ATUAL[8:])   
             if (dia - 7 <= 0):
                 if int(ano) %4 == 0:
                     if int(ano) %4 == 0:
@@ -219,12 +232,21 @@ def estatisticas():
             num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
             num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
             num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
+            seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+            seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
 
             somatotal = num_exec + num_user
             porcentoUser = str((num_user/somatotal)*100)
             porcentoExec = str((num_exec/somatotal)*100)
             aporcentoUser = porcentoUser[:2]
             aporcentoExec = porcentoExec[:2]
+            
+            seila = seila2 + seila3
+            porcentoUsera = str((seila2/seila)*100)
+            porcentoExeca = str((seila3/seila)*100)
+            aporcentoUsers = porcentoUsera[:2]
+            aporcentoExecs = porcentoExeca[:2]
+    
     
 
 
@@ -277,12 +299,21 @@ def estatisticas():
             num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
             num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
             num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
+            seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+            seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
 
             somatotal = num_exec + num_user
             porcentoUser = str((num_user/somatotal)*100)
             porcentoExec = str((num_exec/somatotal)*100)
-            aporcentoUser = porcentoUser[:2]
+            aporcentoUser = porcentoUser[:2] 
             aporcentoExec = porcentoExec[:2]
+
+            seila = seila2 + seila3
+            porcentoUsera = str((seila2/seila)*100)
+            porcentoExeca = str((seila3/seila)*100)
+            aporcentoUsers = porcentoUsera[:2]
+            aporcentoExecs = porcentoExeca[:2]
+    
     
 
 
@@ -324,6 +355,8 @@ def estatisticas():
             tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
 
             tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
+            seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+            seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
 
             num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
             num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
@@ -336,6 +369,12 @@ def estatisticas():
             porcentoExec = str((num_exec/somatotal)*100)
             aporcentoUser = porcentoUser[:2]
             aporcentoExec = porcentoExec[:2]
+
+            seila = seila2 + seila3
+            porcentoUsera = str((seila2/seila)*100)
+            porcentoExeca = str((seila3/seila)*100)
+            aporcentoUsers = porcentoUsera[:2]
+            aporcentoExecs = porcentoExeca[:2]
     
 
 
@@ -356,12 +395,21 @@ def estatisticas():
             num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
             num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
             num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+            seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+            seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
 
             somatotal = num_exec + num_user
             porcentoUser = str((num_user/somatotal)*100)
             porcentoExec = str((num_exec/somatotal)*100)
             aporcentoUser = porcentoUser[:2]
             aporcentoExec = porcentoExec[:2]
+
+            seila = seila2 + seila3
+            porcentoUsera = str((seila2/seila)*100)
+            porcentoExeca = str((seila3/seila)*100)
+            aporcentoUsers = porcentoUsera[:2]
+            aporcentoExecs = porcentoExeca[:2]
+
     
 
 
@@ -371,9 +419,27 @@ def estatisticas():
             avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4'")
             avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5'")
 
+
+            
+
             print('else', DATA_ATUAL)
-        
-    return render_template("char.html",tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa)
+                
+
+        Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+        aaaaaaaa= Cursor.fetchall()
+        Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+        num_andamentoo = Cursor.fetchall()
+        Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+        num_fechadaa = Cursor.fetchall()
+
+
+        # 
+        Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+        data_final = Cursor.fetchone()
+        aberta=Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",('2022-06-06',))
+        fecha=Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(data_final,))
+     
+        return render_template("char.html", num_andamentoo=num_andamentoo, num_fechadaa=num_fechadaa,tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa,aporcentoUsers=aporcentoUsers,aporcentoExecs=aporcentoExecs,aberta=aberta,fecha=fecha)
 
 
 @admin.route("/historico-avaliacao<id>")
@@ -395,15 +461,16 @@ def avaliacao(id):
         vai = Cursor.fetchone()
         Cursor.execute("SELECT nome_user FROM user WHERE id_user= %s ",(id))
         nomeuser = Cursor.fetchone()
+        Cursor.execute("SELECT avg(avaliacao) from solicitacao where id_fechador =%s",(id,))
+        media=Cursor.fetchall()
+
 
         Cursor.execute("SELECT * FROM solicitacao WHERE id_fechador = %s",(id,))
         Details = Cursor.fetchall()
         Values=Cursor.execute("SELECT * FROM solicitacao WHERE id_fechador = %s",(id,))
         if Values > 0:
             Details = Cursor.fetchall()
-            
-        
-    return render_template("/Historico-avaliacao.html",Values=Values,Details=Details,cont_hardware_adm=cont_hardware_adm,cont_software_adm=cont_software_adm,cont_duv_adm=cont_duv_adm,leitorfechado=leitorfechado,vai=vai,nome=nome,email=email,senha=senha,nomeuser=nomeuser)
+    return render_template("/Historico-avaliacao.html",Values=Values,Details=Details,cont_hardware_adm=cont_hardware_adm,cont_software_adm=cont_software_adm,cont_duv_adm=cont_duv_adm,leitorfechado=leitorfechado,vai=vai,nome=nome,email=email,senha=senha,nomeuser=nomeuser,media=media)
 
 
 @admin.route("/cargo<id>")
@@ -420,11 +487,16 @@ def cargo(id):
         else:
             Cursor.execute("UPDATE user set type_user = 'user' WHERE id_user = %s",(id,))
             mysql.commit()
-            Cursor.execute("SELECT id_sol FROM solicitacao WHERE id_fechador =%s and status_sol = 'aberta'",(id,))
-            solicitacaoExe = Cursor.fetchall()
+            Cursor.execute("SELECT id_sol FROM solicitacao WHERE id_fechador =%s and status_sol = 'Andamento'",(id,))
+            solicitacaoAndamento = Cursor.fetchall()
             Cursor.execute("SELECT id_user FROM user WHERE type_user = 'exec'") 
             allExec = Cursor.fetchall()
-            x = 0 
+            x = 0
+            for z in range(len(solicitacaoAndamento)):
+                Cursor.execute("UPDATE solicitacao SET status_sol ='Aberta' WHERE id_sol = %s",(solicitacaoAndamento[z]))
+                mysql.commit()
+            Cursor.execute("SELECT id_sol FROM solicitacao WHERE id_fechador =%s and status_sol = 'Aberta'",(id,))
+            solicitacaoExe = Cursor.fetchall()
             for i in range (len(solicitacaoExe)):
 
                 if len(allExec) == 0:
