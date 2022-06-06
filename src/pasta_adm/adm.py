@@ -507,10 +507,6 @@ def estatisticas():
             else:
                 final=0
         
-        if lista or listaa or listaaa == []:
-            lista = ['sem registro']
-            listaa = ['sem registro']
-            listaaa = ['sem registro']
         return render_template("char.html", num_andamentoo=num_andamentoo, num_fechadaa=num_fechadaa,tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa,aporcentoUsers=aporcentoUsers,aporcentoExecs=aporcentoExecs,aberta=aberta,fecha=fecha,data_final=data_final,data_inicio=data_inicio,final=final,lista=lista,listaa=listaa,listaaa=listaaa)
 
 
