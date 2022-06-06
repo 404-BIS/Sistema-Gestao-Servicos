@@ -115,7 +115,7 @@ def estatisticas():
         dataaa = request.args.get('dataaa')
         # Conta
         DATA_ATUAL = dataaa
-        # checking days
+             # checking days
         if dataaa == '':
             DATA_ATUAL = '2022-06-06'
         if dias_select == '1':
@@ -166,17 +166,24 @@ def estatisticas():
             seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
             seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
 
-            somatotal = num_exec + num_user
-            porcentoUser = str((num_user/somatotal)*100)
-            porcentoExec = str((num_exec/somatotal)*100)
-            aporcentoUser = porcentoUser[:2] 
-            aporcentoExec = porcentoExec[:2] 
+            oi=Cursor.execute("Select * from solicitacao")
+            if oi>0: 
+                somatotal = num_exec + num_user
+                porcentoUser = str((num_user/somatotal)*100)
+                porcentoExec = str((num_exec/somatotal)*100)
+                aporcentoUser = porcentoUser[:2]
+                aporcentoExec = porcentoExec[:2]
 
-            seila = seila2 + seila3
-            porcentoUsera = str((seila2/seila)*100)
-            porcentoExeca = str((seila3/seila)*100)
-            aporcentoUsers = porcentoUsera[:]
-            aporcentoExecs = porcentoExeca[:]
+                seila = seila2 + seila3
+                porcentoUsera = str((seila2/seila)*100)
+                porcentoExeca = str((seila3/seila)*100)
+                aporcentoUsers = porcentoUsera[:]
+                aporcentoExecs = porcentoExeca[:]
+            else:
+                aporcentoUser=0
+                aporcentoExec=0
+                aporcentoExecs=0
+                aporcentoUsers=0
     
     
 
@@ -235,17 +242,24 @@ def estatisticas():
             seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
             seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
 
-            somatotal = num_exec + num_user
-            porcentoUser = str((num_user/somatotal)*100)
-            porcentoExec = str((num_exec/somatotal)*100)
-            aporcentoUser = porcentoUser[:2]
-            aporcentoExec = porcentoExec[:2]
-            
-            seila = seila2 + seila3
-            porcentoUsera = str((seila2/seila)*100)
-            porcentoExeca = str((seila3/seila)*100)
-            aporcentoUsers = porcentoUsera[:]
-            aporcentoExecs = porcentoExeca[:]
+            oi=Cursor.execute("Select * from solicitacao")
+            if oi>0: 
+                somatotal = num_exec + num_user
+                porcentoUser = str((num_user/somatotal)*100)
+                porcentoExec = str((num_exec/somatotal)*100)
+                aporcentoUser = porcentoUser[:2]
+                aporcentoExec = porcentoExec[:2]
+
+                seila = seila2 + seila3
+                porcentoUsera = str((seila2/seila)*100)
+                porcentoExeca = str((seila3/seila)*100)
+                aporcentoUsers = porcentoUsera[:]
+                aporcentoExecs = porcentoExeca[:]
+            else:
+                aporcentoUser=0
+                aporcentoExec=0
+                aporcentoExecs=0
+                aporcentoUsers=0
     
     
 
@@ -302,17 +316,24 @@ def estatisticas():
             seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
             seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
 
-            somatotal = num_exec + num_user
-            porcentoUser = str((num_user/somatotal)*100)
-            porcentoExec = str((num_exec/somatotal)*100)
-            aporcentoUser = porcentoUser[:2] 
-            aporcentoExec = porcentoExec[:2]
+            oi=Cursor.execute("Select * from solicitacao")
+            if oi>0: 
+                somatotal = num_exec + num_user
+                porcentoUser = str((num_user/somatotal)*100)
+                porcentoExec = str((num_exec/somatotal)*100)
+                aporcentoUser = porcentoUser[:2]
+                aporcentoExec = porcentoExec[:2]
 
-            seila = seila2 + seila3
-            porcentoUsera = str((seila2/seila)*100)
-            porcentoExeca = str((seila3/seila)*100)
-            aporcentoUsers = porcentoUsera[:]
-            aporcentoExecs = porcentoExeca[:]
+                seila = seila2 + seila3
+                porcentoUsera = str((seila2/seila)*100)
+                porcentoExeca = str((seila3/seila)*100)
+                aporcentoUsers = porcentoUsera[:]
+                aporcentoExecs = porcentoExeca[:]
+            else:
+                aporcentoUser=0
+                aporcentoExec=0
+                aporcentoExecs=0
+                aporcentoUsers=0
     
     
 
@@ -364,17 +385,24 @@ def estatisticas():
             num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
             num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
 
-            somatotal = num_exec + num_user
-            porcentoUser = str((num_user/somatotal)*100)
-            porcentoExec = str((num_exec/somatotal)*100)
-            aporcentoUser = porcentoUser[:2]
-            aporcentoExec = porcentoExec[:2]
+            oi=Cursor.execute("Select * from solicitacao")
+            if oi>0: 
+                somatotal = num_exec + num_user
+                porcentoUser = str((num_user/somatotal)*100)
+                porcentoExec = str((num_exec/somatotal)*100)
+                aporcentoUser = porcentoUser[:2]
+                aporcentoExec = porcentoExec[:2]
 
-            seila = seila2 + seila3
-            porcentoUsera = str((seila2/seila)*100)
-            porcentoExeca = str((seila3/seila)*100)
-            aporcentoUsers = porcentoUsera[:]
-            aporcentoExecs = porcentoExeca[:]
+                seila = seila2 + seila3
+                porcentoUsera = str((seila2/seila)*100)
+                porcentoExeca = str((seila3/seila)*100)
+                aporcentoUsers = porcentoUsera[:]
+                aporcentoExecs = porcentoExeca[:]
+            else:
+                aporcentoUser=0
+                aporcentoExec=0
+                aporcentoExecs=0
+                aporcentoUsers=0
     
 
 
@@ -397,18 +425,25 @@ def estatisticas():
             num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
             seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
             seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+            
+            oi=Cursor.execute("Select * from solicitacao")
+            if oi>0: 
+                somatotal = num_exec + num_user
+                porcentoUser = str((num_user/somatotal)*100)
+                porcentoExec = str((num_exec/somatotal)*100)
+                aporcentoUser = porcentoUser[:2]
+                aporcentoExec = porcentoExec[:2]
 
-            somatotal = num_exec + num_user
-            porcentoUser = str((num_user/somatotal)*100)
-            porcentoExec = str((num_exec/somatotal)*100)
-            aporcentoUser = porcentoUser[:2]
-            aporcentoExec = porcentoExec[:2]
-
-            seila = seila2 + seila3
-            porcentoUsera = str((seila2/seila)*100)
-            porcentoExeca = str((seila3/seila)*100)
-            aporcentoUsers = porcentoUsera[:]
-            aporcentoExecs = porcentoExeca[:]
+                seila = seila2 + seila3
+                porcentoUsera = str((seila2/seila)*100)
+                porcentoExeca = str((seila3/seila)*100)
+                aporcentoUsers = porcentoUsera[:]
+                aporcentoExecs = porcentoExeca[:]
+            else:
+                aporcentoUser=0
+                aporcentoExec=0
+                aporcentoExecs=0
+                aporcentoUsers=0
 
     
             
@@ -448,6 +483,7 @@ def estatisticas():
 
         # for n in range(len(data_inicio)):
         #     # temporario = data_inicio[n]
+        
         for x in data_inicio:
             if x not in lista :
                 lista.append(x)
@@ -463,10 +499,18 @@ def estatisticas():
             # a.append(h)
         
         with mysql.cursor()as Cursor:
-            Cursor.execute("SELECT avg(avaliacao) from solicitacao where not avaliacao is null")
-            final=Cursor.fetchone()
-            final=round(final[0],1)
+            oi=Cursor.execute("Select * from solicitacao where not avaliacao is null")
+            if oi>0: 
+                Cursor.execute("SELECT avg(avaliacao) from solicitacao where not avaliacao is null")
+                final=Cursor.fetchone()
+                final=round(final[0],1)
+            else:
+                final=0
         
+        if lista or listaa or listaaa == []:
+            lista = ['sem registro']
+            listaa = ['sem registro']
+            listaaa = ['sem registro']
         return render_template("char.html", num_andamentoo=num_andamentoo, num_fechadaa=num_fechadaa,tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa,aporcentoUsers=aporcentoUsers,aporcentoExecs=aporcentoExecs,aberta=aberta,fecha=fecha,data_final=data_final,data_inicio=data_inicio,final=final,lista=lista,listaa=listaa,listaaa=listaaa)
 
 
@@ -489,11 +533,13 @@ def avaliacao(id):
         vai = Cursor.fetchone()
         Cursor.execute("SELECT nome_user FROM user WHERE id_user= %s ",(id))
         nomeuser = Cursor.fetchone()
-        Cursor.execute("SELECT avg(avaliacao) from solicitacao where id_fechador =%s",(id,))
-        media=Cursor.fetchone()
-        media=round(media[0],1)
-
-
+        oi=Cursor.execute("Select * from solicitacao where id_fechador =%s and not avaliacao is null",(id,))
+        if oi>0:
+            Cursor.execute("SELECT avg(avaliacao) from solicitacao where id_fechador =%s",(id,))
+            media=Cursor.fetchone()
+            media=round(media[0],1)
+        else:
+            media=0
         Cursor.execute("SELECT * FROM solicitacao WHERE id_fechador = %s",(id,))
         Details = Cursor.fetchall()
         Values=Cursor.execute("SELECT * FROM solicitacao WHERE id_fechador = %s",(id,))
