@@ -175,8 +175,8 @@ def estatisticas():
             seila = seila2 + seila3
             porcentoUsera = str((seila2/seila)*100)
             porcentoExeca = str((seila3/seila)*100)
-            aporcentoUsers = porcentoUsera[:2]
-            aporcentoExecs = porcentoExeca[:2]
+            aporcentoUsers = porcentoUsera[:]
+            aporcentoExecs = porcentoExeca[:]
     
     
 
@@ -244,8 +244,8 @@ def estatisticas():
             seila = seila2 + seila3
             porcentoUsera = str((seila2/seila)*100)
             porcentoExeca = str((seila3/seila)*100)
-            aporcentoUsers = porcentoUsera[:2]
-            aporcentoExecs = porcentoExeca[:2]
+            aporcentoUsers = porcentoUsera[:]
+            aporcentoExecs = porcentoExeca[:]
     
     
 
@@ -311,8 +311,8 @@ def estatisticas():
             seila = seila2 + seila3
             porcentoUsera = str((seila2/seila)*100)
             porcentoExeca = str((seila3/seila)*100)
-            aporcentoUsers = porcentoUsera[:2]
-            aporcentoExecs = porcentoExeca[:2]
+            aporcentoUsers = porcentoUsera[:]
+            aporcentoExecs = porcentoExeca[:]
     
     
 
@@ -373,8 +373,8 @@ def estatisticas():
             seila = seila2 + seila3
             porcentoUsera = str((seila2/seila)*100)
             porcentoExeca = str((seila3/seila)*100)
-            aporcentoUsers = porcentoUsera[:2]
-            aporcentoExecs = porcentoExeca[:2]
+            aporcentoUsers = porcentoUsera[:]
+            aporcentoExecs = porcentoExeca[:]
     
 
 
@@ -407,24 +407,21 @@ def estatisticas():
             seila = seila2 + seila3
             porcentoUsera = str((seila2/seila)*100)
             porcentoExeca = str((seila3/seila)*100)
-            aporcentoUsers = porcentoUsera[:2]
-            aporcentoExecs = porcentoExeca[:2]
+            aporcentoUsers = porcentoUsera[:]
+            aporcentoExecs = porcentoExeca[:]
 
     
-
+            Cursor.execute("SELECT avg(avaliacao) from solicitacao where not avaliacao is null")
+            final=Cursor.fetchone()
+            final=round(final[0],1)
 
             avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1'")
             avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2'")
             avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3'")
             avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4'")
             avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5'")
-
-
-            
-
-            print('else', DATA_ATUAL)
                 
-
+            
         Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
         aaaaaaaa= Cursor.fetchall()
         Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
@@ -432,14 +429,27 @@ def estatisticas():
         Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
         num_fechadaa = Cursor.fetchall()
 
-
-        # 
+        aberta=[]
+        fecha=[]
+        Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+        data_inicio = Cursor.fetchall()
         Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
-        data_final = Cursor.fetchone()
-        aberta=Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",('2022-06-06',))
-        fecha=Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(data_final,))
-     
-        return render_template("char.html", num_andamentoo=num_andamentoo, num_fechadaa=num_fechadaa,tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa,aporcentoUsers=aporcentoUsers,aporcentoExecs=aporcentoExecs,aberta=aberta,fecha=fecha)
+        data_final = Cursor.fetchall()
+        p = []
+        z = 0
+        a=[]
+        for s in range(len(data_inicio)):
+            if s == 0:
+                p.append(data_inicio[0][0])
+            elif data_inicio[s][0] != p[0]:
+                p.append(data_inicio[s][0])
+        for x in p:
+            aberta.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
+            fecha.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
+        for h in range (len(aberta)):
+            a.append(h)
+        
+        return render_template("char.html", num_andamentoo=num_andamentoo, num_fechadaa=num_fechadaa,tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa,aporcentoUsers=aporcentoUsers,aporcentoExecs=aporcentoExecs,aberta=aberta,fecha=fecha,data_final=data_final,data_inicio=data_inicio,p=p,a=a,final=final)
 
 
 @admin.route("/historico-avaliacao<id>")
@@ -462,7 +472,8 @@ def avaliacao(id):
         Cursor.execute("SELECT nome_user FROM user WHERE id_user= %s ",(id))
         nomeuser = Cursor.fetchone()
         Cursor.execute("SELECT avg(avaliacao) from solicitacao where id_fechador =%s",(id,))
-        media=Cursor.fetchall()
+        media=Cursor.fetchone()
+        media=round(media[0],1)
 
 
         Cursor.execute("SELECT * FROM solicitacao WHERE id_fechador = %s",(id,))
