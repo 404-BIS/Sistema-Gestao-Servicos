@@ -411,9 +411,7 @@ def estatisticas():
             aporcentoExecs = porcentoExeca[:]
 
     
-            Cursor.execute("SELECT avg(avaliacao) from solicitacao where not avaliacao is null")
-            final=Cursor.fetchone()
-            final=round(final[0],1)
+            
 
             avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1'")
             avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2'")
@@ -435,21 +433,41 @@ def estatisticas():
         data_inicio = Cursor.fetchall()
         Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
         data_final = Cursor.fetchall()
-        p = []
-        z = 0
-        a=[]
-        for s in range(len(data_inicio)):
-            if s == 0:
-                p.append(data_inicio[0][0])
-            elif data_inicio[s][0] != p[0]:
-                p.append(data_inicio[s][0])
-        for x in p:
-            aberta.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
-            fecha.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
-        for h in range (len(aberta)):
-            a.append(h)
+        # p = []
+        # z = 0
+        # a=[]
+        # for s in range(len(data_inicio)):
+            
+        #     # if s == 0:
+        #     #     p.append(data_inicio[0][0])
+        #     # elif data_inicio[s][0] != p[0]:
+        #     #     p.append(data_inicio[s][0])
+        lista=[]
+        listaa=[]
+        listaaa=[]
+
+        # for n in range(len(data_inicio)):
+        #     # temporario = data_inicio[n]
+        for x in data_inicio:
+            if x not in lista :
+                lista.append(x)
+                Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                sei=Cursor.fetchone()
+                listaa.append(sei)
+                Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                seia=Cursor.fetchone()
+                listaaa.append(seia)
+        print(lista)
+            # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
+            # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
+            # a.append(h)
         
-        return render_template("char.html", num_andamentoo=num_andamentoo, num_fechadaa=num_fechadaa,tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa,aporcentoUsers=aporcentoUsers,aporcentoExecs=aporcentoExecs,aberta=aberta,fecha=fecha,data_final=data_final,data_inicio=data_inicio,p=p,a=a,final=final)
+        with mysql.cursor()as Cursor:
+            Cursor.execute("SELECT avg(avaliacao) from solicitacao where not avaliacao is null")
+            final=Cursor.fetchone()
+            final=round(final[0],1)
+        
+        return render_template("char.html", num_andamentoo=num_andamentoo, num_fechadaa=num_fechadaa,tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa,aporcentoUsers=aporcentoUsers,aporcentoExecs=aporcentoExecs,aberta=aberta,fecha=fecha,data_final=data_final,data_inicio=data_inicio,final=final,lista=lista,listaa=listaa,listaaa=listaaa)
 
 
 @admin.route("/historico-avaliacao<id>")

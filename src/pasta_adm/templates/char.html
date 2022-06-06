@@ -45,7 +45,6 @@
             border-radius: 10px;
             border: none;
         }
-
     </style>
 
 </head>
@@ -136,7 +135,7 @@
             {%block content%}
 
             <div class="user-exec">
-                <p>Comparação chamados abertos e fechados em  %</p>
+                <p>Comparação chamados abertos e fechados em %</p>
                 <canvas id="income_vs_category"></canvas>
                 <hr>
             </div>
@@ -156,35 +155,53 @@
                 <p>{{final}}</p>
                 <p>Avaliações Gerais</p>
                 <canvas id="overtime_expen"></canvas>
-               
+
             </div>
         </section>
         {%endblock%}
-        <center>
         <br><br><br><br>
-        <table border="1">
-            
-            <tr>
-                <td>DATA</td>
-                <td>CHAMADAS ABERTAS</td>
-                <td>CHAMADAS FECHADAS</td>
-            </tr>
-            
-            {%for x in p %} 
-            <tr>
-              
-                <td>{{x}}</td>
-                <td>{{aberta[0]}}</td>
-                <td>{{fecha[0]}}</td>
-                
-            </tr>
-            {%endfor%}
-           
-        </table></center>
-      
+        <div class="tabelaaa">
+            <table border="1">
+                <tr>
+                    <th>DATAS</th>
 
-        
+                    {%for x in lista %}
+                <tr>
+                    <td>
+                        {{x[0]}}
+                    </td>
+                </tr>
+                {%endfor%}
+                </tr>
+            </table>
+            <table border="1">
+                <tr>
+                    <th>Solicitações Abertas</th>
 
+                    {%for y in listaa %}
+                <tr>
+                    <td>
+                        {{y[0]}}
+                    </td>
+                </tr>
+                {%endfor%}
+                </tr>
+            </table>
+            <table border="1">
+                <tr>
+                    <th>Solicitações Fechadas</th>
+
+                    {%for z in listaaa %}
+                <tr>
+                    <td>
+                        {{z[0]}}
+                    </td>
+                </tr>
+                {%endfor%}
+                </tr>
+            </table>
+        </div>
+        <br><br><br>
     </main>
     {% block javascript%}
     <script>
@@ -255,7 +272,7 @@
                 scales: {
                     y: {
                         beginAtZero: true
-                    }   
+                    }
                 }
             }
         });
