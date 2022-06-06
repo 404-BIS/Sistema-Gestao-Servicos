@@ -160,6 +160,16 @@
         </section>
         {%endblock%}
         <br><br><br><br>
+        <div class="filtro_tabela">
+            <form action="/adm/estatisticas" method="get">
+                <input type="submit" value="1 Dia" id="tabela_filter" name="tabela_filter" onclick="oneday()" >
+                <input type="submit" value="7 Dias" id="tabela_filter" name="tabela_filter" onclick="sevendays()">
+                <input type="submit" value="15 Dias" id="tabela_filter" name="tabela_filter" onclick="fiftydays()">
+                <input type="submit" value="30 Dias" id="tabela_filter" name="tabela_filter" onclick="thirtydays() ">
+                <input type="submit" value="Tudo" id="tabela_filter" name="tabela_filter" onclick="everday()">
+            </form>
+        </div>
+        <br><br><br><br>
         <div class="tabelaaa">
             <table border="1">
                 <tr>

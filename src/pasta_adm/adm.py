@@ -1,3 +1,5 @@
+from curses import window
+from multiprocessing import Event
 from flask import Blueprint,render_template,request,redirect,session, url_for
 from bd.db import mysql
 admin = Blueprint('admin', __name__, template_folder='templates')
@@ -464,39 +466,246 @@ def estatisticas():
 
         aberta=[]
         fecha=[]
-        Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
-        data_inicio = Cursor.fetchall()
-        Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
-        data_final = Cursor.fetchall()
-        # p = []
-        # z = 0
-        # a=[]
-        # for s in range(len(data_inicio)):
-            
-        #     # if s == 0:
-        #     #     p.append(data_inicio[0][0])
-        #     # elif data_inicio[s][0] != p[0]:
-        #     #     p.append(data_inicio[s][0])
-        lista=[]
-        listaa=[]
-        listaaa=[]
 
-        # for n in range(len(data_inicio)):
-        #     # temporario = data_inicio[n]
+        diasdofiltro = request.args.get('tabela_filter')
+        data_de_inicio = request.args.get('dataa2')
+        DATA_ATUALl = data_de_inicio
+        anoo = DATA_ATUALl[:4]
+        mess = DATA_ATUALl[5:7]
+        diaa = int(DATA_ATUALl[8:])
+
+        selectparafiltro = f"{anoo}-{mess}-{diaa-diasdofiltro}"
+        if selectparafiltro <= 0:
+            if mess in mescom31:
+                mess = int(mess) - 1
+                diaa + 31
+                selectparafiltro = f"{anoo}-0{mess}-{anoo}"
+            elif mess == '02':
+                if int(ano) %4 == 0:
+                    mess = '01'
+                    diaa + 2
+                    selectparafiltro = f"{anoo}-{mess}-{anoo}"
+                else:
+                    mess = '01'
+                    diaa + 29
+                    selectparafiltro = f"{anoo}-{mess}-{anoo}"
+            else:
+                mess = int(mess) - 1
+                diaa + 30
+                selectparafiltro = f"{anoo}-0{mess}-{anoo}"
+                
+
+        if diasdofiltro and data_de_inicio is not '':
+            if diasdofiltro == "1 Dia":
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+                data_inicio = Cursor.fetchall()
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+                data_final = Cursor.fetchall()
+                # p = []
+                # z = 0
+                # a=[]
+                # for s in range(len(data_inicio)):
+                    
+                #     # if s == 0:
+                #     #     p.append(data_inicio[0][0])
+                #     # elif data_inicio[s][0] != p[0]:
+                #     #     p.append(data_inicio[s][0])
+
+                lista=[]
+                listaa=[]
+                listaaa=[]
+
+                # for n in range(len(data_inicio)):
+                #     # temporario = data_inicio[n]
+                
+                for x in data_inicio:
+                    if x not in lista :
+                        lista.append(x)
+                        Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                        sei=Cursor.fetchone()
+                        listaa.append(sei)
+                        Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                        seia=Cursor.fetchone()
+                        listaaa.append(seia)
+                print(lista)
+                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
+                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
+                    # a.append(h)
+            elif diasdofiltro == "7 Dias":
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+                data_inicio = Cursor.fetchall()
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+                data_final = Cursor.fetchall()
+                # p = []
+                # z = 0
+                # a=[]
+                # for s in range(len(data_inicio)):
+                    
+                #     # if s == 0:
+                #     #     p.append(data_inicio[0][0])
+                #     # elif data_inicio[s][0] != p[0]:
+                #     #     p.append(data_inicio[s][0])
+
+                lista=[]
+                listaa=[]
+                listaaa=[]
+
+                # for n in range(len(data_inicio)):
+                #     # temporario = data_inicio[n]
+                
+                for x in data_inicio:
+                    if x not in lista :
+                        lista.append(x)
+                        Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                        sei=Cursor.fetchone()
+                        listaa.append(sei)
+                        Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                        seia=Cursor.fetchone()
+                        listaaa.append(seia)
+                print(lista)
+                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
+                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
+                    # a.append(h)
+            elif diasdofiltro == "15 Dias":
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+                data_inicio = Cursor.fetchall()
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+                data_final = Cursor.fetchall()
+                # p = []
+                # z = 0
+                # a=[]
+                # for s in range(len(data_inicio)):
+                    
+                #     # if s == 0:
+                #     #     p.append(data_inicio[0][0])
+                #     # elif data_inicio[s][0] != p[0]:
+                #     #     p.append(data_inicio[s][0])
+
+                lista=[]
+                listaa=[]
+                listaaa=[]
+
+                # for n in range(len(data_inicio)):
+                #     # temporario = data_inicio[n]
+                
+                for x in data_inicio:
+                    if x not in lista :
+                        lista.append(x)
+                        Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                        sei=Cursor.fetchone()
+                        listaa.append(sei)
+                        Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                        seia=Cursor.fetchone()
+                        listaaa.append(seia)
+                print(lista)
+                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
+                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
+                    # a.append(h)
+            elif diasdofiltro == "30 Dias":
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+                data_inicio = Cursor.fetchall()
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+                data_final = Cursor.fetchall()
+                # p = []
+                # z = 0
+                # a=[]
+                # for s in range(len(data_inicio)):
+                    
+                #     # if s == 0:
+                #     #     p.append(data_inicio[0][0])
+                #     # elif data_inicio[s][0] != p[0]:
+                #     #     p.append(data_inicio[s][0])
+
+                lista=[]
+                listaa=[]
+                listaaa=[]
+
+                # for n in range(len(data_inicio)):
+                #     # temporario = data_inicio[n]
+                
+                for x in data_inicio:
+                    if x not in lista :
+                        lista.append(x)
+                        Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                        sei=Cursor.fetchone()
+                        listaa.append(sei)
+                        Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                        seia=Cursor.fetchone()
+                        listaaa.append(seia)
+                print(lista)
+                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
+                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
+                    # a.append(h)
+            else:
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+                data_inicio = Cursor.fetchall()
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+                data_final = Cursor.fetchall()
+                # p = []
+                # z = 0
+                # a=[]
+                # for s in range(len(data_inicio)):
+                    
+                #     # if s == 0:
+                #     #     p.append(data_inicio[0][0])
+                #     # elif data_inicio[s][0] != p[0]:
+                #     #     p.append(data_inicio[s][0])
+
+                lista=[]
+                listaa=[]
+                listaaa=[]
+
+                # for n in range(len(data_inicio)):
+                #     # temporario = data_inicio[n]
+                
+                for x in data_inicio:
+                    if x not in lista :
+                        lista.append(x)
+                        Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                        sei=Cursor.fetchone()
+                        listaa.append(sei)
+                        Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                        seia=Cursor.fetchone()
+                        listaaa.append(seia)
+                print(lista)
+                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
+                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
+                    # a.append(h)
         
-        for x in data_inicio:
-            if x not in lista :
-                lista.append(x)
-                Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
-                sei=Cursor.fetchone()
-                listaa.append(sei)
-                Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
-                seia=Cursor.fetchone()
-                listaaa.append(seia)
-        print(lista)
-            # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
-            # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
-            # a.append(h)
+        else:
+            
+            Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+            data_inicio = Cursor.fetchall()
+            Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+            data_final = Cursor.fetchall()
+            # p = []
+            # z = 0
+            # a=[]
+            # for s in range(len(data_inicio)):
+                
+            #     # if s == 0:
+            #     #     p.append(data_inicio[0][0])
+            #     # elif data_inicio[s][0] != p[0]:
+            #     #     p.append(data_inicio[s][0])
+
+            lista=[]
+            listaa=[]
+            listaaa=[]
+
+            # for n in range(len(data_inicio)):
+            #     # temporario = data_inicio[n]
+            
+            for x in data_inicio:
+                if x not in lista :
+                    lista.append(x)
+                    Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                    sei=Cursor.fetchone()
+                    listaa.append(sei)
+                    Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                    seia=Cursor.fetchone()
+                    listaaa.append(seia)
+            print(lista)
+
         
         with mysql.cursor()as Cursor:
             oi=Cursor.execute("Select * from solicitacao where not avaliacao is null")
