@@ -1,5 +1,3 @@
-from curses import window
-from multiprocessing import Event
 from flask import Blueprint,render_template,request,redirect,session, url_for
 from bd.db import mysql
 admin = Blueprint('admin', __name__, template_folder='templates')
@@ -478,28 +476,28 @@ def estatisticas():
         if selectparafiltro <= 0:
             if mess in mescom31:
                 mess = int(mess) - 1
-                diaa + 31
-                selectparafiltro = f"{anoo}-0{mess}-{anoo}"
+                diaa = diaa + 31
+                selectparafiltro = f"{anoo}-0{mess}-{diaa}"
             elif mess == '02':
                 if int(ano) %4 == 0:
                     mess = '01'
-                    diaa + 2
-                    selectparafiltro = f"{anoo}-{mess}-{anoo}"
+                    diaa = diaa + 2
+                    selectparafiltro = f"{anoo}-{mess}-{diaa}"
                 else:
                     mess = '01'
-                    diaa + 29
-                    selectparafiltro = f"{anoo}-{mess}-{anoo}"
+                    diaa = diaa + 29
+                    selectparafiltro = f"{anoo}-{mess}-{diaa}"
             else:
                 mess = int(mess) - 1
-                diaa + 30
-                selectparafiltro = f"{anoo}-0{mess}-{anoo}"
+                diaa = diaa + 30
+                selectparafiltro = f"{anoo}-0{mess}-{diaa}"
                 
 
-        if diasdofiltro and data_de_inicio is not '':
+        if diasdofiltro and data_de_inicio != '':
             if diasdofiltro == "1 Dia":
-                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
                 data_inicio = Cursor.fetchall()
-                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
                 data_final = Cursor.fetchall()
                 # p = []
                 # z = 0
@@ -532,9 +530,9 @@ def estatisticas():
                     # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
                     # a.append(h)
             elif diasdofiltro == "7 Dias":
-                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
                 data_inicio = Cursor.fetchall()
-                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
                 data_final = Cursor.fetchall()
                 # p = []
                 # z = 0
@@ -567,9 +565,9 @@ def estatisticas():
                     # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
                     # a.append(h)
             elif diasdofiltro == "15 Dias":
-                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
                 data_inicio = Cursor.fetchall()
-                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
                 data_final = Cursor.fetchall()
                 # p = []
                 # z = 0
@@ -602,9 +600,9 @@ def estatisticas():
                     # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
                     # a.append(h)
             elif diasdofiltro == "30 Dias":
-                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
                 data_inicio = Cursor.fetchall()
-                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
                 data_final = Cursor.fetchall()
                 # p = []
                 # z = 0
