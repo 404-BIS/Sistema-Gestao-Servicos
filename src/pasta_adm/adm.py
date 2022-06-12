@@ -1,3 +1,5 @@
+from re import M
+from zlib import DEF_BUF_SIZE
 from flask import Blueprint,render_template,request,redirect,session, url_for
 from bd.db import mysql
 admin = Blueprint('admin', __name__, template_folder='templates')
@@ -8,6 +10,47 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
  
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+
+def P(ANO, MES, DIA, PERIODO):
+    M31 = [1, 3, 5, 7, 8, 10, 12]
+
+    day = int(DIA) + PERIODO
+    month = int(MES)
+    year = int(ANO)
+    DATA_FINAL = None
+    print(day, month, year)
+
+    if year % 4 == 0:
+        if month == 2:
+            if day + PERIODO > 28:
+                day = day - 28
+                month = month + 1
+    elif year % 4 != 0:
+        if month == '02':
+            if day + PERIODO > 29:
+                day = day - 29
+                month = month + 1
+    else:
+        if day + PERIODO >31 and month in M31:
+            day = day - 31
+            month = month + 1
+        elif day + PERIODO > 30 and month not in M31:
+            day = day - 30
+            month = month + 1
+
+    if day < 10:
+        if month < 10:
+            DATA_FINAL = f'{year}-0{month}-0{day}'
+        else:
+            DATA_FINAL = f'{year}-{month}-0{day}'
+    else:
+        if month < 10:
+            DATA_FINAL = f'{year}-0{month}-{day}'
+        else:
+            DATA_FINAL = f'{year}-{month}-{day}'
+    return DATA_FINAL
 
 @admin.route('/perfil_adm',methods=['POST'])
 def perfil():
@@ -109,413 +152,73 @@ def estatisticas():
     with mysql.cursor()as Cursor:
         Cursor.execute("SELECT pass_user FROM user WHERE id_user =%s",(pk_user,))
         senha = Cursor.fetchone()
-        # pegando infos do html
-        mescom31 = ['01', '03', '05', '07', '08', '10', '12']    
+        # pegando infos do html    
         dias_select = request.args.get('days')
         dataaa = request.args.get('dataaa')
         # Conta
         DATA_ATUAL = dataaa
              # checking days
-        if dataaa == '':
-            DATA_ATUAL = '2022-06-06'
-        if dias_select == '1':
-            ano = DATA_ATUAL[:4]
-            mes = DATA_ATUAL[5:7]
-            dia = int(DATA_ATUAL[8:])
-            print(dia, mes, ano)
-            if (dia - 1 <= 0):
-                if int(ano) %4 == 0:
-                    if mes == '02':
-                        cdias = (dia - 1)*(-1)
-                        dia = 29 + cdias
-                        mes = '01'
-                elif int(ano) %4 != 0:
-                    if mes == '02':
-                        cdias = (dia - 1)*(-1)
-                        dia = 28 + cdias
-                        mes = '01'
-                elif mes in mescom31:
-                    cdias = (dia - 1)*(-1)
-                    dia = 31 + cdias
-                    mes = int(mes)
-                    mess=mes-1
-                    mes = '0' + str(mess)
+        if dataaa == '' or dataaa is None:
+            DATA_ATUAL = str(datetime.date.today())
+            ANO = DATA_ATUAL[:4]
+            MES = DATA_ATUAL[5:7]
+            DIA = int(DATA_ATUAL[8:])
+            if dias_select == '1':
+                DATA_FINAL = P(ANO, MES, DIA, 1)
+                tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+                num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+                totaluser = Cursor.execute("SELECT id_user from user WHERE type_user = 'user' ")
+                totalexec = Cursor.execute("SELECT id_user from user WHERE type_user = 'exec' ")
+                num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+                seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+                oi=Cursor.execute("Select * from solicitacao")
+                if oi>0: 
+                    somatotal = num_exec + num_user
+                    porcentoUser = str((num_user/somatotal)*100)
+                    porcentoExec = str((num_exec/somatotal)*100)
+                    aporcentoUser = porcentoUser[:2]
+                    aporcentoExec = porcentoExec[:2]
+
+                    seila = seila2 + seila3
+                    porcentoUsera = str((seila2/seila)*100)
+                    porcentoExeca = str((seila3/seila)*100)
+                    aporcentoUsers = porcentoUsera[:]
+                    aporcentoExecs = porcentoExeca[:]
                 else:
-                    cdias = (dia - 1)*(-1)
-                    dia = 30 + cdias
-                    mes = int(mes)
-                    mess=mes-1
-                    mes = '0' + str(mess)
-            MENOS_1 = f"{ano}-{mes}-{dia-1}"
-            print(MENOS_1)
+                    aporcentoUser=0
+                    aporcentoExec=0
+                    aporcentoExecs=0
+                    aporcentoUsers=0
+                avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                aaaaaaaa= Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_andamentoo = Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                num_fechadaa = Cursor.fetchall()
 
-            tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
+                aberta=[]
+                fecha=[]
 
-            tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-
-            tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-
-            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
-            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
-            totaluser = Cursor.execute("SELECT id_user from user WHERE type_user = 'user' ")
-            totalexec = Cursor.execute("SELECT id_user from user WHERE type_user = 'exec' ")
-            
-            num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-            num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-            num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-            seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
-            seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
-
-            oi=Cursor.execute("Select * from solicitacao")
-            if oi>0: 
-                somatotal = num_exec + num_user
-                porcentoUser = str((num_user/somatotal)*100)
-                porcentoExec = str((num_exec/somatotal)*100)
-                aporcentoUser = porcentoUser[:2]
-                aporcentoExec = porcentoExec[:2]
-
-                seila = seila2 + seila3
-                porcentoUsera = str((seila2/seila)*100)
-                porcentoExeca = str((seila3/seila)*100)
-                aporcentoUsers = porcentoUsera[:]
-                aporcentoExecs = porcentoExeca[:]
-            else:
-                aporcentoUser=0
-                aporcentoExec=0
-                aporcentoExecs=0
-                aporcentoUsers=0
-    
-    
-
-
-            avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-            avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-            avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-            avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-            avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_1, DATA_ATUAL,))
-        elif dias_select == '7':
-            ano = DATA_ATUAL[:4]
-            mes = DATA_ATUAL[5:7]
-            dia = int(DATA_ATUAL[8:])   
-            if (dia - 7 <= 0):
-                if int(ano) %4 == 0:
-                    if int(ano) %4 == 0:
-                        if mes == '02':
-                            cdias = (dia - 7)*(-1)
-                            dia = 29 + cdias
-                            mes = '01'
-                elif int(ano) %4 != 0:
-                    if mes == '02':
-                        cdias = (dia - 7)*(-1)
-                        dia = 28 + cdias
-                        mes = '01'
-                    else:
-                        cdias = (dia - 7)*(-1)
-                        dia = 28 + cdias
-                        mes = '01'
-                elif mes in mescom31:
-                    cdias = (dia - 7)*(-1)
-                    dia = 31 + cdias
-                    mes = int(mes)
-                    mess=mes-1
-                    mes = '0' + str(mess)
-                else:
-                    cdias = (dia - 7)*(-1)
-                    dia = 30 + cdias
-                    mes = int(mes)
-                    mess=mes-1
-                    mes = '0' + str(mess)
-            MENOS_7 = (f"{ano}-{mes}-{dia-7}")
-            print(MENOS_7)
-        
-            tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-
-            tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-
-            tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-
-            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
-            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
-            num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-            num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-            num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-            seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
-            seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
-
-            oi=Cursor.execute("Select * from solicitacao")
-            if oi>0: 
-                somatotal = num_exec + num_user
-                porcentoUser = str((num_user/somatotal)*100)
-                porcentoExec = str((num_exec/somatotal)*100)
-                aporcentoUser = porcentoUser[:2]
-                aporcentoExec = porcentoExec[:2]
-
-                seila = seila2 + seila3
-                porcentoUsera = str((seila2/seila)*100)
-                porcentoExeca = str((seila3/seila)*100)
-                aporcentoUsers = porcentoUsera[:]
-                aporcentoExecs = porcentoExeca[:]
-            else:
-                aporcentoUser=0
-                aporcentoExec=0
-                aporcentoExecs=0
-                aporcentoUsers=0
-    
-    
-
-
-            avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-            avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-            avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-            avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-            avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_7, DATA_ATUAL,))
-        elif dias_select == '15':
-            ano = DATA_ATUAL[:4]
-            mes = DATA_ATUAL[5:7]
-            dia = int(DATA_ATUAL[8:])
-            if (dia - 15 <= 0):
-                if int(ano) %4 == 0:
-                    if mes == '02':
-                        cdias = (dia - 15)*(-1)
-                        dia = 29 + cdias
-                        mes = '01'
-                elif int(ano) %4 != 0:
-                    if mes == '02':
-                        cdias = (dia - 15)*(-1)
-                        dia = 28 + cdias
-                        mes = '01'
-                    else:
-                        cdias = (dia - 15)*(-1)
-                        dia = 28 + cdias
-                        mes = '01'
-                elif mes in mescom31:
-                    cdias = (dia - 15)*(-1)
-                    dia = 31 + cdias
-                    mes = int(mes)
-                    mess=mes-1
-                    mes = '0' + str(mess)
-                else:
-                    cdias = (dia - 15)*(-1)
-                    dia = 30 + cdias
-                    mes = int(mes)
-                    mess=mes-1
-                    mes = '0' + str(mess)
-            MENOS_15 = (f"{ano}-{mes}-{dia-15}")
-        
-            tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-
-            tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-
-            tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-
-            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
-            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
-            num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-            num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-            num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-            seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
-            seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
-
-            oi=Cursor.execute("Select * from solicitacao")
-            if oi>0: 
-                somatotal = num_exec + num_user
-                porcentoUser = str((num_user/somatotal)*100)
-                porcentoExec = str((num_exec/somatotal)*100)
-                aporcentoUser = porcentoUser[:2]
-                aporcentoExec = porcentoExec[:2]
-
-                seila = seila2 + seila3
-                porcentoUsera = str((seila2/seila)*100)
-                porcentoExeca = str((seila3/seila)*100)
-                aporcentoUsers = porcentoUsera[:]
-                aporcentoExecs = porcentoExeca[:]
-            else:
-                aporcentoUser=0
-                aporcentoExec=0
-                aporcentoExecs=0
-                aporcentoUsers=0
-    
-    
-
-
-            avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-            avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-            avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-            avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-            avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_15, DATA_ATUAL,))
-
-        elif dias_select == '30':
-            ano = DATA_ATUAL[:4]
-            mes = DATA_ATUAL[5:7]
-            dia = int(DATA_ATUAL[8:])
-            if (dia - 30 <= 0):
-                if int(ano) %4 == 0:
-                    if mes == '02':
-                        cdias = (dia - 30)*(-1)
-                        dia = 29 + cdias
-                        mes = '01'
-                    else:
-                        cdias = (dia - 30)*(-1)
-                        dia = 28 + cdias
-                        mes = '01'
-                elif mes in mescom31:
-                    cdias = (dia - 30)*(-1)
-                    dia = 31 + cdias
-                    mes = int(mes)
-                    mess=mes-1
-                    mes = '0' + str(mess)
-                else:
-                    cdias = (dia - 30)*(-1)
-                    dia = 30 + cdias
-                    mes = int(mes)
-                    mess= mes-1
-                    mes = '0' + str(mess)
-            MENOS_30 = (f"{ano}-{mes}-{dia-30}")
-            tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-
-            tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-
-            tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-            seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
-            seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
-
-            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
-            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
-            num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-            num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-            num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-
-            oi=Cursor.execute("Select * from solicitacao")
-            if oi>0: 
-                somatotal = num_exec + num_user
-                porcentoUser = str((num_user/somatotal)*100)
-                porcentoExec = str((num_exec/somatotal)*100)
-                aporcentoUser = porcentoUser[:2]
-                aporcentoExec = porcentoExec[:2]
-
-                seila = seila2 + seila3
-                porcentoUsera = str((seila2/seila)*100)
-                porcentoExeca = str((seila3/seila)*100)
-                aporcentoUsers = porcentoUsera[:]
-                aporcentoExecs = porcentoExeca[:]
-            else:
-                aporcentoUser=0
-                aporcentoExec=0
-                aporcentoExecs=0
-                aporcentoUsers=0
-    
-
-
-            avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-            avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-            avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-            avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-            avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (MENOS_30, DATA_ATUAL,))
-        else:
-            tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware'")
-
-            tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software'")
-
-            tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos'")
-
-            num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
-            num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
-            num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
-            num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
-            num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
-            seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
-            seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
-            
-            oi=Cursor.execute("Select * from solicitacao")
-            if oi>0: 
-                somatotal = num_exec + num_user
-                porcentoUser = str((num_user/somatotal)*100)
-                porcentoExec = str((num_exec/somatotal)*100)
-                aporcentoUser = porcentoUser[:2]
-                aporcentoExec = porcentoExec[:2]
-
-                seila = seila2 + seila3
-                porcentoUsera = str((seila2/seila)*100)
-                porcentoExeca = str((seila3/seila)*100)
-                aporcentoUsers = porcentoUsera[:]
-                aporcentoExecs = porcentoExeca[:]
-            else:
-                aporcentoUser=0
-                aporcentoExec=0
-                aporcentoExecs=0
-                aporcentoUsers=0
-
-    
-            
-
-            avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1'")
-            avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2'")
-            avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3'")
-            avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4'")
-            avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5'")
-                
-            
-        Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
-        aaaaaaaa= Cursor.fetchall()
-        Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
-        num_andamentoo = Cursor.fetchall()
-        Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
-        num_fechadaa = Cursor.fetchall()
-
-        aberta=[]
-        fecha=[]
-
-        diasdofiltro = request.args.get('tabela_filter')
-        data_de_inicio = request.args.get('dataa2')
-        DATA_ATUALl = data_de_inicio
-        anoo = DATA_ATUALl[:4]
-        mess = DATA_ATUALl[5:7]
-        diaa = int(DATA_ATUALl[8:])
-
-        selectparafiltro = f"{anoo}-{mess}-{diaa-diasdofiltro}"
-        if selectparafiltro <= 0:
-            if mess in mescom31:
-                mess = int(mess) - 1
-                diaa = diaa + 31
-                selectparafiltro = f"{anoo}-0{mess}-{diaa}"
-            elif mess == '02':
-                if int(ano) %4 == 0:
-                    mess = '01'
-                    diaa = diaa + 2
-                    selectparafiltro = f"{anoo}-{mess}-{diaa}"
-                else:
-                    mess = '01'
-                    diaa = diaa + 29
-                    selectparafiltro = f"{anoo}-{mess}-{diaa}"
-            else:
-                mess = int(mess) - 1
-                diaa = diaa + 30
-                selectparafiltro = f"{anoo}-0{mess}-{diaa}"
-                
-
-        if diasdofiltro and data_de_inicio != '':
-            if diasdofiltro == "1 Dia":
-                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
                 data_inicio = Cursor.fetchall()
-                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
                 data_final = Cursor.fetchall()
-                # p = []
-                # z = 0
-                # a=[]
-                # for s in range(len(data_inicio)):
-                    
-                #     # if s == 0:
-                #     #     p.append(data_inicio[0][0])
-                #     # elif data_inicio[s][0] != p[0]:
-                #     #     p.append(data_inicio[s][0])
 
                 lista=[]
                 listaa=[]
                 listaaa=[]
 
-                # for n in range(len(data_inicio)):
-                #     # temporario = data_inicio[n]
-                
                 for x in data_inicio:
                     if x not in lista :
                         lista.append(x)
@@ -526,31 +229,62 @@ def estatisticas():
                         seia=Cursor.fetchone()
                         listaaa.append(seia)
                 print(lista)
-                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
-                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
-                    # a.append(h)
-            elif diasdofiltro == "7 Dias":
-                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
+            elif dias_select == '7':
+                DATA_FINAL = P(ANO, MES, DIA, 7)
+                tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+                num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+                totaluser = Cursor.execute("SELECT id_user from user WHERE type_user = 'user' ")
+                totalexec = Cursor.execute("SELECT id_user from user WHERE type_user = 'exec' ")
+                num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+                seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+                oi=Cursor.execute("Select * from solicitacao")
+                if oi>0: 
+                    somatotal = num_exec + num_user
+                    porcentoUser = str((num_user/somatotal)*100)
+                    porcentoExec = str((num_exec/somatotal)*100)
+                    aporcentoUser = porcentoUser[:2]
+                    aporcentoExec = porcentoExec[:2]
+
+                    seila = seila2 + seila3
+                    porcentoUsera = str((seila2/seila)*100)
+                    porcentoExeca = str((seila3/seila)*100)
+                    aporcentoUsers = porcentoUsera[:]
+                    aporcentoExecs = porcentoExeca[:]
+                else:
+                    aporcentoUser=0
+                    aporcentoExec=0
+                    aporcentoExecs=0
+                    aporcentoUsers=0
+                avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                aaaaaaaa= Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_andamentoo = Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                num_fechadaa = Cursor.fetchall()
+
+                aberta=[]
+                fecha=[]
+
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
                 data_inicio = Cursor.fetchall()
-                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
                 data_final = Cursor.fetchall()
-                # p = []
-                # z = 0
-                # a=[]
-                # for s in range(len(data_inicio)):
-                    
-                #     # if s == 0:
-                #     #     p.append(data_inicio[0][0])
-                #     # elif data_inicio[s][0] != p[0]:
-                #     #     p.append(data_inicio[s][0])
 
                 lista=[]
                 listaa=[]
                 listaaa=[]
 
-                # for n in range(len(data_inicio)):
-                #     # temporario = data_inicio[n]
-                
                 for x in data_inicio:
                     if x not in lista :
                         lista.append(x)
@@ -561,31 +295,62 @@ def estatisticas():
                         seia=Cursor.fetchone()
                         listaaa.append(seia)
                 print(lista)
-                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
-                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
-                    # a.append(h)
-            elif diasdofiltro == "15 Dias":
-                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
+            elif dias_select == '15':
+                DATA_FINAL = P(ANO, MES, DIA, 15)
+                tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+                num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+                totaluser = Cursor.execute("SELECT id_user from user WHERE type_user = 'user' ")
+                totalexec = Cursor.execute("SELECT id_user from user WHERE type_user = 'exec' ")
+                num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+                seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+                oi=Cursor.execute("Select * from solicitacao")
+                if oi>0: 
+                    somatotal = num_exec + num_user
+                    porcentoUser = str((num_user/somatotal)*100)
+                    porcentoExec = str((num_exec/somatotal)*100)
+                    aporcentoUser = porcentoUser[:2]
+                    aporcentoExec = porcentoExec[:2]
+
+                    seila = seila2 + seila3
+                    porcentoUsera = str((seila2/seila)*100)
+                    porcentoExeca = str((seila3/seila)*100)
+                    aporcentoUsers = porcentoUsera[:]
+                    aporcentoExecs = porcentoExeca[:]
+                else:
+                    aporcentoUser=0
+                    aporcentoExec=0
+                    aporcentoExecs=0
+                    aporcentoUsers=0
+                avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                aaaaaaaa= Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_andamentoo = Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                num_fechadaa = Cursor.fetchall()
+
+                aberta=[]
+                fecha=[]
+
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
                 data_inicio = Cursor.fetchall()
-                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
                 data_final = Cursor.fetchall()
-                # p = []
-                # z = 0
-                # a=[]
-                # for s in range(len(data_inicio)):
-                    
-                #     # if s == 0:
-                #     #     p.append(data_inicio[0][0])
-                #     # elif data_inicio[s][0] != p[0]:
-                #     #     p.append(data_inicio[s][0])
 
                 lista=[]
                 listaa=[]
                 listaaa=[]
 
-                # for n in range(len(data_inicio)):
-                #     # temporario = data_inicio[n]
-                
                 for x in data_inicio:
                     if x not in lista :
                         lista.append(x)
@@ -596,31 +361,62 @@ def estatisticas():
                         seia=Cursor.fetchone()
                         listaaa.append(seia)
                 print(lista)
-                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
-                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
-                    # a.append(h)
-            elif diasdofiltro == "30 Dias":
-                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
+            elif dias_select == '30':
+                DATA_FINAL = P(ANO, MES, DIA, 30)
+                tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+                num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+                totaluser = Cursor.execute("SELECT id_user from user WHERE type_user = 'user' ")
+                totalexec = Cursor.execute("SELECT id_user from user WHERE type_user = 'exec' ")
+                num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+                seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+                oi=Cursor.execute("Select * from solicitacao")
+                if oi>0: 
+                    somatotal = num_exec + num_user
+                    porcentoUser = str((num_user/somatotal)*100)
+                    porcentoExec = str((num_exec/somatotal)*100)
+                    aporcentoUser = porcentoUser[:2]
+                    aporcentoExec = porcentoExec[:2]
+
+                    seila = seila2 + seila3
+                    porcentoUsera = str((seila2/seila)*100)
+                    porcentoExeca = str((seila3/seila)*100)
+                    aporcentoUsers = porcentoUsera[:]
+                    aporcentoExecs = porcentoExeca[:]
+                else:
+                    aporcentoUser=0
+                    aporcentoExec=0
+                    aporcentoExecs=0
+                    aporcentoUsers=0
+                avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                aaaaaaaa= Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_andamentoo = Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                num_fechadaa = Cursor.fetchall()
+
+                aberta=[]
+                fecha=[]
+
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
                 data_inicio = Cursor.fetchall()
-                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio >= %s between %s", (selectparafiltro, DATA_ATUALl))
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
                 data_final = Cursor.fetchall()
-                # p = []
-                # z = 0
-                # a=[]
-                # for s in range(len(data_inicio)):
-                    
-                #     # if s == 0:
-                #     #     p.append(data_inicio[0][0])
-                #     # elif data_inicio[s][0] != p[0]:
-                #     #     p.append(data_inicio[s][0])
 
                 lista=[]
                 listaa=[]
                 listaaa=[]
 
-                # for n in range(len(data_inicio)):
-                #     # temporario = data_inicio[n]
-                
                 for x in data_inicio:
                     if x not in lista :
                         lista.append(x)
@@ -631,31 +427,47 @@ def estatisticas():
                         seia=Cursor.fetchone()
                         listaaa.append(seia)
                 print(lista)
-                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
-                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
-                    # a.append(h)
             else:
+                tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware'")
+                tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software'")
+                tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos'")
+                num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+                num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+                num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+                seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+                oi=Cursor.execute("Select * from solicitacao")
+                if oi>0: 
+                    somatotal = num_exec + num_user
+                    porcentoUser = str((num_user/somatotal)*100)
+                    porcentoExec = str((num_exec/somatotal)*100)
+                    aporcentoUser = porcentoUser[:2]
+                    aporcentoExec = porcentoExec[:2]
+
+                    seila = seila2 + seila3
+                    porcentoUsera = str((seila2/seila)*100)
+                    porcentoExeca = str((seila3/seila)*100)
+                    aporcentoUsers = porcentoUsera[:]
+                    aporcentoExecs = porcentoExeca[:]
+                else:
+                    aporcentoUser=0
+                    aporcentoExec=0
+                    aporcentoExecs=0
+                    aporcentoUsers=0
+                avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1'")
+                avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2'")
+                avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3'")
+                avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4'")
+                avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5'")
                 Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
                 data_inicio = Cursor.fetchall()
                 Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
                 data_final = Cursor.fetchall()
-                # p = []
-                # z = 0
-                # a=[]
-                # for s in range(len(data_inicio)):
-                    
-                #     # if s == 0:
-                #     #     p.append(data_inicio[0][0])
-                #     # elif data_inicio[s][0] != p[0]:
-                #     #     p.append(data_inicio[s][0])
-
                 lista=[]
                 listaa=[]
                 listaaa=[]
-
-                # for n in range(len(data_inicio)):
-                #     # temporario = data_inicio[n]
-                
                 for x in data_inicio:
                     if x not in lista :
                         lista.append(x)
@@ -666,44 +478,335 @@ def estatisticas():
                         seia=Cursor.fetchone()
                         listaaa.append(seia)
                 print(lista)
-                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,)))
-                    # a.append(Cursor.execute("SELECT * FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,)))
-                    # a.append(h)
-        
         else:
-            
-            Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
-            data_inicio = Cursor.fetchall()
-            Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
-            data_final = Cursor.fetchall()
-            # p = []
-            # z = 0
-            # a=[]
-            # for s in range(len(data_inicio)):
-                
-            #     # if s == 0:
-            #     #     p.append(data_inicio[0][0])
-            #     # elif data_inicio[s][0] != p[0]:
-            #     #     p.append(data_inicio[s][0])
+            ANO = DATA_ATUAL[:4]
+            MES = DATA_ATUAL[5:7]
+            DIA = int(DATA_ATUAL[8:])
+            if dias_select == '1':
+                DATA_FINAL = P(ANO, MES, DIA, 1)
+                tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+                num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+                totaluser = Cursor.execute("SELECT id_user from user WHERE type_user = 'user' ")
+                totalexec = Cursor.execute("SELECT id_user from user WHERE type_user = 'exec' ")
+                num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+                seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+                oi=Cursor.execute("Select * from solicitacao")
+                if oi>0: 
+                    somatotal = num_exec + num_user
+                    porcentoUser = str((num_user/somatotal)*100)
+                    porcentoExec = str((num_exec/somatotal)*100)
+                    aporcentoUser = porcentoUser[:2]
+                    aporcentoExec = porcentoExec[:2]
 
-            lista=[]
-            listaa=[]
-            listaaa=[]
+                    seila = seila2 + seila3
+                    porcentoUsera = str((seila2/seila)*100)
+                    porcentoExeca = str((seila3/seila)*100)
+                    aporcentoUsers = porcentoUsera[:]
+                    aporcentoExecs = porcentoExeca[:]
+                else:
+                    aporcentoUser=0
+                    aporcentoExec=0
+                    aporcentoExecs=0
+                    aporcentoUsers=0
+                avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                aaaaaaaa= Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_andamentoo = Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                num_fechadaa = Cursor.fetchall()
 
-            # for n in range(len(data_inicio)):
-            #     # temporario = data_inicio[n]
-            
-            for x in data_inicio:
-                if x not in lista :
-                    lista.append(x)
-                    Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
-                    sei=Cursor.fetchone()
-                    listaa.append(sei)
-                    Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
-                    seia=Cursor.fetchone()
-                    listaaa.append(seia)
-            print(lista)
+                aberta=[]
+                fecha=[]
 
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                data_inicio = Cursor.fetchall()
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                data_final = Cursor.fetchall()
+
+                lista=[]
+                listaa=[]
+                listaaa=[]
+
+                for x in data_inicio:
+                    if x not in lista :
+                        lista.append(x)
+                        Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                        sei=Cursor.fetchone()
+                        listaa.append(sei)
+                        Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                        seia=Cursor.fetchone()
+                        listaaa.append(seia)
+                print(lista)
+            elif dias_select == '7':
+                DATA_FINAL = P(ANO, MES, DIA, 7)
+                tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+                num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+                totaluser = Cursor.execute("SELECT id_user from user WHERE type_user = 'user' ")
+                totalexec = Cursor.execute("SELECT id_user from user WHERE type_user = 'exec' ")
+                num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+                seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+                oi=Cursor.execute("Select * from solicitacao")
+                if oi>0: 
+                    somatotal = num_exec + num_user
+                    porcentoUser = str((num_user/somatotal)*100)
+                    porcentoExec = str((num_exec/somatotal)*100)
+                    aporcentoUser = porcentoUser[:2]
+                    aporcentoExec = porcentoExec[:2]
+
+                    seila = seila2 + seila3
+                    porcentoUsera = str((seila2/seila)*100)
+                    porcentoExeca = str((seila3/seila)*100)
+                    aporcentoUsers = porcentoUsera[:]
+                    aporcentoExecs = porcentoExeca[:]
+                else:
+                    aporcentoUser=0
+                    aporcentoExec=0
+                    aporcentoExecs=0
+                    aporcentoUsers=0
+                avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                aaaaaaaa= Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_andamentoo = Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                num_fechadaa = Cursor.fetchall()
+
+                aberta=[]
+                fecha=[]
+
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                data_inicio = Cursor.fetchall()
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                data_final = Cursor.fetchall()
+
+                lista=[]
+                listaa=[]
+                listaaa=[]
+
+                for x in data_inicio:
+                    if x not in lista :
+                        lista.append(x)
+                        Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                        sei=Cursor.fetchone()
+                        listaa.append(sei)
+                        Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                        seia=Cursor.fetchone()
+                        listaaa.append(seia)
+                print(lista)
+            elif dias_select == '15':
+                DATA_FINAL = P(ANO, MES, DIA, 15)
+                tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+                num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+                totaluser = Cursor.execute("SELECT id_user from user WHERE type_user = 'user' ")
+                totalexec = Cursor.execute("SELECT id_user from user WHERE type_user = 'exec' ")
+                num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+                seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+                oi=Cursor.execute("Select * from solicitacao")
+                if oi>0: 
+                    somatotal = num_exec + num_user
+                    porcentoUser = str((num_user/somatotal)*100)
+                    porcentoExec = str((num_exec/somatotal)*100)
+                    aporcentoUser = porcentoUser[:2]
+                    aporcentoExec = porcentoExec[:2]
+
+                    seila = seila2 + seila3
+                    porcentoUsera = str((seila2/seila)*100)
+                    porcentoExeca = str((seila3/seila)*100)
+                    aporcentoUsers = porcentoUsera[:]
+                    aporcentoExecs = porcentoExeca[:]
+                else:
+                    aporcentoUser=0
+                    aporcentoExec=0
+                    aporcentoExecs=0
+                    aporcentoUsers=0
+                avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                aaaaaaaa= Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_andamentoo = Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                num_fechadaa = Cursor.fetchall()
+
+                aberta=[]
+                fecha=[]
+
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                data_inicio = Cursor.fetchall()
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                data_final = Cursor.fetchall()
+
+                lista=[]
+                listaa=[]
+                listaaa=[]
+
+                for x in data_inicio:
+                    if x not in lista :
+                        lista.append(x)
+                        Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                        sei=Cursor.fetchone()
+                        listaa.append(sei)
+                        Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                        seia=Cursor.fetchone()
+                        listaaa.append(seia)
+                print(lista)
+            elif dias_select == '30':
+                DATA_FINAL = P(ANO, MES, DIA, 30)
+                print(DATA_FINAL)
+                tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+                num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+                totaluser = Cursor.execute("SELECT id_user from user WHERE type_user = 'user' ")
+                totalexec = Cursor.execute("SELECT id_user from user WHERE type_user = 'exec' ")
+                num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+                seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+                oi=Cursor.execute("Select * from solicitacao")
+                if oi>0: 
+                    somatotal = num_exec + num_user
+                    porcentoUser = str((num_user/somatotal)*100)
+                    porcentoExec = str((num_exec/somatotal)*100)
+                    aporcentoUser = porcentoUser[:2]
+                    aporcentoExec = porcentoExec[:2]
+
+                    seila = seila2 + seila3
+                    porcentoUsera = str((seila2/seila)*100)
+                    porcentoExeca = str((seila3/seila)*100)
+                    aporcentoUsers = porcentoUsera[:]
+                    aporcentoExecs = porcentoExeca[:]
+                else:
+                    aporcentoUser=0
+                    aporcentoExec=0
+                    aporcentoExecs=0
+                    aporcentoUsers=0
+                avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5' and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                aaaaaaaa= Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_andamentoo = Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                num_fechadaa = Cursor.fetchall()
+
+                aberta=[]
+                fecha=[]
+
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                data_inicio = Cursor.fetchall()
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null and data_inicio between %s and %s", (DATA_ATUAL, DATA_FINAL,))
+                data_final = Cursor.fetchall()
+
+                lista=[]
+                listaa=[]
+                listaaa=[]
+
+                for x in data_inicio:
+                    if x not in lista :
+                        lista.append(x)
+                        Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                        sei=Cursor.fetchone()
+                        listaa.append(sei)
+                        Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                        seia=Cursor.fetchone()
+                        listaaa.append(seia)
+                print(lista)
+                print(type(DATA_ATUAL), DATA_ATUAL, DATA_FINAL)
+            else:
+                tipo_hardware=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Hardware'")
+                tipo_software=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Problemas de Software'")
+                tipo_duvida=Cursor.execute("SELECT * FROM solicitacao WHERE type_problem='Duvidas ou Esclarecimentos'")
+                num_user=Cursor.execute("SELECT * FROM user WHERE type_user='user'")
+                num_exec=Cursor.execute("SELECT * FROM user WHERE type_user='exec'")
+                num_analise=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                num_andamento=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_fechada=Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                seila2 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Aberta'")
+                seila3 = Cursor.execute("SELECT id_sol from solicitacao where status_sol = 'Fechada'")
+                oi=Cursor.execute("Select * from solicitacao")
+                if oi>0: 
+                    somatotal = num_exec + num_user
+                    porcentoUser = str((num_user/somatotal)*100)
+                    porcentoExec = str((num_exec/somatotal)*100)
+                    aporcentoUser = porcentoUser[:2]
+                    aporcentoExec = porcentoExec[:2]
+
+                    seila = seila2 + seila3
+                    porcentoUsera = str((seila2/seila)*100)
+                    porcentoExeca = str((seila3/seila)*100)
+                    aporcentoUsers = porcentoUsera[:]
+                    aporcentoExecs = porcentoExeca[:]
+                else:
+                    aporcentoUser=0
+                    aporcentoExec=0
+                    aporcentoExecs=0
+                    aporcentoUsers=0
+                avaliacao_pessima=Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='1'")
+                avaliacao_ruim = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='2'")
+                avaliacao_mediana =Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='3'")
+                avaliacao_bom = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='4'")
+                avaliacao_otimo = Cursor.execute("SELECT * FROM solicitacao WHERE avaliacao='5'")
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Aberta'")
+                aaaaaaaa= Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Andamento'")
+                num_andamentoo = Cursor.fetchall()
+                Cursor.execute("SELECT * FROM solicitacao WHERE status_sol='Fechada'")
+                num_fechadaa = Cursor.fetchall()
+                aberta=[]
+                fecha=[]
+                Cursor.execute("SELECT data_inicio FROM solicitacao where not data_inicio is null")
+                data_inicio = Cursor.fetchall()
+                Cursor.execute("SELECT data_final FROM solicitacao where not data_final is null")
+                data_final = Cursor.fetchall()
+                lista=[]
+                listaa=[]
+                listaaa=[]
+                for x in data_inicio:
+                    if x not in lista :
+                        lista.append(x)
+                        Cursor.execute("SELECT count(data_inicio) FROM solicitacao where data_inicio= %s and status_sol='Aberta'",(x,))
+                        sei=Cursor.fetchone()
+                        listaa.append(sei)
+                        Cursor.execute("SELECT count(data_final) FROM solicitacao where data_final= %s and status_sol='Fechada'",(x,))
+                        seia=Cursor.fetchone()
+                        listaaa.append(seia)
+                print(lista)
         
         with mysql.cursor()as Cursor:
             oi=Cursor.execute("Select * from solicitacao where not avaliacao is null")
@@ -713,8 +816,7 @@ def estatisticas():
                 final=round(final[0],1)
             else:
                 final=0
-        
-        return render_template("char.html", num_andamentoo=num_andamentoo, num_fechadaa=num_fechadaa,tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa,aporcentoUsers=aporcentoUsers,aporcentoExecs=aporcentoExecs,aberta=aberta,fecha=fecha,data_final=data_final,data_inicio=data_inicio,final=final,lista=lista,listaa=listaa,listaaa=listaaa)
+        return render_template("char.html",tipo_hardware=tipo_hardware,tipo_software=tipo_software,tipo_duvida=tipo_duvida,num_exec=aporcentoExec,num_analise=num_analise,num_andamento=num_andamento,num_fechada=num_fechada,avaliacao_otimo=avaliacao_otimo,avaliacao_bom=avaliacao_bom,num_user=aporcentoUser,avaliacao_ruim=avaliacao_ruim,avaliacao_pessima=avaliacao_pessima,avaliacao_mediana=avaliacao_mediana,senha = senha , email=email, nome = nome, dataaa=dataaa,aporcentoUsers=aporcentoUsers,aporcentoExecs=aporcentoExecs,data_final=data_final,data_inicio=data_inicio,lista=lista,listaa=listaa,listaaa=listaaa)
 
 
 @admin.route("/historico-avaliacao<id>")
